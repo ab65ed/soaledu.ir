@@ -491,6 +491,13 @@ export const contactService = {
       body: JSON.stringify({ status }),
     });
   },
+
+  async respondToTicket(id: string, response: string, status: 'replied' | 'closed'): Promise<ContactMessage> {
+    return apiRequest(`/contact/tickets/${id}/respond`, {
+      method: 'POST',
+      body: JSON.stringify({ response, status }),
+    });
+  },
 };
 
 // ===================
@@ -902,6 +909,320 @@ export const adminService = {
     return apiRequest(`/admin/users/${userId}`, {
       method: 'DELETE',
     });
+  },
+};
+
+// ===================
+// Learner Services
+// ===================
+
+export interface LearnerExam {
+  id: string;
+  title: string;
+  courseType: string;
+  grade: string;
+  score?: number;
+  maxScore: number;
+  completedAt?: string;
+  status: 'completed' | 'in-progress' | 'not-started';
+  timeSpent?: number;
+  correctAnswers?: number;
+  totalQuestions: number;
+  difficulty: string;
+  price: number;
+}
+
+export interface LearnerWallet {
+  balance: number;
+  totalSpent: number;
+  rewardsEarned: number;
+  transactions: Array<{
+    id: string;
+    type: 'purchase' | 'reward' | 'refund';
+    amount: number;
+    description: string;
+    date: string;
+    status: 'completed' | 'pending' | 'failed';
+  }>;
+  rewards: {
+    current: number;
+    target: number;
+    level: string;
+  };
+}
+
+export interface LearnerProgress {
+  totalExamsCompleted: number;
+  totalTimeSpent: number;
+  averageScore: number;
+  strongSubjects: string[];
+  weakSubjects: string[];
+  recentActivity: Array<{
+    type: 'exam_completed' | 'exam_started' | 'purchase';
+    title: string;
+    date: string;
+    details?: string;
+  }>;
+}
+
+export interface LearnerOverviewData {
+  exams: LearnerExam[];
+  wallet: LearnerWallet;
+  progress: LearnerProgress;
+  recentExams: LearnerExam[];
+  recommendations: LearnerExam[];
+}
+
+export const learnerService = {
+  /**
+   * دریافت اطلاعات کلی داشبورد فراگیر
+   * Get learner overview data
+   */
+  async getLearnerOverview(): Promise<LearnerOverviewData> {
+    return apiRequest('/learner/overview');
+  },
+
+  /**
+   * دریافت لیست آزمون‌های فراگیر
+   * Get learner's exams list
+   */
+  async getLearnerExams(filters: {
+    status?: 'completed' | 'in-progress' | 'not-started';
+    limit?: number;
+    skip?: number;
+  } = {}): Promise<{
+    exams: LearnerExam[];
+    pagination: {
+      total: number;
+      count: number;
+      limit: number;
+      skip: number;
+    };
+  }> {
+    const queryParams = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, value.toString());
+      }
+    });
+
+    return apiRequest(`/learner/exams?${queryParams.toString()}`);
+  },
+
+  /**
+   * دریافت اطلاعات کیف پول فراگیر
+   * Get learner's wallet information
+   */
+  async getLearnerWallet(): Promise<LearnerWallet> {
+    return apiRequest('/learner/wallet');
+  },
+
+  /**
+   * دریافت پیشرفت تحصیلی فراگیر
+   * Get learner's progress data
+   */
+  async getLearnerProgress(): Promise<LearnerProgress> {
+    return apiRequest('/learner/progress');
+  },
+
+  /**
+   * شروع آزمون جدید
+   * Start a new exam
+   */
+  async startExam(examId: string): Promise<{ examSessionId: string; startTime: string }> {
+    return apiRequest(`/learner/exams/${examId}/start`, {
+      method: 'POST',
+    });
+  },
+
+  /**
+   * ادامه آزمون
+   * Continue exam
+   */
+  async continueExam(examId: string): Promise<{
+    examSessionId: string;
+    currentQuestionIndex: number;
+    timeRemaining: number;
+    answers: Record<string, unknown>;
+  }> {
+    return apiRequest(`/learner/exams/${examId}/continue`);
+  },
+
+  /**
+   * خرید آزمون
+   * Purchase exam
+   */
+  async purchaseExam(examId: string): Promise<{
+    success: boolean;
+    transactionId: string;
+    newBalance: number;
+  }> {
+    return apiRequest(`/learner/exams/${examId}/purchase`, {
+      method: 'POST',
+    });
+  },
+};
+
+// ===================
+// Expert Services
+// ===================
+
+export interface PendingContent {
+  id: string;
+  title: string;
+  type: 'question' | 'course-exam';
+  content_preview: string;
+  full_content: string;
+  created_date: string;
+  priority?: 'high' | 'medium' | 'low';
+  author_id: string;
+  author_name: string;
+  category?: string;
+  tags?: string[];
+  status: 'pending' | 'under_review' | 'approved' | 'rejected' | 'needs_revision';
+}
+
+export interface QualityStats {
+  overall_average: number;
+  approved_today: number;
+  needs_revision: number;
+  average_quality: number;
+  today_reviews: number;
+  today_trend: number;
+  high_quality_percentage: number;
+  active_experts: number;
+  content_type_quality: Array<{
+    type: string;
+    average: number;
+    count: number;
+    improvement: number;
+  }>;
+  weekly_trend: Array<{
+    day_name: string;
+    average: number;
+  }>;
+  status_breakdown: {
+    approved: number;
+    needs_revision: number;
+    rejected: number;
+  };
+  response_time: {
+    average: number;
+    min: number;
+    max: number;
+  };
+  top_expert: {
+    name: string;
+    score: number;
+  };
+  expert_performance: {
+    daily_average: number;
+  };
+  satisfaction_rate: number;
+}
+
+export interface ReviewSubmission {
+  status: 'approved' | 'needs_revision' | 'rejected';
+  feedback: string;
+  quality_score: number;
+  improvements?: string;
+}
+
+export const expertService = {
+  // دریافت محتوای در انتظار بررسی
+  async getPendingContent(): Promise<{
+    items: PendingContent[];
+    total: number;
+    pagination: {
+      total: number;
+      count: number;
+      limit: number;
+      skip: number;
+    };
+  }> {
+    return apiRequest('/expert/content/pending');
+  },
+
+  // دریافت آمار کیفیت
+  async getQualityStats(): Promise<QualityStats> {
+    return apiRequest('/expert/quality-stats');
+  },
+
+  // ارسال بازخورد
+  async submitReview(itemId: string, review: ReviewSubmission): Promise<{
+    success: boolean;
+    message: string;
+    updatedItem: PendingContent;
+  }> {
+    return apiRequest(`/expert/content/${itemId}/review`, {
+      method: 'POST',
+      body: JSON.stringify(review),
+    });
+  },
+
+  // دریافت تاریخچه بررسی‌ها
+  async getReviewHistory(filters: {
+    startDate?: string;
+    endDate?: string;
+    status?: string;
+    limit?: number;
+    skip?: number;
+  } = {}): Promise<{
+    reviews: Array<{
+      id: string;
+      contentId: string;
+      contentTitle: string;
+      status: string;
+      quality_score: number;
+      feedback: string;
+      reviewed_at: string;
+      expert_name: string;
+    }>;
+    pagination: {
+      total: number;
+      count: number;
+      limit: number;
+      skip: number;
+    };
+  }> {
+    const queryParams = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, value.toString());
+      }
+    });
+
+    return apiRequest(`/expert/reviews/history?${queryParams.toString()}`);
+  },
+
+  // آپدیت وضعیت کارشناس (فعال/غیرفعال)
+  async updateExpertStatus(isActive: boolean): Promise<{
+    success: boolean;
+    message: string;
+  }> {
+    return apiRequest('/expert/status', {
+      method: 'PATCH',
+      body: JSON.stringify({ isActive }),
+    });
+  },
+
+  // دریافت آمار عملکرد شخصی کارشناس
+  async getPersonalStats(): Promise<{
+    total_reviews: number;
+    average_quality_score: number;
+    reviews_this_month: number;
+    ranking: number;
+    total_experts: number;
+    response_time_average: number;
+    satisfaction_rating: number;
+    specialties: string[];
+    monthly_trend: Array<{
+      month: string;
+      reviews: number;
+      average_score: number;
+    }>;
+  }> {
+    return apiRequest('/expert/stats/personal');
   },
 };
 

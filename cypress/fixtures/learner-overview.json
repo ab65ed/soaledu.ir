@@ -1,0 +1,228 @@
+{
+  "status": "success",
+  "data": {
+    "exams": [
+      {
+        "id": "exam-1",
+        "title": "آزمون ریاضی پایه دهم",
+        "courseType": "ریاضی",
+        "grade": "دهم",
+        "score": 85,
+        "maxScore": 100,
+        "completedAt": "2024-01-15T10:30:00Z",
+        "status": "completed",
+        "timeSpent": 3600,
+        "correctAnswers": 17,
+        "totalQuestions": 20,
+        "difficulty": "medium",
+        "price": 25000
+      },
+      {
+        "id": "exam-2", 
+        "title": "آزمون فیزیک پایه دهم",
+        "courseType": "فیزیک",
+        "grade": "دهم",
+        "score": 78,
+        "maxScore": 100,
+        "completedAt": "2024-01-12T14:20:00Z",
+        "status": "completed",
+        "timeSpent": 4200,
+        "correctAnswers": 15,
+        "totalQuestions": 20,
+        "difficulty": "hard",
+        "price": 30000
+      },
+      {
+        "id": "exam-3",
+        "title": "آزمون شیمی پایه دهم",
+        "courseType": "شیمی",
+        "grade": "دهم",
+        "status": "in-progress",
+        "timeSpent": 1800,
+        "correctAnswers": 8,
+        "totalQuestions": 25,
+        "difficulty": "medium",
+        "price": 20000
+      },
+      {
+        "id": "exam-4",
+        "title": "آزمون زیست‌شناسی پایه دهم",
+        "courseType": "زیست‌شناسی", 
+        "grade": "دهم",
+        "status": "not-started",
+        "totalQuestions": 20,
+        "difficulty": "easy",
+        "price": 15000
+      }
+    ],
+    "wallet": {
+      "balance": 125000,
+      "totalSpent": 75000,
+      "rewardsEarned": 1850,
+      "transactions": [
+        {
+          "id": "trans-1",
+          "type": "purchase",
+          "amount": 25000,
+          "description": "خرید آزمون ریاضی پایه دهم",
+          "date": "2024-01-14T09:00:00Z",
+          "status": "completed"
+        },
+        {
+          "id": "trans-2",
+          "type": "reward",
+          "amount": 500,
+          "description": "پاداش تکمیل آزمون",
+          "date": "2024-01-15T11:00:00Z",
+          "status": "completed"
+        },
+        {
+          "id": "trans-3",
+          "type": "purchase",
+          "amount": 30000,
+          "description": "خرید آزمون فیزیک پایه دهم",
+          "date": "2024-01-11T16:30:00Z",
+          "status": "completed"
+        }
+      ],
+      "rewards": {
+        "current": 18500,
+        "target": 120000,
+        "level": "نقره‌ای"
+      }
+    },
+    "progress": {
+      "totalExamsCompleted": 12,
+      "totalTimeSpent": 28800,
+      "averageScore": 82.5,
+      "strongSubjects": ["ریاضی", "فیزیک", "هندسه"],
+      "weakSubjects": ["شیمی", "زیست‌شناسی"],
+      "recentActivity": [
+        {
+          "type": "exam_completed",
+          "title": "آزمون ریاضی پایه دهم",
+          "date": "2024-01-15T10:30:00Z",
+          "details": "نمره: 85/100"
+        },
+        {
+          "type": "exam_completed", 
+          "title": "آزمون فیزیک پایه دهم",
+          "date": "2024-01-12T14:20:00Z",
+          "details": "نمره: 78/100"
+        },
+        {
+          "type": "exam_started",
+          "title": "آزمون شیمی پایه دهم",
+          "date": "2024-01-10T13:15:00Z",
+          "details": "50% تکمیل شده"
+        },
+        {
+          "type": "purchase",
+          "title": "آزمون ریاضی پایه دهم",
+          "date": "2024-01-14T09:00:00Z",
+          "details": "25,000 تومان"
+        },
+        {
+          "type": "purchase",
+          "title": "آزمون فیزیک پایه دهم", 
+          "date": "2024-01-11T16:30:00Z",
+          "details": "30,000 تومان"
+        }
+      ]
+    },
+    "recentExams": [
+      {
+        "id": "exam-1",
+        "title": "آزمون ریاضی پایه دهم",
+        "courseType": "ریاضی",
+        "grade": "دهم",
+        "score": 85,
+        "maxScore": 100,
+        "completedAt": "2024-01-15T10:30:00Z",
+        "status": "completed",
+        "difficulty": "medium",
+        "price": 25000
+      },
+      {
+        "id": "exam-2",
+        "title": "آزمون فیزیک پایه دهم", 
+        "courseType": "فیزیک",
+        "grade": "دهم",
+        "score": 78,
+        "maxScore": 100,
+        "completedAt": "2024-01-12T14:20:00Z",
+        "status": "completed",
+        "difficulty": "hard",
+        "price": 30000
+      }
+    ],
+    "recommendations": [
+      {
+        "id": "exam-rec-1",
+        "title": "آزمون جامع ریاضی دهم",
+        "courseType": "ریاضی",
+        "grade": "دهم",
+        "status": "not-started",
+        "totalQuestions": 30,
+        "difficulty": "medium",
+        "price": 35000,
+        "maxScore": 100
+      },
+      {
+        "id": "exam-rec-2",
+        "title": "آزمون هندسه تحلیلی",
+        "courseType": "ریاضی",
+        "grade": "دهم",
+        "status": "not-started", 
+        "totalQuestions": 25,
+        "difficulty": "hard",
+        "price": 40000,
+        "maxScore": 100
+      },
+      {
+        "id": "exam-rec-3",
+        "title": "آزمون مکانیک کلاسیک",
+        "courseType": "فیزیک",
+        "grade": "دهم",
+        "status": "not-started",
+        "totalQuestions": 20,
+        "difficulty": "medium",
+        "price": 30000,
+        "maxScore": 100
+      },
+      {
+        "id": "exam-rec-4",
+        "title": "آزمون شیمی آلی مقدماتی",
+        "courseType": "شیمی",
+        "grade": "دهم", 
+        "status": "not-started",
+        "totalQuestions": 15,
+        "difficulty": "easy",
+        "price": 20000,
+        "maxScore": 100
+      },
+      {
+        "id": "exam-rec-5",
+        "title": "آزمون زیست‌شناسی سلولی",
+        "courseType": "زیست‌شناسی",
+        "grade": "دهم",
+        "status": "not-started",
+        "totalQuestions": 18,
+        "difficulty": "easy",
+        "price": 0,
+        "maxScore": 100
+      },
+      {
+        "id": "exam-rec-6",
+        "title": "آزمون ترکیبی علوم تجربی",
+        "courseType": "علوم تجربی",
+        "grade": "دهم",
+        "status": "not-started",
+        "totalQuestions": 40,
+        "difficulty": "hard",
+        "price": 50000,
+        "maxScore": 100
+      }
+    ]
+  }
+} 
