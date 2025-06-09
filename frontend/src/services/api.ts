@@ -517,12 +517,227 @@ export const testimonialService = {
   },
 };
 
+// ===================
+// Blog Services
+// ===================
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string;
+  featuredImage?: string;
+  authorId: string;
+  authorName: string;
+  authorAvatar?: string;
+  categoryId: string;
+  categoryName: string;
+  tags: string[];
+  viewCount: number;
+  likeCount: number;
+  isPublished: boolean;
+  isDraft: boolean;
+  publishedAt?: string;
+  readTime: number; // تخمین زمان مطالعه به دقیقه
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BlogCategory {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  color?: string;
+  postCount: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BlogComment {
+  id: string;
+  postId: string;
+  authorName: string;
+  authorEmail: string;
+  authorAvatar?: string;
+  content: string;
+  parentId?: string; // برای پاسخ به کامنت
+  isApproved: boolean;
+  userId?: string;
+  replies?: BlogComment[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BlogFilters {
+  search?: string;
+  categoryId?: string;
+  authorId?: string;
+  tags?: string[];
+  isPublished?: boolean;
+  sortBy?: 'newest' | 'oldest' | 'popular' | 'trending';
+  limit?: number;
+  skip?: number;
+}
+
+export interface BlogStats {
+  totalPosts: number;
+  publishedPosts: number;
+  draftPosts: number;
+  totalViews: number;
+  totalComments: number;
+  categoriesCount: number;
+}
+
+export const blogService = {
+  // دریافت لیست مقالات بلاگ با فیلتر
+  async getBlogPosts(filters: BlogFilters = {}): Promise<{
+    posts: BlogPost[];
+    pagination: {
+      total: number;
+      count: number;
+      limit: number;
+      skip: number;
+    };
+  }> {
+    const queryParams = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        if (Array.isArray(value)) {
+          queryParams.append(key, value.join(','));
+        } else {
+          queryParams.append(key, value.toString());
+        }
+      }
+    });
+
+    return apiRequest(`/blog/posts?${queryParams.toString()}`);
+  },
+
+  // دریافت مقاله بلاگ با slug
+  async getBlogPostBySlug(slug: string): Promise<BlogPost> {
+    return apiRequest(`/blog/posts/${slug}`);
+  },
+
+  // دریافت مقالات پربازدید
+  async getPopularBlogPosts(limit = 5): Promise<BlogPost[]> {
+    return apiRequest(`/blog/posts/popular?limit=${limit}`);
+  },
+
+  // دریافت مقالات مرتبط
+  async getRelatedBlogPosts(postId: string, limit = 3): Promise<BlogPost[]> {
+    return apiRequest(`/blog/posts/${postId}/related?limit=${limit}`);
+  },
+
+  // ایجاد مقاله جدید (برای Admin/Designer)
+  async createBlogPost(data: Partial<BlogPost>): Promise<BlogPost> {
+    return apiRequest('/blog/posts', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // ویرایش مقاله
+  async updateBlogPost(id: string, data: Partial<BlogPost>): Promise<BlogPost> {
+    return apiRequest(`/blog/posts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // حذف مقاله
+  async deleteBlogPost(id: string): Promise<void> {
+    return apiRequest(`/blog/posts/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  // انتشار/عدم انتشار مقاله
+  async publishBlogPost(id: string, publish: boolean): Promise<BlogPost> {
+    return apiRequest(`/blog/posts/${id}/publish`, {
+      method: 'PATCH',
+      body: JSON.stringify({ isPublished: publish }),
+    });
+  },
+
+  // افزایش تعداد بازدید
+  async incrementViewCount(slug: string): Promise<void> {
+    return apiRequest(`/blog/posts/${slug}/view`, {
+      method: 'POST',
+    });
+  },
+
+  // دریافت دسته‌بندی‌های بلاگ
+  async getBlogCategories(): Promise<BlogCategory[]> {
+    return apiRequest('/blog/categories');
+  },
+
+  // ایجاد دسته‌بندی جدید
+  async createBlogCategory(data: Partial<BlogCategory>): Promise<BlogCategory> {
+    return apiRequest('/blog/categories', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // دریافت نظرات مقاله
+  async getBlogComments(postId: string, approved = true): Promise<BlogComment[]> {
+    return apiRequest(`/blog/posts/${postId}/comments?approved=${approved}`);
+  },
+
+  // ارسال نظر جدید
+  async createBlogComment(data: {
+    postId: string;
+    authorName: string;
+    authorEmail: string;
+    content: string;
+    parentId?: string;
+  }): Promise<BlogComment> {
+    return apiRequest('/blog/comments', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // تأیید/رد نظر (برای Admin)
+  async approveBlogComment(id: string, approved: boolean): Promise<BlogComment> {
+    return apiRequest(`/blog/comments/${id}/approve`, {
+      method: 'PATCH',
+      body: JSON.stringify({ isApproved: approved }),
+    });
+  },
+
+  // حذف نظر
+  async deleteBlogComment(id: string): Promise<void> {
+    return apiRequest(`/blog/comments/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  // دریافت آمار بلاگ
+  async getBlogStats(): Promise<BlogStats> {
+    return apiRequest('/blog/stats');
+  },
+
+  // جستجوی مقالات
+  async searchBlogPosts(query: string): Promise<BlogPost[]> {
+    return apiRequest(`/blog/search?q=${encodeURIComponent(query)}`);
+  },
+};
+
 const apiServices = {
   authService,
   courseExamService,
   questionService,
   parseService,
   contactService,
+  testimonialService,
+  blogService,
   queryClient,
 };
 
