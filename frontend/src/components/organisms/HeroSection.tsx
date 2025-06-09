@@ -33,6 +33,11 @@ const HeroSection: React.FC = () => {
     },
   };
 
+  // تابع کمکی برای هدایت
+  const navigateTo = (url: string) => {
+    window.location.href = url;
+  };
+
   // هدایت به داشبورد بر اساس نقش کاربر
   const handleCTAClick = () => {
     // منطق تشخیص نقش کاربر و هدایت به داشبورد مناسب
@@ -40,25 +45,25 @@ const HeroSection: React.FC = () => {
     
     switch (userRole) {
       case 'admin':
-        window.location.href = '/admin/dashboard';
+        navigateTo('/admin/dashboard');
         break;
       case 'designer':
-        window.location.href = '/designer/dashboard';
+        navigateTo('/designer/dashboard');
         break;
       case 'student':
-        window.location.href = '/learner/dashboard';
+        navigateTo('/learner/dashboard');
         break;
       case 'expert':
-        window.location.href = '/expert/dashboard';
+        navigateTo('/expert/dashboard');
         break;
       default:
         // کاربر مهمان - هدایت به صفحه ثبت‌نام
-        window.location.href = '/auth/register';
+        navigateTo('/auth/register');
     }
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 py-16 sm:py-24">
+    <section role="main" className="relative bg-gradient-to-br from-blue-50 to-indigo-100 py-16 sm:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           className="text-center max-w-4xl mx-auto"

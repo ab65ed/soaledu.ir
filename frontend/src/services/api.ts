@@ -730,6 +730,181 @@ export const blogService = {
   },
 };
 
+// ===================
+// Admin Services
+// ===================
+
+export interface AdminStats {
+  users: {
+    total: number;
+    active: number;
+    newThisMonth: number;
+    students: number;
+    teachers: number;
+    admins: number;
+  };
+  courseExams: {
+    total: number;
+    published: number;
+    drafts: number;
+    totalSales: number;
+  };
+  questions: {
+    total: number;
+    published: number;
+    drafts: number;
+  };
+  finance: {
+    totalRevenue: number;
+    monthlyRevenue: number;
+    avgOrderValue: number;
+    pendingPayments: number;
+  };
+  activity: {
+    totalLogins: number;
+    activeToday: number;
+    averageSessionTime: number;
+  };
+}
+
+export interface AdminUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+  lastLogin: string;
+  registeredAt: string;
+}
+
+export interface ActivityLog {
+  id: string;
+  userId: string;
+  userName: string;
+  action: string;
+  description: string;
+  ipAddress: string;
+  userAgent: string;
+  timestamp: string;
+  level: 'info' | 'warning' | 'error';
+}
+
+export interface FinanceData {
+  revenue: {
+    total: number;
+    monthly: number;
+    weekly: number;
+    daily: number;
+  };
+  discounts: {
+    active: number;
+    totalUsed: number;
+    totalSavings: number;
+  };
+  pricing: {
+    averagePrice: number;
+    minPrice: number;
+    maxPrice: number;
+  };
+  transactions: Array<{
+    id: string;
+    amount: number;
+    type: 'sale' | 'refund' | 'discount';
+    date: string;
+    description: string;
+    status: 'completed' | 'pending' | 'failed';
+  }>;
+}
+
+export const adminService = {
+  // دریافت آمار کلی سیستم
+  async getAdminStats(): Promise<AdminStats> {
+    return apiRequest('/admin/stats');
+  },
+
+  // دریافت لیست کاربران
+  async getUsers(filters: {
+    role?: string;
+    isActive?: boolean;
+    search?: string;
+    limit?: number;
+    skip?: number;
+  } = {}): Promise<{
+    users: AdminUser[];
+    pagination: {
+      total: number;
+      count: number;
+      limit: number;
+      skip: number;
+    };
+  }> {
+    const queryParams = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, value.toString());
+      }
+    });
+
+    return apiRequest(`/admin/users?${queryParams.toString()}`);
+  },
+
+  // دریافت داده‌های مالی
+  async getFinanceData(): Promise<FinanceData> {
+    return apiRequest('/admin/finance');
+  },
+
+  // دریافت لاگ‌های فعالیت
+  async getActivityLogs(filters: {
+    userId?: string;
+    action?: string;
+    level?: string;
+    startDate?: string;
+    endDate?: string;
+    limit?: number;
+    skip?: number;
+  } = {}): Promise<{
+    logs: ActivityLog[];
+    pagination: {
+      total: number;
+      count: number;
+      limit: number;
+      skip: number;
+    };
+  }> {
+    const queryParams = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, value.toString());
+      }
+    });
+
+    return apiRequest(`/admin/logs?${queryParams.toString()}`);
+  },
+
+  // تغییر وضعیت کاربر
+  async updateUserStatus(userId: string, isActive: boolean): Promise<AdminUser> {
+    return apiRequest(`/admin/users/${userId}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ isActive }),
+    });
+  },
+
+  // تغییر نقش کاربر
+  async updateUserRole(userId: string, role: string): Promise<AdminUser> {
+    return apiRequest(`/admin/users/${userId}/role`, {
+      method: 'PATCH',
+      body: JSON.stringify({ role }),
+    });
+  },
+
+  // حذف کاربر
+  async deleteUser(userId: string): Promise<void> {
+    return apiRequest(`/admin/users/${userId}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
 const apiServices = {
   authService,
   courseExamService,
@@ -738,6 +913,7 @@ const apiServices = {
   contactService,
   testimonialService,
   blogService,
+  adminService,
   queryClient,
 };
 
