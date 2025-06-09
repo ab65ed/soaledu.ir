@@ -7,7 +7,7 @@
 export interface DatabaseIndex {
   id: string;
   collection: string;
-  fields: Record<string, 1 | -1>; // 1 for ascending, -1 for descending
+  fields: Record<string, 1 | -1 | 'text'>; // 1 for ascending, -1 for descending, 'text' for text indexes
   name: string;
   type: 'single' | 'compound' | 'text' | 'geospatial' | 'partial';
   options?: {

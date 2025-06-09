@@ -6,6 +6,7 @@
 import Parse from 'parse/node';
 
 export interface ContactData {
+  objectId?: string;
   name: string;
   email: string;
   message: string;
@@ -54,34 +55,35 @@ class Contact extends Parse.Object {
   static async create(data: ContactCreateData): Promise<Contact> {
     const contact = new Contact();
     
-    // Set basic fields
+    // Set required fields
     contact.set('name', data.name);
     contact.set('email', data.email);
     contact.set('message', data.message);
-    contact.set('status', 'pending');
-    contact.set('priority', 'medium');
-    contact.set('category', 'general');
     
     // Set optional fields
     if (data.userAgent) contact.set('userAgent', data.userAgent);
     if (data.ipAddress) contact.set('ipAddress', data.ipAddress);
     if (data.userId) contact.set('userId', data.userId);
     
+    // Set default values
+    contact.set('status', 'pending');
+    contact.set('priority', 'medium');
+    contact.set('category', 'general');
+    contact.set('tags', []);
+    
     // Auto-categorize and prioritize
     contact.autoCategorize();
     contact.autoPrioritize();
-    
-    // Set default tags
-    contact.set('tags', []);
     
     await contact.save();
     return contact;
   }
 
   static async findById(id: string): Promise<Contact | null> {
-    const query = new Parse.Query(Contact);
     try {
-      return await query.get(id);
+      const query = new Parse.Query(Contact);
+      const result = await query.get(id);
+      return result as unknown as Contact;
     } catch (error) {
       return null;
     }
@@ -118,7 +120,8 @@ class Contact extends Parse.Object {
       query.skip(options.skip);
     }
     
-    return await query.find();
+    const results = await query.find();
+    return results as unknown as Contact[];
   }
 
   static async getStats(): Promise<{
@@ -262,8 +265,9 @@ class Contact extends Parse.Object {
   }
 
   // Convert to JSON for API responses
-  toJSON(): ContactData {
+  toContactData(): ContactData & { objectId: string } {
     return {
+      objectId: this.id,
       name: this.get('name'),
       email: this.get('email'),
       message: this.get('message'),
@@ -284,6 +288,6 @@ class Contact extends Parse.Object {
 }
 
 // Register the subclass
-Parse.Object.registerSubclass('Contact', Contact);
+Parse.Object.registerSubclass('Contact', Contact as any);
 
 export default Contact; 

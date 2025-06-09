@@ -29,13 +29,13 @@ import logger from "./config/logger";
 
 // Import routes
 // Import working routes
-import contactRoutes from "./routes/contact"; // Contact management routes
+// import contactRoutes from "./routes/contact"; // Contact management routes - موقتاً غیرفعال
 import cacheRoutes from "./routes/cache"; // Cache management routes
 import performanceRoutes from "./routes/performance"; // Performance monitoring routes
 import abTestRoutes from "./routes/ab-test"; // A/B Testing management routes
 import scalabilityRoutes from "./routes/scalability"; // Database scalability and optimization routes
 
-// Temporarily disabled routes due to compilation errors
+// Auth routes - موقتاً غیرفعال به دلیل مشکلات compilation
 // import authRoutes from "./routes/auth.routes";
 // import categoryRoutes from "./routes/category.routes";
 // import examsRoutes from "./routes/exams"; // New exam management routes
@@ -59,12 +59,12 @@ import { createParseServer } from "./config/parse-server";
 // Initialize Parse Server
 const parseServer = createParseServer();
 
-// Initialize Parse
+// Initialize Parse - after server creation
 Parse.initialize(PARSE_APPLICATION_ID, PARSE_JAVASCRIPT_KEY);
-Parse.serverURL = PARSE_SERVER_URL;
+Parse.serverURL = `http://localhost:${PORT}/parse`; // Use the same server
 
 logger.info(`Parse initialized with Application ID: ${PARSE_APPLICATION_ID}`);
-logger.info(`Parse Server URL: ${PARSE_SERVER_URL}`);
+logger.info(`Parse Server URL: http://localhost:${PORT}/parse`);
 
 // Initialize Express app
 const app = express();
@@ -151,13 +151,13 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use('/parse', parseServer.app);
 
 // API Routes - Working routes
-app.use("/api/v1/contact", contactRoutes); // Contact management routes
+// app.use("/api/v1/contact", contactRoutes); // Contact management routes - موقتاً غیرفعال
 app.use("/api/v1/cache", cacheRoutes); // Cache management routes
 app.use("/api/v1/performance", performanceRoutes); // Performance monitoring routes
 app.use("/api/v1/ab-test", abTestRoutes); // A/B Testing management routes
 app.use("/api/v1/scalability", scalabilityRoutes); // Database scalability and optimization routes
 
-// Temporarily disabled routes due to compilation errors
+// Auth routes - موقتاً غیرفعال به دلیل مشکلات compilation
 // app.use("/api/v1/auth", authRoutes);
 // app.use("/api/v1/legacy-categories", categoryRoutes); // Keep legacy routes for backward compatibility
 // app.use("/api/v1/exams", examsRoutes); // New exam management routes
