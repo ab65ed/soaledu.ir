@@ -1,0 +1,19 @@
+{
+  "totalUsers": 1248,
+  "newUsersThisMonth": 156,
+  "publishedExams": 187,
+  "totalExams": 234,
+  "monthlyRevenue": 28900000,
+  "todayActiveUsers": 234,
+  "averageSessionTime": 30,
+  "userRoles": {
+    "students": 1089,
+    "teachers": 145,
+    "admins": 14
+  },
+  "contentStats": {
+    "totalQuestions": 5678,
+    "soldExams": 3456,
+    "averageOrderValue": 125000
+  }
+} 

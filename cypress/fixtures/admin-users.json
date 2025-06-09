@@ -1,0 +1,58 @@
+{
+  "status": "success",
+  "data": {
+    "users": [
+      {
+        "id": 1,
+        "name": "علی احمدی",
+        "email": "ali@example.com",
+        "role": "student",
+        "status": "active",
+        "lastLogin": "2024-01-15T10:30:00Z",
+        "createdAt": "2023-09-01T08:00:00Z"
+      },
+      {
+        "id": 2,
+        "name": "مریم محمدی",
+        "email": "maryam@example.com",
+        "role": "teacher",
+        "status": "active",
+        "lastLogin": "2024-01-14T16:45:00Z",
+        "createdAt": "2023-08-15T09:30:00Z"
+      },
+      {
+        "id": 3,
+        "name": "حسن رضایی",
+        "email": "hassan@example.com",
+        "role": "admin",
+        "status": "active",
+        "lastLogin": "2024-01-15T09:15:00Z",
+        "createdAt": "2023-07-01T10:00:00Z"
+      },
+      {
+        "id": 4,
+        "name": "فاطمه کریمی",
+        "email": "fateme@example.com",
+        "role": "student",
+        "status": "inactive",
+        "lastLogin": "2024-01-10T14:20:00Z",
+        "createdAt": "2023-10-05T11:15:00Z"
+      },
+      {
+        "id": 5,
+        "name": "محمد صادقی",
+        "email": "mohammad@example.com",
+        "role": "teacher",
+        "status": "active",
+        "lastLogin": "2024-01-15T08:30:00Z",
+        "createdAt": "2023-09-20T13:45:00Z"
+      }
+    ],
+    "pagination": {
+      "total": 5,
+      "count": 5,
+      "limit": 10,
+      "skip": 0
+    }
+  }
+} 
