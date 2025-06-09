@@ -32,7 +32,7 @@ export declare const CreateCourseExamSchema: z.ZodObject<{
     description?: string;
     title?: string;
     price?: number;
-    courseType?: "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic" | "other";
+    courseType?: "history" | "mathematics" | "other" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "university" | "konkur";
     group?: "technical" | "other" | "theoretical" | "mathematical" | "experimental" | "art";
     estimatedTime?: number;
@@ -44,7 +44,7 @@ export declare const CreateCourseExamSchema: z.ZodObject<{
     description?: string;
     title?: string;
     price?: number;
-    courseType?: "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic" | "other";
+    courseType?: "history" | "mathematics" | "other" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "university" | "konkur";
     group?: "technical" | "other" | "theoretical" | "mathematical" | "experimental" | "art";
     estimatedTime?: number;
@@ -72,7 +72,7 @@ export declare const UpdateCourseExamSchema: z.ZodObject<{
     description?: string;
     title?: string;
     price?: number;
-    courseType?: "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic" | "other";
+    courseType?: "history" | "mathematics" | "other" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "university" | "konkur";
     group?: "technical" | "other" | "theoretical" | "mathematical" | "experimental" | "art";
     estimatedTime?: number;
@@ -84,7 +84,7 @@ export declare const UpdateCourseExamSchema: z.ZodObject<{
     description?: string;
     title?: string;
     price?: number;
-    courseType?: "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic" | "other";
+    courseType?: "history" | "mathematics" | "other" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "university" | "konkur";
     group?: "technical" | "other" | "theoretical" | "mathematical" | "experimental" | "art";
     estimatedTime?: number;
@@ -147,37 +147,37 @@ export declare const SearchQuerySchema: z.ZodEffects<z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     tags?: string[];
     difficulty?: "medium" | "easy" | "hard";
-    q?: string;
-    courseType?: "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic" | "other";
+    courseType?: "history" | "mathematics" | "other" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "university" | "konkur";
     group?: "technical" | "other" | "theoretical" | "mathematical" | "experimental" | "art";
+    q?: string;
     minPrice?: number;
     maxPrice?: number;
 }, {
     tags?: string;
     difficulty?: "medium" | "easy" | "hard";
-    q?: string;
-    courseType?: "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic" | "other";
+    courseType?: "history" | "mathematics" | "other" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "university" | "konkur";
     group?: "technical" | "other" | "theoretical" | "mathematical" | "experimental" | "art";
+    q?: string;
     minPrice?: number;
     maxPrice?: number;
 }>, {
     tags?: string[];
     difficulty?: "medium" | "easy" | "hard";
-    q?: string;
-    courseType?: "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic" | "other";
+    courseType?: "history" | "mathematics" | "other" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "university" | "konkur";
     group?: "technical" | "other" | "theoretical" | "mathematical" | "experimental" | "art";
+    q?: string;
     minPrice?: number;
     maxPrice?: number;
 }, {
     tags?: string;
     difficulty?: "medium" | "easy" | "hard";
-    q?: string;
-    courseType?: "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic" | "other";
+    courseType?: "history" | "mathematics" | "other" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "university" | "konkur";
     group?: "technical" | "other" | "theoretical" | "mathematical" | "experimental" | "art";
+    q?: string;
     minPrice?: number;
     maxPrice?: number;
 }>;
@@ -198,20 +198,20 @@ export declare const ListQuerySchema: z.ZodObject<{
     limit?: number;
     difficulty?: "medium" | "easy" | "hard";
     isPublished?: boolean;
-    sortBy?: "createdAt" | "updatedAt" | "title" | "price" | "rating";
     page?: number;
+    sortBy?: "createdAt" | "updatedAt" | "title" | "price" | "rating";
     order?: "asc" | "desc";
-    courseType?: "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic" | "other";
+    courseType?: "history" | "mathematics" | "other" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "university" | "konkur";
     group?: "technical" | "other" | "theoretical" | "mathematical" | "experimental" | "art";
 }, {
     limit?: number;
     difficulty?: "medium" | "easy" | "hard";
     isPublished?: boolean;
-    sortBy?: "createdAt" | "updatedAt" | "title" | "price" | "rating";
     page?: number;
+    sortBy?: "createdAt" | "updatedAt" | "title" | "price" | "rating";
     order?: "asc" | "desc";
-    courseType?: "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic" | "other";
+    courseType?: "history" | "mathematics" | "other" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "university" | "konkur";
     group?: "technical" | "other" | "theoretical" | "mathematical" | "experimental" | "art";
 }>;

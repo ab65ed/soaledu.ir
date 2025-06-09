@@ -4,6 +4,7 @@
  */
 import Parse from 'parse/node';
 export interface ContactData {
+    objectId?: string;
     name: string;
     email: string;
     message: string;
@@ -68,6 +69,8 @@ declare class Contact extends Parse.Object {
     close(): void;
     autoCategorize(): void;
     autoPrioritize(): void;
-    toJSON(): ContactData;
+    toContactData(): ContactData & {
+        objectId: string;
+    };
 }
 export default Contact;

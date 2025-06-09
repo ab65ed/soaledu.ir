@@ -6,7 +6,7 @@
 export interface DatabaseIndex {
     id: string;
     collection: string;
-    fields: Record<string, 1 | -1>;
+    fields: Record<string, 1 | -1 | 'text'>;
     name: string;
     type: 'single' | 'compound' | 'text' | 'geospatial' | 'partial';
     options?: {

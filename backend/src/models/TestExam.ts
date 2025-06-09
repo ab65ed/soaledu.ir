@@ -1,5 +1,6 @@
 const Parse = require('parse/node');
 const Question = require('./Question');
+import { TestExamOptions } from '../types/interfaces';
 
 /**
  * TestExam Schema for Back4App
@@ -194,7 +195,7 @@ class TestExam extends Parse.Object {
     return await query.get(id);
   }
 
-  static async findByAuthor(authorId, options = {}) {
+  static async findByAuthor(authorId: string, options: TestExamOptions = {}) {
     const query = new Parse.Query(TestExam);
     query.equalTo('authorId', authorId);
     query.include('author');
@@ -219,8 +220,8 @@ class TestExam extends Parse.Object {
     return await query.find();
   }
 
-  static async findPublished(options = {}) {
-    const query = new Parse.Query(TestExam);
+  static async findPublished(options: TestExamOptions = {}) {
+    let query = new Parse.Query(TestExam);
     query.equalTo('isPublished', true);
     query.equalTo('status', 'active');
     query.include('author');

@@ -7,7 +7,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authenticateToken = exports.supportAccess = exports.financeAccess = exports.flashcardAccess = exports.testExamAccess = exports.questionAccess = exports.courseExamAccess = exports.logActivity = exports.requireOwnerOrRole = exports.requireAllPermissions = exports.requireAnyPermission = exports.requirePermission = exports.requireRole = exports.authenticate = exports.ActivityType = exports.Permission = exports.UserRole = void 0;
+exports.supportAccess = exports.financeAccess = exports.flashcardAccess = exports.testExamAccess = exports.questionAccess = exports.courseExamAccess = exports.logActivity = exports.requireOwnerOrRole = exports.requireAllPermissions = exports.requireAnyPermission = exports.requirePermission = exports.requireRole = exports.authenticate = exports.ActivityType = exports.Permission = exports.UserRole = void 0;
+exports.getDefaultPermissions = getDefaultPermissions;
+exports.generateActivityDescription = generateActivityDescription;
+exports.sanitizeRequestBody = sanitizeRequestBody;
 const node_1 = __importDefault(require("parse/node"));
 const roles_1 = require("../models/roles");
 Object.defineProperty(exports, "UserRole", { enumerable: true, get: function () { return roles_1.UserRole; } });
@@ -255,24 +258,24 @@ exports.courseExamAccess = {
 // Question access control  
 exports.questionAccess = {
     // طراح می‌تواند سوال ایجاد کند
-    create: [authenticateToken, (0, exports.requirePermission)(roles_1.Permission.CREATE_CONTENT), (0, exports.logActivity)(roles_1.ActivityType.CREATE, 'question')],
+    create: [exports.authenticate, (0, exports.requirePermission)(roles_1.Permission.CREATE_CONTENT), (0, exports.logActivity)(roles_1.ActivityType.CREATE, 'question')],
     // همه می‌توانند سوالات را مشاهده کنند
-    read: [authenticateToken],
+    read: [exports.authenticate],
     // فقط مالک یا ادمین/کارشناس می‌تواند ویرایش کند
-    update: [authenticateToken, (0, exports.requireOwnerOrRole)('createdBy', roles_1.UserRole.ADMIN, roles_1.UserRole.EXPERT), (0, exports.logActivity)(roles_1.ActivityType.UPDATE, 'question')],
+    update: [exports.authenticate, (0, exports.requireOwnerOrRole)('createdBy', roles_1.UserRole.ADMIN, roles_1.UserRole.EXPERT), (0, exports.logActivity)(roles_1.ActivityType.UPDATE, 'question')],
     // فقط مالک یا ادمین می‌تواند حذف کند
-    delete: [authenticateToken, (0, exports.requireOwnerOrRole)('createdBy', roles_1.UserRole.ADMIN), (0, exports.logActivity)(roles_1.ActivityType.DELETE, 'question')],
+    delete: [exports.authenticate, (0, exports.requireOwnerOrRole)('createdBy', roles_1.UserRole.ADMIN), (0, exports.logActivity)(roles_1.ActivityType.DELETE, 'question')],
     // انتشار سوال برای آزمون - کارشناس یا ادمین
-    publish: [authenticateToken, (0, exports.requireAnyPermission)(roles_1.Permission.APPROVE_CONTENT, roles_1.Permission.MANAGE_SYSTEM), (0, exports.logActivity)(roles_1.ActivityType.APPROVE, 'question')]
+    publish: [exports.authenticate, (0, exports.requireAnyPermission)(roles_1.Permission.APPROVE_CONTENT, roles_1.Permission.MANAGE_SYSTEM), (0, exports.logActivity)(roles_1.ActivityType.APPROVE, 'question')]
 };
 // Test-Exam access control
 exports.testExamAccess = {
     // دانشجویان می‌توانند آزمون بگیرند
-    take: [authenticateToken, (0, exports.requirePermission)(roles_1.Permission.TAKE_EXAMS)],
+    take: [exports.authenticate, (0, exports.requirePermission)(roles_1.Permission.TAKE_EXAMS)],
     // مشاهده نتایج
-    results: [authenticateToken, (0, exports.requirePermission)(roles_1.Permission.VIEW_RESULTS)],
+    results: [exports.authenticate, (0, exports.requirePermission)(roles_1.Permission.VIEW_RESULTS)],
     // مدیریت آزمون‌ها - کارشناس یا ادمین
-    manage: [authenticateToken, (0, exports.requireAnyPermission)(roles_1.Permission.MANAGE_EXAMS, roles_1.Permission.MANAGE_SYSTEM)],
+    manage: [exports.authenticate, (0, exports.requireAnyPermission)(roles_1.Permission.MANAGE_EXAMS, roles_1.Permission.MANAGE_SYSTEM)],
     // لاگ فعالیت
     withLogging: (activityType) => [
         ...exports.testExamAccess.take,
@@ -282,35 +285,35 @@ exports.testExamAccess = {
 // Flashcard access control
 exports.flashcardAccess = {
     // طراح می‌تواند فلش‌کارت ایجاد کند
-    create: [authenticateToken, (0, exports.requirePermission)(roles_1.Permission.CREATE_CONTENT), (0, exports.logActivity)(roles_1.ActivityType.CREATE, 'flashcard')],
+    create: [exports.authenticate, (0, exports.requirePermission)(roles_1.Permission.CREATE_CONTENT), (0, exports.logActivity)(roles_1.ActivityType.CREATE, 'flashcard')],
     // همه می‌توانند فلش‌کارت‌ها را مشاهده کنند
-    read: [authenticateToken],
+    read: [exports.authenticate],
     // خرید فلش‌کارت
-    purchase: [authenticateToken, (0, exports.requirePermission)(roles_1.Permission.PURCHASE_CONTENT), (0, exports.logActivity)(roles_1.ActivityType.VIEW, 'flashcard_purchase')],
+    purchase: [exports.authenticate, (0, exports.requirePermission)(roles_1.Permission.PURCHASE_CONTENT), (0, exports.logActivity)(roles_1.ActivityType.VIEW, 'flashcard_purchase')],
     // مدیریت فلش‌کارت‌ها
-    manage: [authenticateToken, (0, exports.requireAnyPermission)(roles_1.Permission.MANAGE_SYSTEM, roles_1.Permission.APPROVE_CONTENT)]
+    manage: [exports.authenticate, (0, exports.requireAnyPermission)(roles_1.Permission.MANAGE_SYSTEM, roles_1.Permission.APPROVE_CONTENT)]
 };
 // Finance access control
 exports.financeAccess = {
     // مشاهده قیمت‌ها - همه
-    viewPrices: [authenticateToken],
+    viewPrices: [exports.authenticate],
     // مدیریت مالی - فقط ادمین
-    manage: [authenticateToken, (0, exports.requirePermission)(roles_1.Permission.MANAGE_PAYMENTS)],
+    manage: [exports.authenticate, (0, exports.requirePermission)(roles_1.Permission.MANAGE_PAYMENTS)],
     // درخواست وجه - طراحان
-    requestPayment: [authenticateToken, (0, exports.requirePermission)(roles_1.Permission.REQUEST_PAYMENT), (0, exports.logActivity)(roles_1.ActivityType.PAYMENT_REQUEST, 'payment_request')],
+    requestPayment: [exports.authenticate, (0, exports.requirePermission)(roles_1.Permission.REQUEST_PAYMENT), (0, exports.logActivity)(roles_1.ActivityType.PAYMENT_REQUEST, 'payment_request')],
     // پردازش پرداخت
-    processPayment: [authenticateToken, (0, exports.logActivity)(roles_1.ActivityType.VIEW, 'payment')]
+    processPayment: [exports.authenticate, (0, exports.logActivity)(roles_1.ActivityType.VIEW, 'payment')]
 };
 // Support access control
 exports.supportAccess = {
     // ایجاد تیکت - همه
-    createTicket: [authenticateToken, (0, exports.requirePermission)(roles_1.Permission.CREATE_TICKETS), (0, exports.logActivity)(roles_1.ActivityType.TICKET_CREATED, 'support_ticket')],
+    createTicket: [exports.authenticate, (0, exports.requirePermission)(roles_1.Permission.CREATE_TICKETS), (0, exports.logActivity)(roles_1.ActivityType.TICKET_CREATED, 'support_ticket')],
     // مشاهده تیکت‌ها - پشتیبانی یا ادمین
-    viewTickets: [authenticateToken, (0, exports.requireAnyPermission)(roles_1.Permission.VIEW_TICKETS, roles_1.Permission.MANAGE_SYSTEM)],
+    viewTickets: [exports.authenticate, (0, exports.requireAnyPermission)(roles_1.Permission.VIEW_TICKETS, roles_1.Permission.MANAGE_SYSTEM)],
     // پاسخ به تیکت - پشتیبانی
-    respondTicket: [authenticateToken, (0, exports.requirePermission)(roles_1.Permission.RESPOND_TICKETS), (0, exports.logActivity)(roles_1.ActivityType.UPDATE, 'support_ticket')],
+    respondTicket: [exports.authenticate, (0, exports.requirePermission)(roles_1.Permission.RESPOND_TICKETS), (0, exports.logActivity)(roles_1.ActivityType.UPDATE, 'support_ticket')],
     // مدیریت پایگاه دانش
-    manageKnowledgeBase: [authenticateToken, (0, exports.requirePermission)(roles_1.Permission.MANAGE_KNOWLEDGE_BASE)]
+    manageKnowledgeBase: [exports.authenticate, (0, exports.requirePermission)(roles_1.Permission.MANAGE_KNOWLEDGE_BASE)]
 };
 // Utility functions
 function getDefaultPermissions(role) {

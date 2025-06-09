@@ -3,114 +3,580 @@ description:
 globs: 
 alwaysApply: false
 ---
-# ============================================================
-# PROJECT RULES
-# Project-specific policies and standards that must be followed within this project.
-# Enforced by Cursor agent across the team.
-# ============================================================
+1. Technology Stack
 
-# 🧪 Testing & Verification
 
-- After any change to the codebase, always run a full build and execute all tests (Jest, Cypress).
-# Do not proceed to further changes until all errors are fully resolved.
 
-- After completing each development section, always review the test results and resolve any issues before moving forward.
-# To ensure stability and prevent regressions.
 
-# 🎨 UI & Design
 
-- Always act as a **senior UI/UX engineer** when working on UI, interactions, and design-related tasks.
-# Ensure the highest standards of visual design, usability, and accessibility.
+Frontend:
 
-- All UI must strictly use **Tailwind CSS**, with variables and design tokens from `theme.ts`.
-# To ensure consistent, accessible, and brand-aligned visual design.
 
-- UI must fully support RTL and IranSans font.
-# To ensure accessibility for target users.
 
-# MCP Usage in Project
 
-- Always automatically invoke:
-  - "sequential-thinking"
-  - "context7" (as `use context7` hook)
-  - "@21st-dev/magic" (for UI tasks via `/ui`)
-  - "@magicuidesign/mcp" (for styling tasks)
 
-# ⚙️ State & Data Management
+Framework: Next.js 15.XX (latest App Router) with Turbopack for optimized builds.
 
-- Always use **Zustand** for all state management in this project.
-# Do not use Redux or introduce new Redux patterns.
 
-- Always manage system cache using **React Query** in the most professional and optimized way.
-# Leverage advanced caching strategies and best practices of React Query to achieve intelligent, high-performance caching behavior.
 
-- Always ensure seamless integration and consistency between **Zustand** (for local state) and **React Query** (for server state).
-# Use well-structured services and custom hooks to manage the interaction between state layers effectively.
+Language: JavaScript with strict type safety and exactOptionalPropertyTypes.
 
-- Always utilize custom hooks in an effective, scalable, and advanced manner.
-# To encapsulate logic, improve reusability, and maintain a clean architecture.
 
-# ⚡ Performance Optimization
 
-- Always place special emphasis on performance optimization across both frontend and backend.
-# Continuously optimize rendering, network usage, memory consumption, and computational efficiency.
+Styling: TailwindCSS with full RTL support, utilizing IRANSans font and dynamic theme tokens from /theme.ts.
 
-- Perform professional memory usage tracking and optimization.
-# Detect memory leaks and maintain optimal runtime performance.
 
-- Conduct bundle size analysis and maintain an optimal bundle size.
-# Improve frontend performance and user experience.
 
-- Always use **sequential thinking** combined with the latest and most accurate official documentation when debugging.
-# Approach complex debugging in a structured, step-by-step manner using up-to-date resources.
+Animations: FramerMotion for GPU-accelerated, 60fps animations with Reduced Motion support.
 
-# 🛡️ Security & System Integrity
 
-- Always implement form and input validation using the most professional, strict, and secure practices.
-# All forms must have robust validation logic to prevent invalid, malicious, or unsafe inputs.
 
-- Always ensure that validation is implemented both client-side and server-side.
-# To guarantee full security and consistency regardless of entry point.
+Form Validation: Zod integrated with ReactHookForm, enforcing Persian error messages and real-time feedback.
 
-- Always apply strict anti-intrusion (anti-injection, anti-XSS, anti-logic bypass) validation patterns.
-# Protect against common attack vectors such as SQL Injection, XSS, and business logic bypass.
 
-- Always ensure that form validation logic is modular, reusable, and thoroughly tested.
-# To maintain a clean architecture and guarantee correctness over time.
 
-- Implement full **Security Event Logging**.
-# Track and monitor important security-related events.
+State Management: Zustand for local state, ReactQuery for server state with intelligent caching (staleTime: 30000ms, refetchInterval: 60000ms).
 
-- Implement a comprehensive **Audit Trail**.
-# Ensure full traceability of actions performed within the system.
 
-- Implement and continuously monitor **System Health Monitoring**.
-# Ensure system stability and detect issues early.
 
-- Implement professional **Error Tracking and Reporting**.
-# Proactively detect and address errors with detailed reporting.
+Icons: Heroicons for consistent UI elements.
 
-# 🚀 Code Structure & Maintainability
 
-- Always split large files into smaller, modular components where applicable.
-# To enhance code clarity, maintainability, and scalability.
 
-- Maintain atomic design structure and modular architecture across the project.
-# To ensure a scalable and maintainable project structure.
+Offline Support: localStorage as a fallback for data persistence.
 
-- Manage and optimize cache behavior intelligently based on new requests.
-# Ensure optimal data freshness and performance.
 
-- Always coordinate with the user before making significant changes to core business logic.
-# To ensure collaborative decision-making and alignment with project goals.
 
-- After any change, always perform a full build and execute all necessary tests.
-# Iteratively fix any errors encountered before proceeding further.
+Backend:
 
-# 🧑‍💻 Professional Development Mindset
 
-- Always act as a **senior TypeScript engineer** across all parts of the project, even when not using strict typing everywhere.
-# Write code with type safety, clarity, and maintainability in mind.
 
-- Continuously strive for the highest level of software engineering professionalism across all tasks.
-# Maintain a mindset of delivering clean, optimized, scalable, and secure code.
+
+
+Framework: Express.js integrated with ParseServer/Back4App for MongoDB operations.
+
+
+
+Validation: Zod for API input validation with Persian error messages.
+
+
+
+Authentication: JWT with 10-minute token expiration and auto-refresh mechanisms.
+
+
+
+Testing:
+
+
+
+
+
+Unit/Integration: Jest/Vitest targeting 80%+ coverage (95% components, 90% services, 85% hooks).
+
+
+
+End-to-End: Cypress for user flows, RTL design, performance, and accessibility.
+
+
+
+Development Tools:
+
+
+
+
+
+Linting: ESLint with TypeScript rules for code consistency.
+
+
+
+Formatting: Prettier for standardized code style.
+
+
+
+Documentation: Markdown-based in /frontend/docs and /backend/docs.
+
+
+
+Commits: ConventionalCommits for traceable change history.
+
+2. Project Structure
+
+
+
+
+
+Frontend (/frontend/src):
+
+
+
+
+
+Components: AtomicDesign (/components/{atoms,molecules,organisms}) for modularity.
+
+
+
+Services: /services/api.ts for REST and Parse SDK integrations.
+
+
+
+Hooks: /hooks for reusable logic (e.g., useAuth, useCourseExams).
+
+
+
+Types: /types for TypeScript interfaces and enums.
+
+
+
+Tests: /__tests__ for Jest and Cypress suites.
+
+
+
+Pages: /app leveraging Next.js App Router.
+
+
+
+Backend (/backend/src):
+
+
+
+
+
+Controllers: /controllers for business logic.
+
+
+
+Models: /models for MongoDB schemas with performance indexes.
+
+
+
+Routes: /routes for RESTful API endpoints.
+
+
+
+Middleware: /middleware for security, authentication, and authorization.
+
+
+
+Validations: /validations with Zod for input sanitization.
+
+
+
+Documentation:
+
+
+
+
+
+Comprehensive reports in /frontend/docs (e.g., setup.md, pages.md) and /backend/docs (e.g., refactor_report.md).
+
+
+
+Persian comments for complex logic to enhance team comprehension.
+
+3. Role-Based Access Control (RBAC)
+
+
+
+
+
+Roles:
+
+
+
+
+
+Admin: Full system access, including user/role/content/finance/log management.
+
+
+
+Designer: Content creation/editing (courses, questions, flashcards), revenue tracking, content analytics.
+
+
+
+Student: Exam participation, result viewing, profile/wallet management.
+
+
+
+Expert: Content review/approval, feedback, quality analytics.
+
+
+
+Support: Ticket viewing/responding, limited user management.
+
+
+
+Permissions:
+
+
+
+
+
+Enum: MANAGE_SYSTEM, VIEW_LOGS, MANAGE_USERS, CREATE_CONTENT, TAKE_EXAMS, MANAGE_PAYMENTS, VIEW_ANALYTICS, VIEW_TICKETS, RESPOND_TICKETS, CREATE_TICKETS.
+
+
+
+Functions: hasPermission, hasAnyPermission, hasAllPermissions for access control.
+
+
+
+UI Components:
+
+
+
+
+
+RoleBasedDashboard for role-specific content rendering.
+
+
+
+Dedicated dashboards: AdminDashboard, DesignerDashboard, StudentDashboard, ExpertDashboard, SupportDashboard.
+
+
+
+Security:
+
+
+
+
+
+Resource ownership enforced (e.g., Designers edit only their content).
+
+
+
+Activity logging for all actions (create/edit/delete/payment/ticket) with timestamps.
+
+4. Performance Optimization
+
+
+
+
+
+Frontend:
+
+
+
+
+
+Implement LazyLoading for components (3 per batch).
+
+
+
+Apply Debouncing for search/filter operations (300ms delay).
+
+
+
+Utilize CodeSplitting and DynamicImports via Next.js.
+
+
+
+Enable Virtualization (e.g., react-window) for large lists like QuestionSelector.
+
+
+
+Leverage React.memo, useMemo, useCallback to prevent unnecessary re-renders.
+
+
+
+Optimize images with Next.jsImage (max 400px, WebP format).
+
+
+
+Backend:
+
+
+
+
+
+Maintain performance indexes (7 strategic indexes on MongoDB models).
+
+
+
+Optimize queries with Projection and Population.
+
+
+
+Implement three-layer caching for exam purchases (6-hour shared, unique 70%+ new, max 2 repetitions).
+
+
+
+Monitoring:
+
+
+
+
+
+Track CoreWebVitals (LCP, FID, CLS) via Lighthouse.
+
+
+
+Perform BundleAnalysis to minimize initial load size.
+
+5. Security
+
+
+
+
+
+Authentication: JWT with 10-minute expiration and auto-expire.
+
+
+
+RateLimiting: 5 req/min for auth, 100 req/min for public, 10 req/min for uploads.
+
+
+
+InputSanitization: Prevent XSS and Injection using Zod.
+
+
+
+BotDetection: Employ Honeypot and Timing Analysis.
+
+
+
+Logging: Maintain 4 log types (application, security, error, audit) with retention policies.
+
+
+
+FileUploads: Restrict to PNG/JPG, max 5MB, with dimension validation.
+
+
+
+CSRFProtection: Enforce for all forms.
+
+6. Testing and Code Quality
+
+
+
+
+
+TestingStrategy:
+
+
+
+
+
+Unit: Components, hooks, services.
+
+
+
+Integration: Component-API interactions.
+
+
+
+End-to-End: User flows (e.g., registration, exam-taking).
+
+
+
+Coverage: Target 80%+ (95% components, 90% services, 85% hooks).
+
+
+
+SpecializedTests:
+
+
+
+
+
+Performance: Lighthouse CI, Bundle Size Analysis.
+
+
+
+Accessibility: WCAG 2.2 compliance.
+
+
+
+Security: Iranian national ID/mobile validation, password reset flows.
+
+
+
+CodeQuality:
+
+
+
+
+
+Adhere to CleanCode principles (Single Responsibility, meaningful naming).
+
+
+
+Implement ErrorBoundaries and Persian error messages.
+
+
+
+Refactor to eliminate redundant code and ensure modularity.
+
+7. Documentation and Reporting
+
+
+
+
+
+Documentation:
+
+
+
+
+
+Maintain Markdown files in /frontend/docs and /backend/docs.
+
+
+
+Generate test coverage reports in /frontend/docs/test-report.md.
+
+
+
+Produce performance reports in /frontend/docs/performance.md.
+
+
+
+Logging:
+
+
+
+
+
+Log user activities (create/edit/delete/payment/ticket) with timestamps.
+
+
+
+Capture errors with stack traces and context.
+
+
+
+Backup:
+
+
+
+
+
+Ensure robust backup mechanisms before significant changes.
+
+8. Development Process
+
+
+
+
+
+Methodology: Agile/Scrum with 2-week sprints.
+
+
+
+Prompts:
+
+
+
+
+
+Focus solely on page-specific details (e.g., /course-exam form logic) or issue resolutions (e.g., QuestionSelector performance).
+
+
+
+Require explicit user approval for new or modified BusinessLogic.
+
+
+
+BuildandTest:
+
+
+
+
+
+Execute full builds (npm run build) after every change.
+
+
+
+Run comprehensive tests (npm run test) until all issues are resolved.
+
+
+
+Deployment:
+
+
+
+
+
+Local development initially, with future support for Render or similar platforms.
+
+
+
+Utilize Dockerfile and Nginx for production-grade deployment.
+
+9. UI/UX Standards
+
+
+
+
+
+Language: Persian with full RTL support.
+
+
+
+Font: IRANSans with variable weights.
+
+
+
+Animations: Tailwind CSS for interactive elements (e.g., ShimmerButton, accordions).
+
+
+
+Accessibility: Comply with WCAG 2.2, including Screen Reader support.
+
+
+
+ResponsiveDesign: Prioritize Mobile-First with Tailwind CSS.
+
+
+
+Theme: Default blue/primary (configurable with user approval).
+
+10. Additional Requirements
+
+
+
+
+
+Exam-Edu Specifics:
+
+
+
+
+
+Implement A/BTesting for UI/UX and QuestionSelector with dynamic variant assignment and conversion tracking.
+
+
+
+Support FinancialSystem with dynamic pricing (e.g., 800 IRR/10000-20000 toman for 10-20 questions) and discounts (10% first purchase, 20% student).
+
+
+
+Enable offlineSupport via localStorage for forms and exam sessions.
+
+
+
+Integrate SmartExamPurchaseCache with three-layer caching for optimized exam delivery.
+
+
+
+KnownIssues:
+
+
+
+
+
+Optimize QuestionSelector performance with Virtualization (e.g., react-window).
+
+
+
+Resolve Cypress E2E test failures.
+
+
+
+Transition from polling to WebSocket for real-time notifications (polling fallback sufficient for now).
+
+
+
+Address TypeScript linting issues generically.
+
+
+
+Replace MockData with live API integrations progressively.

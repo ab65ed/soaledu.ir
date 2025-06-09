@@ -302,31 +302,31 @@ export const courseExamAccess = {
 // Question access control  
 export const questionAccess = {
   // طراح می‌تواند سوال ایجاد کند
-  create: [authenticateToken, requirePermission(Permission.CREATE_CONTENT), logActivity(ActivityType.CREATE, 'question')],
+  create: [authenticate, requirePermission(Permission.CREATE_CONTENT), logActivity(ActivityType.CREATE, 'question')],
   
   // همه می‌توانند سوالات را مشاهده کنند
-  read: [authenticateToken],
+  read: [authenticate],
   
   // فقط مالک یا ادمین/کارشناس می‌تواند ویرایش کند
-  update: [authenticateToken, requireOwnerOrRole('createdBy', UserRole.ADMIN, UserRole.EXPERT), logActivity(ActivityType.UPDATE, 'question')],
+  update: [authenticate, requireOwnerOrRole('createdBy', UserRole.ADMIN, UserRole.EXPERT), logActivity(ActivityType.UPDATE, 'question')],
   
   // فقط مالک یا ادمین می‌تواند حذف کند
-  delete: [authenticateToken, requireOwnerOrRole('createdBy', UserRole.ADMIN), logActivity(ActivityType.DELETE, 'question')],
+  delete: [authenticate, requireOwnerOrRole('createdBy', UserRole.ADMIN), logActivity(ActivityType.DELETE, 'question')],
   
   // انتشار سوال برای آزمون - کارشناس یا ادمین
-  publish: [authenticateToken, requireAnyPermission(Permission.APPROVE_CONTENT, Permission.MANAGE_SYSTEM), logActivity(ActivityType.APPROVE, 'question')]
+  publish: [authenticate, requireAnyPermission(Permission.APPROVE_CONTENT, Permission.MANAGE_SYSTEM), logActivity(ActivityType.APPROVE, 'question')]
 };
 
 // Test-Exam access control
 export const testExamAccess = {
   // دانشجویان می‌توانند آزمون بگیرند
-  take: [authenticateToken, requirePermission(Permission.TAKE_EXAMS)],
+  take: [authenticate, requirePermission(Permission.TAKE_EXAMS)],
   
   // مشاهده نتایج
-  results: [authenticateToken, requirePermission(Permission.VIEW_RESULTS)],
+  results: [authenticate, requirePermission(Permission.VIEW_RESULTS)],
   
   // مدیریت آزمون‌ها - کارشناس یا ادمین
-  manage: [authenticateToken, requireAnyPermission(Permission.MANAGE_EXAMS, Permission.MANAGE_SYSTEM)],
+  manage: [authenticate, requireAnyPermission(Permission.MANAGE_EXAMS, Permission.MANAGE_SYSTEM)],
   
   // لاگ فعالیت
   withLogging: (activityType: ActivityType) => [
@@ -338,46 +338,46 @@ export const testExamAccess = {
 // Flashcard access control
 export const flashcardAccess = {
   // طراح می‌تواند فلش‌کارت ایجاد کند
-  create: [authenticateToken, requirePermission(Permission.CREATE_CONTENT), logActivity(ActivityType.CREATE, 'flashcard')],
+  create: [authenticate, requirePermission(Permission.CREATE_CONTENT), logActivity(ActivityType.CREATE, 'flashcard')],
   
   // همه می‌توانند فلش‌کارت‌ها را مشاهده کنند
-  read: [authenticateToken],
+  read: [authenticate],
   
   // خرید فلش‌کارت
-  purchase: [authenticateToken, requirePermission(Permission.PURCHASE_CONTENT), logActivity(ActivityType.VIEW, 'flashcard_purchase')],
+  purchase: [authenticate, requirePermission(Permission.PURCHASE_CONTENT), logActivity(ActivityType.VIEW, 'flashcard_purchase')],
   
   // مدیریت فلش‌کارت‌ها
-  manage: [authenticateToken, requireAnyPermission(Permission.MANAGE_SYSTEM, Permission.APPROVE_CONTENT)]
+  manage: [authenticate, requireAnyPermission(Permission.MANAGE_SYSTEM, Permission.APPROVE_CONTENT)]
 };
 
 // Finance access control
 export const financeAccess = {
   // مشاهده قیمت‌ها - همه
-  viewPrices: [authenticateToken],
+  viewPrices: [authenticate],
   
   // مدیریت مالی - فقط ادمین
-  manage: [authenticateToken, requirePermission(Permission.MANAGE_PAYMENTS)],
+  manage: [authenticate, requirePermission(Permission.MANAGE_PAYMENTS)],
   
   // درخواست وجه - طراحان
-  requestPayment: [authenticateToken, requirePermission(Permission.REQUEST_PAYMENT), logActivity(ActivityType.PAYMENT_REQUEST, 'payment_request')],
+  requestPayment: [authenticate, requirePermission(Permission.REQUEST_PAYMENT), logActivity(ActivityType.PAYMENT_REQUEST, 'payment_request')],
   
   // پردازش پرداخت
-  processPayment: [authenticateToken, logActivity(ActivityType.VIEW, 'payment')]
+  processPayment: [authenticate, logActivity(ActivityType.VIEW, 'payment')]
 };
 
 // Support access control
 export const supportAccess = {
   // ایجاد تیکت - همه
-  createTicket: [authenticateToken, requirePermission(Permission.CREATE_TICKETS), logActivity(ActivityType.TICKET_CREATED, 'support_ticket')],
+  createTicket: [authenticate, requirePermission(Permission.CREATE_TICKETS), logActivity(ActivityType.TICKET_CREATED, 'support_ticket')],
   
   // مشاهده تیکت‌ها - پشتیبانی یا ادمین
-  viewTickets: [authenticateToken, requireAnyPermission(Permission.VIEW_TICKETS, Permission.MANAGE_SYSTEM)],
+  viewTickets: [authenticate, requireAnyPermission(Permission.VIEW_TICKETS, Permission.MANAGE_SYSTEM)],
   
   // پاسخ به تیکت - پشتیبانی
-  respondTicket: [authenticateToken, requirePermission(Permission.RESPOND_TICKETS), logActivity(ActivityType.UPDATE, 'support_ticket')],
+  respondTicket: [authenticate, requirePermission(Permission.RESPOND_TICKETS), logActivity(ActivityType.UPDATE, 'support_ticket')],
   
   // مدیریت پایگاه دانش
-  manageKnowledgeBase: [authenticateToken, requirePermission(Permission.MANAGE_KNOWLEDGE_BASE)]
+  manageKnowledgeBase: [authenticate, requirePermission(Permission.MANAGE_KNOWLEDGE_BASE)]
 };
 
 // Utility functions
@@ -473,21 +473,10 @@ function sanitizeRequestBody(body: any): any {
   return sanitized;
 }
 
-// Export all middleware functions
+// Export all middleware functions and utility functions
 export type { AuthenticatedRequest };
-
 export {
-  authenticateToken,
-  requireRole,
-  requirePermission,
-  requireAnyPermission,
-  requireAllPermissions,
-  requireOwnerOrRole,
-  logActivity,
-  courseExamAccess,
-  questionAccess,
-  testExamAccess,
-  flashcardAccess,
-  financeAccess,
-  supportAccess
+  getDefaultPermissions,
+  generateActivityDescription,
+  sanitizeRequestBody
 }; 

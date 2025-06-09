@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Question = void 0;
-const node_1 = __importDefault(require("parse/node"));
+const Parse = require('parse/node');
 /**
  * Question Schema for Back4App
  * Represents a question entity with comprehensive metadata
@@ -15,7 +12,7 @@ const node_1 = __importDefault(require("parse/node"));
  * - صفحه منبع اختیاری
  * - انواع مختلف سوال
  */
-class Question extends node_1.default.Object {
+class Question extends Parse.Object {
     constructor() {
         super('Question');
     }
@@ -200,7 +197,7 @@ class Question extends node_1.default.Object {
             question.author = data.author;
         }
         // ACL settings
-        const acl = new node_1.default.ACL();
+        const acl = new Parse.ACL();
         if (data.authorId) {
             acl.setReadAccess(data.authorId, true);
             acl.setWriteAccess(data.authorId, true);
@@ -215,11 +212,11 @@ class Question extends node_1.default.Object {
         return await question.save();
     }
     static async findById(id) {
-        const query = new node_1.default.Query(Question);
+        const query = new Parse.Query(Question);
         return await query.get(id);
     }
     static async findByAuthor(authorId, options = {}) {
-        const query = new node_1.default.Query(Question);
+        const query = new Parse.Query(Question);
         query.equalTo('authorId', authorId);
         if (options.include) {
             query.include(options.include);
@@ -233,7 +230,7 @@ class Question extends node_1.default.Object {
         return await query.find();
     }
     static async findPublished(options = {}) {
-        const query = new node_1.default.Query(Question);
+        let query = new Parse.Query(Question);
         query.equalTo('isPublished', true);
         if (options.type) {
             query.equalTo('type', options.type);
@@ -249,14 +246,14 @@ class Question extends node_1.default.Object {
         }
         if (options.search) {
             // Create compound query for text search
-            const textQuery = new node_1.default.Query(Question);
+            const textQuery = new Parse.Query(Question);
             textQuery.contains('text', options.search);
-            const categoryQuery = new node_1.default.Query(Question);
+            const categoryQuery = new Parse.Query(Question);
             categoryQuery.contains('category', options.search);
-            const tagQuery = new node_1.default.Query(Question);
+            const tagQuery = new Parse.Query(Question);
             tagQuery.containedIn('tags', [options.search]);
-            const searchQuery = node_1.default.Query.or(textQuery, categoryQuery, tagQuery);
-            query = node_1.default.Query.and(query, searchQuery);
+            const searchQuery = Parse.Query.or(textQuery, categoryQuery, tagQuery);
+            query = Parse.Query.and(query, searchQuery);
         }
         if (options.sortBy) {
             if (options.sortBy === 'difficulty') {
@@ -284,15 +281,15 @@ class Question extends node_1.default.Object {
         return await query.find();
     }
     static async searchByText(searchText, options = {}) {
-        const query = new node_1.default.Query(Question);
+        const query = new Parse.Query(Question);
         // Full text search across multiple fields
-        const textQuery = new node_1.default.Query(Question);
+        const textQuery = new Parse.Query(Question);
         textQuery.contains('text', searchText);
-        const categoryQuery = new node_1.default.Query(Question);
+        const categoryQuery = new Parse.Query(Question);
         categoryQuery.contains('category', searchText);
-        const tagQuery = new node_1.default.Query(Question);
+        const tagQuery = new Parse.Query(Question);
         tagQuery.containedIn('tags', [searchText]);
-        const searchQuery = node_1.default.Query.or(textQuery, categoryQuery, tagQuery);
+        const searchQuery = Parse.Query.or(textQuery, categoryQuery, tagQuery);
         if (options.publishedOnly) {
             searchQuery.equalTo('isPublished', true);
         }
@@ -303,7 +300,7 @@ class Question extends node_1.default.Object {
         return await searchQuery.find();
     }
     static async getStats(authorId) {
-        const query = new node_1.default.Query(Question);
+        const query = new Parse.Query(Question);
         if (authorId) {
             query.equalTo('authorId', authorId);
         }
@@ -470,6 +467,6 @@ class Question extends node_1.default.Object {
 }
 exports.Question = Question;
 // Register the class
-node_1.default.Object.registerSubclass('Question', Question);
+Parse.Object.registerSubclass('Question', Question);
 exports.default = Question;
 //# sourceMappingURL=Question.js.map

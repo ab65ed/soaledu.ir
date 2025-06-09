@@ -23,12 +23,12 @@ const env_1 = require("./config/env");
 const logger_1 = __importDefault(require("./config/logger"));
 // Import routes
 // Import working routes
-const contact_1 = __importDefault(require("./routes/contact")); // Contact management routes
+// import contactRoutes from "./routes/contact"; // Contact management routes - موقتاً غیرفعال
 const cache_1 = __importDefault(require("./routes/cache")); // Cache management routes
 const performance_1 = __importDefault(require("./routes/performance")); // Performance monitoring routes
 const ab_test_1 = __importDefault(require("./routes/ab-test")); // A/B Testing management routes
 const scalability_1 = __importDefault(require("./routes/scalability")); // Database scalability and optimization routes
-// Temporarily disabled routes due to compilation errors
+// Auth routes - موقتاً غیرفعال به دلیل مشکلات compilation
 // import authRoutes from "./routes/auth.routes";
 // import categoryRoutes from "./routes/category.routes";
 // import examsRoutes from "./routes/exams"; // New exam management routes
@@ -49,11 +49,11 @@ const errorHandler_1 = require("./middlewares/errorHandler");
 const parse_server_1 = require("./config/parse-server");
 // Initialize Parse Server
 const parseServer = (0, parse_server_1.createParseServer)();
-// Initialize Parse
+// Initialize Parse - after server creation
 node_1.default.initialize(env_1.PARSE_APPLICATION_ID, env_1.PARSE_JAVASCRIPT_KEY);
-node_1.default.serverURL = env_1.PARSE_SERVER_URL;
+node_1.default.serverURL = `http://localhost:${env_1.PORT}/parse`; // Use the same server
 logger_1.default.info(`Parse initialized with Application ID: ${env_1.PARSE_APPLICATION_ID}`);
-logger_1.default.info(`Parse Server URL: ${env_1.PARSE_SERVER_URL}`);
+logger_1.default.info(`Parse Server URL: http://localhost:${env_1.PORT}/parse`);
 // Initialize Express app
 const app = (0, express_1.default)();
 // Swagger configuration
@@ -61,18 +61,41 @@ const swaggerOptions = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "Educational Test System API",
+            title: "Educational Test System API - Exam-Edu",
             version: "1.0.0",
-            description: "API documentation for the Educational Test System",
+            description: "API documentation for the Educational Test System including Contact, Performance, A/B Testing, Cache Management, and Scalability routes",
+            contact: {
+                name: "API Support",
+                url: "https://soaledu.ir",
+                email: "support@soaledu.ir"
+            }
         },
         servers: [
             {
                 url: `http://localhost:${env_1.PORT}/api/v1`,
                 description: "Development server",
             },
+            {
+                url: "https://soaledu.ir/api/v1",
+                description: "Production server",
+            },
+        ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT",
+                },
+            },
+        },
+        security: [
+            {
+                bearerAuth: [],
+            },
         ],
     },
-    apis: ["./src/routes/*.ts", "./src/routes/*.js", "./src/models/*.ts", "./src/models/*.js"],
+    apis: ["./src/routes/*.ts", "./src/routes/*.js", "./src/models/*.ts", "./src/models/*.js", "./src/controllers/*.ts"],
 };
 const swaggerDocs = (0, swagger_jsdoc_1.default)(swaggerOptions);
 // Middleware
@@ -106,12 +129,12 @@ app.use((req, res, next) => {
 // Parse Server endpoint
 app.use('/parse', parseServer.app);
 // API Routes - Working routes
-app.use("/api/v1/contact", contact_1.default); // Contact management routes
+// app.use("/api/v1/contact", contactRoutes); // Contact management routes - موقتاً غیرفعال
 app.use("/api/v1/cache", cache_1.default); // Cache management routes
 app.use("/api/v1/performance", performance_1.default); // Performance monitoring routes
 app.use("/api/v1/ab-test", ab_test_1.default); // A/B Testing management routes
 app.use("/api/v1/scalability", scalability_1.default); // Database scalability and optimization routes
-// Temporarily disabled routes due to compilation errors
+// Auth routes - موقتاً غیرفعال به دلیل مشکلات compilation
 // app.use("/api/v1/auth", authRoutes);
 // app.use("/api/v1/legacy-categories", categoryRoutes); // Keep legacy routes for backward compatibility
 // app.use("/api/v1/exams", examsRoutes); // New exam management routes

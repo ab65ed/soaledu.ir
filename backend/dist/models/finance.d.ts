@@ -246,8 +246,8 @@ export declare const TransactionSchema: z.ZodObject<{
     platformFee: z.ZodOptional<z.ZodNumber>;
     metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
 }, "strip", z.ZodTypeAny, {
-    userId?: string;
     type?: TransactionType;
+    userId?: string;
     metadata?: Record<string, any>;
     description?: string;
     amount?: number;
@@ -256,8 +256,8 @@ export declare const TransactionSchema: z.ZodObject<{
     referenceId?: string;
     designerId?: string;
 }, {
-    userId?: string;
     type?: TransactionType;
+    userId?: string;
     metadata?: Record<string, any>;
     description?: string;
     amount?: number;

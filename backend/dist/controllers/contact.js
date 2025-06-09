@@ -10,6 +10,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getContactStats = exports.deleteContact = exports.updateContact = exports.getContactById = exports.getContacts = exports.createContact = void 0;
 const node_1 = __importDefault(require("parse/node"));
 const zod_1 = require("zod");
+const errorHandler_1 = require("../middlewares/errorHandler");
 // Validation schemas
 const contactCreateSchema = zod_1.z.object({
     name: zod_1.z.string().min(2, 'نام باید حداقل ۲ کاراکتر باشد').max(100, 'نام نمی‌تواند بیش از ۱۰۰ کاراکتر باشد'),
@@ -100,20 +101,17 @@ const createContact = async (req, res) => {
         const savedContact = await contact.save();
         // Log security event
         console.log(`[SECURITY] New contact message created: ${savedContact.id} from ${validatedData.email}`);
-        res.status(201).json({
-            success: true,
-            message: 'پیام شما با موفقیت ارسال شد',
-            data: {
-                id: savedContact.id,
-                name: savedContact.get('name'),
-                email: savedContact.get('email'),
-                message: savedContact.get('message'),
-                status: savedContact.get('status'),
-                priority: savedContact.get('priority'),
-                category: savedContact.get('category'),
-                createdAt: savedContact.createdAt
-            }
-        });
+        const responseData = {
+            id: savedContact.id,
+            name: savedContact.get('name'),
+            email: savedContact.get('email'),
+            message: savedContact.get('message'),
+            status: savedContact.get('status'),
+            priority: savedContact.get('priority'),
+            category: savedContact.get('category'),
+            createdAt: savedContact.createdAt
+        };
+        res.status(201).json((0, errorHandler_1.createSuccessResponse)(responseData, 'پیام شما با موفقیت ارسال شد'));
     }
     catch (error) {
         console.error('[ERROR] Create contact failed:', error);

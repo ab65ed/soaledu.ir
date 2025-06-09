@@ -23,8 +23,8 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     allowMultipleCorrect: z.ZodOptional<z.ZodBoolean>;
     correctAnswer: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    options?: string[];
     type?: "multiple-choice";
+    options?: string[];
     category?: string;
     tags?: string[];
     text?: string;
@@ -42,8 +42,8 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     isDraft?: boolean;
     isPublished?: boolean;
 }, {
-    options?: string[];
     type?: "multiple-choice";
+    options?: string[];
     category?: string;
     tags?: string[];
     text?: string;
@@ -81,8 +81,8 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     allowMultipleCorrect: z.ZodOptional<z.ZodLiteral<false>>;
     correctAnswer: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    options?: string[];
     type?: "true-false";
+    options?: string[];
     category?: string;
     tags?: string[];
     text?: string;
@@ -100,8 +100,8 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     isDraft?: boolean;
     isPublished?: boolean;
 }, {
-    options?: string[];
     type?: "true-false";
+    options?: string[];
     category?: string;
     tags?: string[];
     text?: string;
@@ -139,8 +139,8 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     correctAnswer: z.ZodString;
     allowMultipleCorrect: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    options?: string[];
     type?: "short-answer" | "essay";
+    options?: string[];
     category?: string;
     tags?: string[];
     text?: string;
@@ -158,8 +158,8 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     isDraft?: boolean;
     isPublished?: boolean;
 }, {
-    options?: string[];
     type?: "short-answer" | "essay";
+    options?: string[];
     category?: string;
     tags?: string[];
     text?: string;
@@ -201,11 +201,11 @@ export declare const QuestionUpdateSchema: z.ZodObject<{
     allowMultipleCorrect: z.ZodOptional<z.ZodBoolean>;
     correctAnswer: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    options?: string[];
+    id?: string;
     type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
+    options?: string[];
     category?: string;
     tags?: string[];
-    id?: string;
     text?: string;
     correctOptions?: number[];
     correctAnswer?: string;
@@ -221,11 +221,11 @@ export declare const QuestionUpdateSchema: z.ZodObject<{
     isDraft?: boolean;
     isPublished?: boolean;
 }, {
-    options?: string[];
+    id?: string;
     type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
+    options?: string[];
     category?: string;
     tags?: string[];
-    id?: string;
     text?: string;
     correctOptions?: number[];
     correctAnswer?: string;
@@ -252,16 +252,16 @@ export declare const QuestionAutoSaveSchema: z.ZodObject<{
     sourcePage: z.ZodOptional<z.ZodNumber>;
     tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
+    id?: string;
     category?: string;
     tags?: string[];
-    id?: string;
     text?: string;
     points?: number;
     sourcePage?: number;
 }, {
+    id?: string;
     category?: string;
     tags?: string[];
-    id?: string;
     text?: string;
     points?: number;
     sourcePage?: number;
@@ -296,16 +296,16 @@ export declare const QuestionListSchema: z.ZodObject<{
     type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
     limit?: number;
     difficulty?: "Medium" | "Easy" | "Hard";
+    page?: number;
     sortBy?: "category" | "difficulty" | "points" | "newest" | "oldest";
     publishedOnly?: boolean;
-    page?: number;
 }, {
     type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
     limit?: number;
     difficulty?: "Medium" | "Easy" | "Hard";
+    page?: number;
     sortBy?: "category" | "difficulty" | "points" | "newest" | "oldest";
     publishedOnly?: boolean;
-    page?: number;
 }>;
 /**
  * Schema for rating a question

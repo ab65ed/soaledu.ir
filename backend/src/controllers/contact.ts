@@ -6,6 +6,7 @@
 import { Request, Response } from 'express';
 import Parse from 'parse/node';
 import { z } from 'zod';
+import { createSuccessResponse, createErrorResponse } from '../middlewares/errorHandler';
 
 // Validation schemas
 const contactCreateSchema = z.object({
@@ -104,20 +105,18 @@ export const createContact = async (req: Request, res: Response): Promise<void> 
     // Log security event
     console.log(`[SECURITY] New contact message created: ${savedContact.id} from ${validatedData.email}`);
     
-    res.status(201).json({
-      success: true,
-      message: 'پیام شما با موفقیت ارسال شد',
-      data: {
-        id: savedContact.id,
-        name: savedContact.get('name'),
-        email: savedContact.get('email'),
-        message: savedContact.get('message'),
-        status: savedContact.get('status'),
-        priority: savedContact.get('priority'),
-        category: savedContact.get('category'),
-        createdAt: savedContact.createdAt
-      }
-    });
+    const responseData = {
+      id: savedContact.id,
+      name: savedContact.get('name'),
+      email: savedContact.get('email'),
+      message: savedContact.get('message'),
+      status: savedContact.get('status'),
+      priority: savedContact.get('priority'),
+      category: savedContact.get('category'),
+      createdAt: savedContact.createdAt
+    };
+
+    res.status(201).json(createSuccessResponse(responseData, 'پیام شما با موفقیت ارسال شد'));
     
   } catch (error) {
     console.error('[ERROR] Create contact failed:', error);

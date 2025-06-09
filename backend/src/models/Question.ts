@@ -1,4 +1,5 @@
-import Parse from 'parse/node';
+const Parse = require('parse/node');
+import { QuestionOptions, SearchOptions, ValidationResult } from '../types/interfaces';
 
 interface QuestionData {
   type: 'multiple-choice' | 'true-false' | 'short-answer' | 'essay' | 'fill-blank';
@@ -20,7 +21,7 @@ interface QuestionData {
   isDraft?: boolean;
   isPublished?: boolean;
   authorId?: string;
-  author?: Parse.User;
+  author?: any;
   metadata?: Record<string, any>;
 }
 
@@ -293,7 +294,7 @@ class Question extends Parse.Object {
     return await query.get(id);
   }
 
-  static async findByAuthor(authorId, options = {}) {
+  static async findByAuthor(authorId: string, options: QuestionOptions = {}) {
     const query = new Parse.Query(Question);
     query.equalTo('authorId', authorId);
     
@@ -312,8 +313,8 @@ class Question extends Parse.Object {
     return await query.find();
   }
 
-  static async findPublished(options = {}) {
-    const query = new Parse.Query(Question);
+  static async findPublished(options: QuestionOptions = {}) {
+    let query = new Parse.Query(Question);
     query.equalTo('isPublished', true);
     
     if (options.type) {
@@ -372,7 +373,7 @@ class Question extends Parse.Object {
     return await query.find();
   }
 
-  static async searchByText(searchText, options = {}) {
+  static async searchByText(searchText: string, options: SearchOptions = {}) {
     const query = new Parse.Query(Question);
     
     // Full text search across multiple fields

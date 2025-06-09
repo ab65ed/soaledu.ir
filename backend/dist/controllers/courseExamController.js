@@ -1,5 +1,7 @@
-const CourseExam = require('../models/CourseExam');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const Parse = require('parse/node');
+const CourseExam = require('../models/CourseExam');
 class CourseExamController {
     /**
      * Create a new course exam

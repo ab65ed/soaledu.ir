@@ -67,12 +67,12 @@ export declare const CreateQuestionSchema: z.ZodObject<{
         chapter?: string;
     }>>;
 }, "strip", z.ZodTypeAny, {
+    type?: "multiple-choice" | "true-false" | "descriptive";
     options?: {
         label?: string;
         content?: string;
         isCorrect?: boolean;
     }[];
-    type?: "multiple-choice" | "true-false" | "descriptive";
     tags?: string[];
     correctAnswer?: string;
     difficulty?: "medium" | "easy" | "hard";
@@ -88,12 +88,12 @@ export declare const CreateQuestionSchema: z.ZodObject<{
     content?: string;
     source?: string;
 }, {
+    type?: "multiple-choice" | "true-false" | "descriptive";
     options?: {
         label?: string;
         content?: string;
         isCorrect?: boolean;
     }[];
-    type?: "multiple-choice" | "true-false" | "descriptive";
     tags?: string[];
     correctAnswer?: string;
     difficulty?: "medium" | "easy" | "hard";
@@ -147,12 +147,12 @@ export declare const UpdateQuestionSchema: z.ZodObject<Omit<{
         chapter?: string;
     }>>>;
 }, "courseExamId">, "strip", z.ZodTypeAny, {
+    type?: "multiple-choice" | "true-false" | "descriptive";
     options?: {
         label?: string;
         content?: string;
         isCorrect?: boolean;
     }[];
-    type?: "multiple-choice" | "true-false" | "descriptive";
     tags?: string[];
     correctAnswer?: string;
     difficulty?: "medium" | "easy" | "hard";
@@ -167,12 +167,12 @@ export declare const UpdateQuestionSchema: z.ZodObject<Omit<{
     content?: string;
     source?: string;
 }, {
+    type?: "multiple-choice" | "true-false" | "descriptive";
     options?: {
         label?: string;
         content?: string;
         isCorrect?: boolean;
     }[];
-    type?: "multiple-choice" | "true-false" | "descriptive";
     tags?: string[];
     correctAnswer?: string;
     difficulty?: "medium" | "easy" | "hard";

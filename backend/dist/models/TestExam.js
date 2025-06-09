@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const Parse = require('parse/node');
 const Question = require('./Question');
 /**
@@ -175,7 +177,7 @@ class TestExam extends Parse.Object {
         return await query.find();
     }
     static async findPublished(options = {}) {
-        const query = new Parse.Query(TestExam);
+        let query = new Parse.Query(TestExam);
         query.equalTo('isPublished', true);
         query.equalTo('status', 'active');
         query.include('author');

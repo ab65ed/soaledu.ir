@@ -1,4 +1,23 @@
 const Parse = require('parse/node');
+import { CourseExamOptions } from '../types/interfaces';
+
+interface QueryOptions {
+  include?: string[];
+  limit?: number;
+  skip?: number;
+  courseType?: string;
+  grade?: string;
+  group?: string;
+  difficulty?: string;
+  tags?: string[];
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  search?: string;
+  sortBy?: string;
+  publishedOnly?: boolean;
+}
 
 /**
  * CourseExam Schema for Back4App
@@ -244,12 +263,70 @@ class CourseExam extends Parse.Object {
     return await query.get(id);
   }
 
-  static async findByAuthor(authorId, options = {}) {
-    const query = new Parse.Query(CourseExam);
+  static async findByAuthor(authorId: string, options: CourseExamOptions = {}) {
+    let query = new Parse.Query(CourseExam);
     query.equalTo('authorId', authorId);
+    query.include('author');
     
-    if (options.include) {
-      query.include(options.include);
+    if (options.courseType) {
+      query.equalTo('courseType', options.courseType);
+    }
+    
+    if (options.grade) {
+      query.equalTo('grade', options.grade);
+    }
+    
+    if (options.group) {
+      query.equalTo('group', options.group);
+    }
+    
+    if (options.difficulty) {
+      query.equalTo('difficulty', options.difficulty);
+    }
+    
+    if (options.tags && options.tags.length > 0) {
+      query.containedIn('tags', options.tags);
+    }
+    
+    if (options.priceRange) {
+      if (options.priceRange.min !== undefined) {
+        query.greaterThanOrEqualTo('price', options.priceRange.min);
+      }
+      if (options.priceRange.max !== undefined) {
+        query.lessThanOrEqualTo('price', options.priceRange.max);
+      }
+    }
+    
+    if (options.search) {
+      const titleQuery = new Parse.Query(CourseExam);
+      titleQuery.contains('title', options.search);
+      
+      const descQuery = new Parse.Query(CourseExam);
+      descQuery.contains('description', options.search);
+      
+      const tagQuery = new Parse.Query(CourseExam);
+      tagQuery.containedIn('tags', [options.search]);
+      
+      const searchQuery = Parse.Query.or(titleQuery, descQuery, tagQuery);
+      query = Parse.Query.and(query, searchQuery);
+    }
+    
+    if (options.sortBy) {
+      if (options.sortBy === 'popularity') {
+        query.descending('totalSales');
+      } else if (options.sortBy === 'revenue') {
+        query.descending('revenue');
+      } else if (options.sortBy === 'rating') {
+        query.descending('averageRating');
+      } else if (options.sortBy === 'newest') {
+        query.descending('createdAt');
+      } else if (options.sortBy === 'price_low') {
+        query.ascending('price');
+      } else if (options.sortBy === 'price_high') {
+        query.descending('price');
+      }
+    } else {
+      query.descending('createdAt');
     }
     
     if (options.limit) {
@@ -259,12 +336,12 @@ class CourseExam extends Parse.Object {
     if (options.skip) {
       query.skip(options.skip);
     }
-
+    
     return await query.find();
   }
 
-  static async findPublished(options = {}) {
-    const query = new Parse.Query(CourseExam);
+  static async findPublished(options: CourseExamOptions = {}) {
+    let query = new Parse.Query(CourseExam);
     query.equalTo('isPublished', true);
     
     if (options.courseType) {
@@ -340,8 +417,8 @@ class CourseExam extends Parse.Object {
     return await query.find();
   }
 
-  static async searchByText(searchText, options = {}) {
-    const query = new Parse.Query(CourseExam);
+  static async searchByText(searchText: string, options: CourseExamOptions = {}) {
+    let query = new Parse.Query(CourseExam);
     
     // Full text search across multiple fields
     const titleQuery = new Parse.Query(CourseExam);

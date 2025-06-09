@@ -1,4 +1,5 @@
-import Parse from 'parse/node';
+declare const Parse: any;
+import { QuestionOptions, SearchOptions } from '../types/interfaces';
 /**
  * Question Schema for Back4App
  * Represents a question entity with comprehensive metadata
@@ -59,9 +60,9 @@ declare class Question extends Parse.Object {
     set metadata(value: any);
     static create(data: any): Promise<any>;
     static findById(id: any): Promise<any>;
-    static findByAuthor(authorId: any, options?: {}): Promise<any>;
-    static findPublished(options?: {}): Promise<any>;
-    static searchByText(searchText: any, options?: {}): Promise<any>;
+    static findByAuthor(authorId: string, options?: QuestionOptions): Promise<any>;
+    static findPublished(options?: QuestionOptions): Promise<any>;
+    static searchByText(searchText: string, options?: SearchOptions): Promise<any>;
     static getStats(authorId: any): Promise<{
         totalQuestions: any;
         publishedQuestions: any;

@@ -1,5 +1,6 @@
-const CourseExam = require('../models/CourseExam');
 const Parse = require('parse/node');
+import { CourseExamOptions } from '../types/interfaces';
+const CourseExam = require('../models/CourseExam');
 
 class CourseExamController {
   /**
@@ -203,7 +204,7 @@ class CourseExamController {
 
       const skip = (parseInt(page) - 1) * parseInt(limit);
 
-      const options = {
+      const options: CourseExamOptions = {
         limit: parseInt(limit),
         skip,
         sortBy

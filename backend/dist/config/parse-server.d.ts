@@ -17,5 +17,19 @@ export declare const parseServerConfig: {
     logLevel: string;
     verbose: boolean;
     silent: boolean;
+    encodeParseObjectInCloudFunction: boolean;
+    enableInsecureAuthAdapters: boolean;
+    enforcePrivateUsers: boolean;
+    allowExpiredAuthDataToken: boolean;
+    pages: {
+        enableRouter: boolean;
+        enableLocalization: boolean;
+    };
+    directAccess: boolean;
+    auth: {
+        anonymous: {
+            enabled: boolean;
+        };
+    };
 };
 export declare const createParseServer: () => ParseServer;

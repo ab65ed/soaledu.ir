@@ -4,14 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const auth_routes_1 = __importDefault(require("./auth.routes"));
-const roles_1 = __importDefault(require("./roles"));
-const wallet_1 = __importDefault(require("./wallet"));
+// import authRoutes from './auth.routes'; // موقتاً غیرفعال
+// import rolesRoutes from './roles'; // موقتاً غیرفعال - فایل rename شده
+// import walletRoutes from './wallet'; // موقتاً غیرفعال - فایل rename شده
 const router = express_1.default.Router();
-// Mount routes
-router.use('/auth', auth_routes_1.default);
-router.use('/roles', roles_1.default);
-router.use('/wallet', wallet_1.default);
+// Mount routes - موقتاً غیرفعال
+// router.use('/auth', authRoutes);
+// router.use('/roles', rolesRoutes);
+// router.use('/wallet', walletRoutes);
 // Health check endpoint
 router.get('/health', (req, res) => {
     res.json({

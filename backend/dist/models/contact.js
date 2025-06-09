@@ -19,13 +19,10 @@ class Contact extends node_1.default.Object {
     // Static methods for CRUD operations
     static async create(data) {
         const contact = new Contact();
-        // Set basic fields
+        // Set required fields
         contact.set('name', data.name);
         contact.set('email', data.email);
         contact.set('message', data.message);
-        contact.set('status', 'pending');
-        contact.set('priority', 'medium');
-        contact.set('category', 'general');
         // Set optional fields
         if (data.userAgent)
             contact.set('userAgent', data.userAgent);
@@ -33,18 +30,22 @@ class Contact extends node_1.default.Object {
             contact.set('ipAddress', data.ipAddress);
         if (data.userId)
             contact.set('userId', data.userId);
+        // Set default values
+        contact.set('status', 'pending');
+        contact.set('priority', 'medium');
+        contact.set('category', 'general');
+        contact.set('tags', []);
         // Auto-categorize and prioritize
         contact.autoCategorize();
         contact.autoPrioritize();
-        // Set default tags
-        contact.set('tags', []);
         await contact.save();
         return contact;
     }
     static async findById(id) {
-        const query = new node_1.default.Query(Contact);
         try {
-            return await query.get(id);
+            const query = new node_1.default.Query(Contact);
+            const result = await query.get(id);
+            return result;
         }
         catch (error) {
             return null;
@@ -68,7 +69,8 @@ class Contact extends node_1.default.Object {
         if (options.skip) {
             query.skip(options.skip);
         }
-        return await query.find();
+        const results = await query.find();
+        return results;
     }
     static async getStats() {
         const totalQuery = new node_1.default.Query(Contact);
@@ -195,8 +197,9 @@ class Contact extends node_1.default.Object {
         }
     }
     // Convert to JSON for API responses
-    toJSON() {
+    toContactData() {
         return {
+            objectId: this.id,
             name: this.get('name'),
             email: this.get('email'),
             message: this.get('message'),

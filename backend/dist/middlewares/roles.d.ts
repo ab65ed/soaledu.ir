@@ -29,35 +29,38 @@ export declare const courseExamAccess: {
     withLogging: (activityType: ActivityType) => ((req: AuthenticatedRequest, res: Response, next: NextFunction) => Promise<void>)[];
 };
 export declare const questionAccess: {
-    create: any[];
-    read: any[];
-    update: any[];
-    delete: any[];
-    publish: any[];
+    create: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
+    read: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => Promise<void>)[];
+    update: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => Promise<void>)[];
+    delete: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => Promise<void>)[];
+    publish: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
 };
 export declare const testExamAccess: {
-    take: any[];
-    results: any[];
-    manage: any[];
-    withLogging: (activityType: ActivityType) => any[];
+    take: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
+    results: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
+    manage: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
+    withLogging: (activityType: ActivityType) => ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
 };
 export declare const flashcardAccess: {
-    create: any[];
-    read: any[];
-    purchase: any[];
-    manage: any[];
+    create: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
+    read: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => Promise<void>)[];
+    purchase: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
+    manage: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
 };
 export declare const financeAccess: {
-    viewPrices: any[];
-    manage: any[];
-    requestPayment: any[];
-    processPayment: any[];
+    viewPrices: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => Promise<void>)[];
+    manage: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
+    requestPayment: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
+    processPayment: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => Promise<void>)[];
 };
 export declare const supportAccess: {
-    createTicket: any[];
-    viewTickets: any[];
-    respondTicket: any[];
-    manageKnowledgeBase: any[];
+    createTicket: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
+    viewTickets: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
+    respondTicket: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
+    manageKnowledgeBase: ((req: AuthenticatedRequest, res: Response, next: NextFunction) => void)[];
 };
+declare function getDefaultPermissions(role: UserRole): Permission[];
+declare function generateActivityDescription(activityType: ActivityType, resourceType: string, userName: string, resourceId: string): string;
+declare function sanitizeRequestBody(body: any): any;
 export type { AuthenticatedRequest };
-export { authenticateToken, requireRole, requirePermission, requireAnyPermission, requireAllPermissions, requireOwnerOrRole, logActivity, courseExamAccess, questionAccess, testExamAccess, flashcardAccess, financeAccess, supportAccess };
+export { getDefaultPermissions, generateActivityDescription, sanitizeRequestBody };
