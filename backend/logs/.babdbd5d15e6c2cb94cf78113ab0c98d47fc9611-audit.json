@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "/home/abedin/Desktop/next-js/soaledu.ir/backend/logs/.babdbd5d15e6c2cb94cf78113ab0c98d47fc9611-audit.json",
+    "files": [
+        {
+            "date": 1749418333252,
+            "name": "/home/abedin/Desktop/next-js/soaledu.ir/backend/logs/application-2025-06-09.log",
+            "hash": "7b7d52cef2bd5cbc1f0220769438a6b0b82e93666ef5306f402174ec72828063"
+        }
+    ],
+    "hashType": "sha256"
+}

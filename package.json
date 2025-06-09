@@ -1,0 +1,58 @@
+{
+  "name": "exam-edu",
+  "version": "1.0.0",
+  "description": "Educational test system with comprehensive testing framework",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:frontend": "cd frontend && npm run start",
+    "start:backend": "cd backend && npm run start",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd backend && npm run test",
+    "test:frontend": "cd frontend && npm run test",
+    "test:watch": "concurrently \"npm run test:watch:backend\" \"npm run test:watch:frontend\"",
+    "test:watch:backend": "cd backend && npm run test:watch",
+    "test:watch:frontend": "cd frontend && npm run test:watch",
+    "test:coverage": "npm run test:coverage:backend && npm run test:coverage:frontend",
+    "test:coverage:backend": "cd backend && npm run test:coverage",
+    "test:coverage:frontend": "cd frontend && npm run test:coverage",
+    "test:ci": "npm run test:ci:backend && npm run test:ci:frontend",
+    "test:ci:backend": "cd backend && npm run test:ci",
+    "test:ci:frontend": "cd frontend && npm run test:ci",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:run:headless": "cypress run --headless",
+    "e2e": "start-server-and-test dev http://localhost:3000 cypress:run",
+    "e2e:open": "start-server-and-test dev http://localhost:3000 cypress:open",
+    "performance:audit": "lighthouse http://localhost:3000 --output=html --output-path=./performance-report.html",
+    "performance:ci": "lighthouse http://localhost:3000 --output=json --output-path=./lighthouse-results.json --chrome-flags='--headless'",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && npm run lint",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "clean": "rm -rf node_modules frontend/node_modules backend/node_modules coverage cypress/screenshots cypress/videos",
+    "clean:coverage": "rm -rf coverage frontend/coverage backend/coverage",
+    "clean:cypress": "rm -rf cypress/screenshots cypress/videos"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "start-server-and-test": "^2.0.12"
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "critters": "^0.0.23"
+  }
+}

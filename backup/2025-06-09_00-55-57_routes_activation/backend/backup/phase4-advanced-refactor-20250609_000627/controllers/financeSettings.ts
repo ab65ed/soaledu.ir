@@ -1,0 +1,117 @@
+/**
+ * Finance Settings Controller
+ * کنترلر تنظیمات مالی برای مدیریت سهم‌بندی درآمد و تنظیمات مالی
+ * 
+ * ویژگی‌های اصلی:
+ * - مدیریت سهم طراحان و پلتفرم
+ * - تنظیمات قیمت‌گذاری
+ * - مدیریت تخفیف‌ها
+ * - تنظیمات خاص هر آزمون
+ * 
+ * @author Exam-Edu Platform
+ * @version 1.0.0
+ */
+
+import { Request, Response } from 'express';
+import { validationResult } from 'express-validator';
+import Parse from 'parse/node';
+
+interface AuthenticatedRequest extends Request {
+  user?: any;
+}
+
+// Default financial settings
+export const DEFAULT_FINANCE_SETTINGS = {
+  // سهم‌بندی درآمد (درصد)
+  revenueSharing: {
+    designerShare: 50,    // سهم طراح
+    platformFee: 50       // سهم پلتفرم
+  },
+  
+  // تنظیمات قیمت‌گذاری
+  pricing: {
+    exam: {
+      '10-20': 800,
+      '21-30': 1000,
+      '31-50': 1200
+    },
+    flashcard: {
+      default: 200,
+      min: 100,
+      max: 500
+    }
+  },
+  
+  // تنظیمات تخفیف
+  discounts: {
+    firstTime: 10,        // درصد
+    bulkPurchase: 15,     // درصد
+    student: 20,          // درصد
+    seasonal: 5           // درصد
+  },
+  
+  // حداقل و حداکثر قیمت
+  limits: {
+    minPrice: 500,
+    maxPrice: 2000
+  }
+};
+
+export class FinanceSettingsController {
+  
+  /**
+   * Get global finance settings
+   * GET /api/finance-settings/global
+   */
+  static async getGlobalSettings(req: AuthenticatedRequest, res: Response): Promise<void> {
+    res.json({ success: true, message: 'Finance settings controller working' });
+  }
+  
+  /**
+   * Update global finance settings
+   * PUT /api/finance-settings/global
+   */
+  static async updateGlobalSettings(req: AuthenticatedRequest, res: Response): Promise<void> {
+    res.json({ success: true, message: 'Update global settings' });
+  }
+  
+  /**
+   * Get exam-specific finance settings
+   * GET /api/finance-settings/exam/:examId
+   */
+  static async getExamSettings(req: AuthenticatedRequest, res: Response): Promise<void> {
+    res.json({ success: true, message: 'Get exam settings' });
+  }
+  
+  /**
+   * Set exam-specific finance settings
+   * PUT /api/finance-settings/exam/:examId
+   */
+  static async setExamSettings(req: AuthenticatedRequest, res: Response): Promise<void> {
+    res.json({ success: true, message: 'Set exam settings' });
+  }
+  
+  /**
+   * Reset exam settings to global defaults
+   * DELETE /api/finance-settings/exam/:examId
+   */
+  static async resetExamSettings(req: AuthenticatedRequest, res: Response): Promise<void> {
+    res.json({ success: true, message: 'Reset exam settings' });
+  }
+  
+  /**
+   * Get all exams with custom finance settings
+   * GET /api/finance-settings/custom-exams
+   */
+  static async getCustomExams(req: AuthenticatedRequest, res: Response): Promise<void> {
+    res.json({ success: true, message: 'Get custom exams' });
+  }
+  
+  /**
+   * Calculate revenue sharing for a specific amount
+   * POST /api/finance-settings/calculate-sharing
+   */
+  static async calculateSharing(req: AuthenticatedRequest, res: Response): Promise<void> {
+    res.json({ success: true, message: 'Calculate sharing' });
+  }
+} 

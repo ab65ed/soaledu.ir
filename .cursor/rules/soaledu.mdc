@@ -1,0 +1,116 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# ============================================================
+# PROJECT RULES
+# Project-specific policies and standards that must be followed within this project.
+# Enforced by Cursor agent across the team.
+# ============================================================
+
+# 🧪 Testing & Verification
+
+- After any change to the codebase, always run a full build and execute all tests (Jest, Cypress).
+# Do not proceed to further changes until all errors are fully resolved.
+
+- After completing each development section, always review the test results and resolve any issues before moving forward.
+# To ensure stability and prevent regressions.
+
+# 🎨 UI & Design
+
+- Always act as a **senior UI/UX engineer** when working on UI, interactions, and design-related tasks.
+# Ensure the highest standards of visual design, usability, and accessibility.
+
+- All UI must strictly use **Tailwind CSS**, with variables and design tokens from `theme.ts`.
+# To ensure consistent, accessible, and brand-aligned visual design.
+
+- UI must fully support RTL and IranSans font.
+# To ensure accessibility for target users.
+
+# MCP Usage in Project
+
+- Always automatically invoke:
+  - "sequential-thinking"
+  - "context7" (as `use context7` hook)
+  - "@21st-dev/magic" (for UI tasks via `/ui`)
+  - "@magicuidesign/mcp" (for styling tasks)
+
+# ⚙️ State & Data Management
+
+- Always use **Zustand** for all state management in this project.
+# Do not use Redux or introduce new Redux patterns.
+
+- Always manage system cache using **React Query** in the most professional and optimized way.
+# Leverage advanced caching strategies and best practices of React Query to achieve intelligent, high-performance caching behavior.
+
+- Always ensure seamless integration and consistency between **Zustand** (for local state) and **React Query** (for server state).
+# Use well-structured services and custom hooks to manage the interaction between state layers effectively.
+
+- Always utilize custom hooks in an effective, scalable, and advanced manner.
+# To encapsulate logic, improve reusability, and maintain a clean architecture.
+
+# ⚡ Performance Optimization
+
+- Always place special emphasis on performance optimization across both frontend and backend.
+# Continuously optimize rendering, network usage, memory consumption, and computational efficiency.
+
+- Perform professional memory usage tracking and optimization.
+# Detect memory leaks and maintain optimal runtime performance.
+
+- Conduct bundle size analysis and maintain an optimal bundle size.
+# Improve frontend performance and user experience.
+
+- Always use **sequential thinking** combined with the latest and most accurate official documentation when debugging.
+# Approach complex debugging in a structured, step-by-step manner using up-to-date resources.
+
+# 🛡️ Security & System Integrity
+
+- Always implement form and input validation using the most professional, strict, and secure practices.
+# All forms must have robust validation logic to prevent invalid, malicious, or unsafe inputs.
+
+- Always ensure that validation is implemented both client-side and server-side.
+# To guarantee full security and consistency regardless of entry point.
+
+- Always apply strict anti-intrusion (anti-injection, anti-XSS, anti-logic bypass) validation patterns.
+# Protect against common attack vectors such as SQL Injection, XSS, and business logic bypass.
+
+- Always ensure that form validation logic is modular, reusable, and thoroughly tested.
+# To maintain a clean architecture and guarantee correctness over time.
+
+- Implement full **Security Event Logging**.
+# Track and monitor important security-related events.
+
+- Implement a comprehensive **Audit Trail**.
+# Ensure full traceability of actions performed within the system.
+
+- Implement and continuously monitor **System Health Monitoring**.
+# Ensure system stability and detect issues early.
+
+- Implement professional **Error Tracking and Reporting**.
+# Proactively detect and address errors with detailed reporting.
+
+# 🚀 Code Structure & Maintainability
+
+- Always split large files into smaller, modular components where applicable.
+# To enhance code clarity, maintainability, and scalability.
+
+- Maintain atomic design structure and modular architecture across the project.
+# To ensure a scalable and maintainable project structure.
+
+- Manage and optimize cache behavior intelligently based on new requests.
+# Ensure optimal data freshness and performance.
+
+- Always coordinate with the user before making significant changes to core business logic.
+# To ensure collaborative decision-making and alignment with project goals.
+
+- After any change, always perform a full build and execute all necessary tests.
+# Iteratively fix any errors encountered before proceeding further.
+
+# 🧑‍💻 Professional Development Mindset
+
+- Always act as a **senior TypeScript engineer** across all parts of the project, even when not using strict typing everywhere.
+# Write code with type safety, clarity, and maintainability in mind.
+
+- Continuously strive for the highest level of software engineering professionalism across all tasks.
+# Maintain a mindset of delivering clean, optimized, scalable, and secure code.

@@ -1,0 +1,37 @@
+{
+  "success": true,
+  "data": {
+    "user": {
+      "_id": "507f1f77bcf86cd799439011",
+      "name": "Test User",
+      "email": "test@example.com",
+      "role": "student",
+      "isActive": true,
+      "profile": {
+        "firstName": "Test",
+        "lastName": "User",
+        "phone": "09123456789",
+        "dateOfBirth": "1990-01-01T00:00:00.000Z",
+        "gender": "male",
+        "education": "bachelor",
+        "field": "computer-science",
+        "bio": "Test user bio",
+        "avatar": null,
+        "address": {
+          "street": "Test Street",
+          "city": "Tehran",
+          "state": "Tehran",
+          "postalCode": "12345",
+          "country": "Iran"
+        }
+      },
+      "wallet": {
+        "balance": 100000,
+        "transactions": []
+      },
+      "createdAt": "2023-01-01T00:00:00.000Z",
+      "updatedAt": "2023-01-01T00:00:00.000Z",
+      "lastLogin": "2023-01-01T00:00:00.000Z"
+    }
+  }
+}

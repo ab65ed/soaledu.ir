@@ -1,0 +1,75 @@
+# Cursor Rules for Exam-Edu Project
+
+## Project Structure
+- Frontend follows Next.js App Router structure
+- Backend follows MVC-like pattern with controllers, services, and models
+- Component organization follows Atomic Design principles
+- User (Abedin) requires `.jsx` for React, `.js` for utilities.
+- Only `fastest-validator` for validation; no Zod.
+- Project root: Only `frontend` and `backend`.
+- All frontend code in `/frontend/src`; move/delete extra folders.
+- Manual Git push; no auto-push.
+- Use all MCPs: Back4App (backend), @21st-dev/magic (UI), magicuidesign/mcp (UI/UX), sequential-thinking (debugging).
+
+## Workflow Preferences
+- Work in Cursor IDE.
+- Auto-check terminal errors and resolve with sequential-thinking.
+- Test `npm run dev` after changes.
+- Commit messages: Descriptive (e.g., "Add Exam Results with graphs").
+
+## Known Challenges
+- Git remote issues (`ab65ed` vs `abedin-esmaeili`).
+- Folder misplacement outside `/frontend/src`.
+- Ensuring senior-level React Query and UI/UX.
+
+
+## Code Style
+- Use arrow functions for component declarations
+- Prefer functional components with hooks over class components
+- Use destructuring for props and state
+- RTL (Right-to-Left) support is essential for all UI components
+- Follow TailwindCSS utility-first approach for styling
+
+## Naming Conventions
+- React components use PascalCase (e.g., ExamCard, UserProfile)
+- Hooks use camelCase with 'use' prefix (e.g., useAuth, useExam)
+- API endpoints use kebab-case (e.g., /api/exam-results)
+- Database models use PascalCase singular form (e.g., User, Exam)
+- File names match the component/function name they export
+
+## State Management
+- Use React Query for server state (API data)
+- Use Redux for global UI state
+- Use local state for component-specific state
+- Keep state normalized when possible
+
+## Form Handling
+- Use React Hook Form for form management
+- Use Fastest Validator for validation
+- Implement client-side validation before API calls
+
+## API Patterns
+- Use consistent response format: { success, data, error, message }
+- Implement proper error handling with status codes
+- Use JWT for authentication with HTTP-only cookies
+- Document all endpoints with Swagger
+
+## Testing Approach
+- Backend: Unit tests for services, integration tests for APIs
+- Frontend: Component tests with React Testing Library
+
+## Documentation
+- Keep Memory Bank up to date with project progress
+- Document all APIs with JSDoc comments
+- Include PropTypes or TypeScript interfaces for components
+- Use meaningful commit messages
+
+## Directory Navigation
+- Important frontend directories: app/, components/, hooks/, services/
+- Important backend directories: src/controllers/, src/services/, src/models/
+
+## User Preferences
+- Maintain a clean, minimal UI
+- Ensure responsive design works on all screen sizes
+- Focus on performance and load times
+- Ensure accessibility compliance

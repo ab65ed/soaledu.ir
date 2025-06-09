@@ -1,0 +1,55 @@
+{
+  "_id": "507f1f77bcf86cd799439012",
+  "title": "Sample Programming Exam",
+  "description": "A comprehensive exam covering basic programming concepts",
+  "duration": 60,
+  "totalQuestions": 10,
+  "passingScore": 70,
+  "difficulty": "medium",
+  "category": "programming",
+  "status": "published",
+  "pricing": {
+    "isFree": false,
+    "price": 50000
+  },
+  "settings": {
+    "shuffleQuestions": true,
+    "shuffleOptions": true,
+    "showResults": true,
+    "allowReview": true,
+    "timeLimit": true,
+    "attempts": 3
+  },
+  "questions": [
+    {
+      "_id": "507f1f77bcf86cd799439013",
+      "text": "What is the output of console.log(typeof null)?",
+      "type": "multiple-choice",
+      "options": [
+        { "text": "null", "isCorrect": false },
+        { "text": "object", "isCorrect": true },
+        { "text": "undefined", "isCorrect": false },
+        { "text": "string", "isCorrect": false }
+      ],
+      "difficulty": "easy",
+      "points": 1,
+      "explanation": "In JavaScript, typeof null returns 'object' due to a historical bug."
+    },
+    {
+      "_id": "507f1f77bcf86cd799439014",
+      "text": "Which of the following are valid JavaScript data types?",
+      "type": "multiple-choice",
+      "options": [
+        { "text": "string, number, boolean", "isCorrect": true },
+        { "text": "integer, float, char", "isCorrect": false },
+        { "text": "array, object, function", "isCorrect": false },
+        { "text": "all of the above", "isCorrect": false }
+      ],
+      "difficulty": "easy",
+      "points": 1,
+      "explanation": "JavaScript has primitive types: string, number, boolean, null, undefined, symbol, and bigint."
+    }
+  ],
+  "createdAt": "2023-01-01T00:00:00.000Z",
+  "updatedAt": "2023-01-01T00:00:00.000Z"
+}

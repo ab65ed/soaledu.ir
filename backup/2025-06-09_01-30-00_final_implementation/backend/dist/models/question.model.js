@@ -1,0 +1,394 @@
+"use strict";
+/**
+ * Question model
+ *
+ * This file defines the Question schema for MongoDB.
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = __importStar(require("mongoose"));
+const QuestionSchema = new mongoose_1.Schema({
+    type: {
+        type: String,
+        enum: {
+            values: ['multiple-choice', 'true-false', 'short-answer'],
+            message: 'Question type must be either: multiple-choice, true-false, or short-answer',
+        },
+        required: [true, 'Please provide question type'],
+        default: 'multiple-choice',
+    },
+    text: {
+        type: String,
+        required: [true, 'Please provide question text'],
+        trim: true,
+        minlength: [10, 'Question text must be at least 10 characters'],
+        maxlength: [1000, 'Question text cannot exceed 1000 characters'],
+    },
+    options: {
+        type: [String],
+        validate: {
+            validator: function (options) {
+                if (this.type === 'multiple-choice') {
+                    return options && options.length >= 2 && options.length <= 4;
+                }
+                else if (this.type === 'true-false') {
+                    return options && options.length === 2;
+                }
+                else if (this.type === 'short-answer') {
+                    return !options || options.length === 0;
+                }
+                return true;
+            },
+            message: 'Options validation failed based on question type',
+        },
+    },
+    correctOptions: {
+        type: [Number],
+        validate: {
+            validator: function (correctOptions) {
+                if (this.type === 'multiple-choice') {
+                    return correctOptions && correctOptions.length >= 1 &&
+                        correctOptions.every(idx => idx >= 0 && idx < (this.options?.length || 0));
+                }
+                else if (this.type === 'true-false') {
+                    return correctOptions && correctOptions.length === 1 &&
+                        correctOptions[0] >= 0 && correctOptions[0] < 2;
+                }
+                else if (this.type === 'short-answer') {
+                    return !correctOptions || correctOptions.length === 0;
+                }
+                return true;
+            },
+            message: 'Correct options validation failed based on question type',
+        },
+    },
+    correctAnswer: {
+        type: String,
+        trim: true,
+        validate: {
+            validator: function (correctAnswer) {
+                if (this.type === 'short-answer') {
+                    return correctAnswer && correctAnswer.length > 0;
+                }
+                return true;
+            },
+            message: 'Correct answer is required for short-answer questions',
+        },
+    },
+    allowMultipleCorrect: {
+        type: Boolean,
+        default: false,
+    },
+    category: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'Category',
+        required: [true, 'Please provide a category'],
+    },
+    lesson: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'Lesson',
+    },
+    difficulty: {
+        type: String,
+        enum: {
+            values: ['Easy', 'Medium', 'Hard'],
+            message: 'Difficulty must be either: Easy, Medium, or Hard',
+        },
+        default: 'Medium',
+    },
+    points: {
+        type: Number,
+        default: 1,
+        min: [0.1, 'Points must be at least 0.1'],
+        max: [10, 'Points cannot exceed 10'],
+    },
+    explanation: {
+        type: String,
+        trim: true,
+        maxlength: [500, 'Explanation cannot exceed 500 characters'],
+    },
+    tags: [String],
+    thumbnail: {
+        type: String,
+        default: null,
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
+    },
+    analytics: {
+        usageCount: {
+            type: Number,
+            default: 0,
+        },
+        correctAnswers: {
+            type: Number,
+            default: 0,
+        },
+        totalAttempts: {
+            type: Number,
+            default: 0,
+        },
+        averageResponseTime: {
+            type: Number, // in seconds
+            default: 0,
+        },
+        lastUsed: {
+            type: Date,
+        },
+    },
+    createdBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+        required: [true, 'Please provide creator'],
+    },
+    source: {
+        type: String,
+        enum: ['manual', 'import', 'generated'],
+        default: 'manual',
+    },
+    version: {
+        type: Number,
+        default: 1,
+    },
+}, {
+    timestamps: true,
+});
+QuestionSchema.pre('save', async function (next) {
+    if (this.lesson) {
+        const Lesson = mongoose_1.default.model('Lesson'); // Consider defining ILesson and importing
+        const lesson = await Lesson.findById(this.lesson); // Add proper type for lesson
+        if (!lesson) {
+            return next(new Error('Lesson not found'));
+        }
+        if (!lesson.category.equals(this.category)) {
+            return next(new Error('Lesson does not belong to the selected category'));
+        }
+    }
+    if (this.type === 'true-false' && (!this.options || this.options.length === 0)) {
+        this.options = ['درست', 'غلط'];
+    }
+    if (this.type === 'multiple-choice' && this.allowMultipleCorrect) {
+        if (!this.correctOptions || this.correctOptions.length < 2) {
+            return next(new Error('Multiple correct questions must have at least 2 correct options'));
+        }
+    }
+    next();
+});
+QuestionSchema.methods.checkAnswer = function (userAnswer) {
+    if (this.type === 'multiple-choice' || this.type === 'true-false') {
+        if (Array.isArray(userAnswer)) {
+            return userAnswer.length === (this.correctOptions?.length || 0) &&
+                userAnswer.every(ans => this.correctOptions?.includes(ans));
+        }
+        else {
+            return this.correctOptions?.includes(userAnswer) || false;
+        }
+    }
+    else if (this.type === 'short-answer') {
+        return (this.correctAnswer?.toLowerCase().trim() ===
+            userAnswer.toLowerCase().trim()) || false;
+    }
+    return false;
+};
+QuestionSchema.methods.getForDisplay = function () {
+    const question = this.toObject();
+    delete question.correctOptions;
+    delete question.correctAnswer;
+    return question;
+};
+QuestionSchema.statics.findByCriteria = function (criteria = {}) {
+    const query = { isActive: true, ...criteria };
+    return this.find(query).exec();
+};
+QuestionSchema.statics.getRandomQuestions = function (count, criteria = {}) {
+    const query = { isActive: true, ...criteria };
+    return this.aggregate([
+        { $match: query },
+        { $sample: { size: count } }
+    ]).exec();
+};
+QuestionSchema.methods.recordUsage = function (isCorrect, responseTime) {
+    this.analytics.usageCount += 1;
+    this.analytics.totalAttempts += 1;
+    this.analytics.lastUsed = new Date();
+    if (isCorrect) {
+        this.analytics.correctAnswers += 1;
+    }
+    if (responseTime) {
+        const currentAvg = this.analytics.averageResponseTime || 0;
+        const totalTime = currentAvg * (this.analytics.totalAttempts - 1) + responseTime;
+        this.analytics.averageResponseTime = totalTime / this.analytics.totalAttempts;
+    }
+    return this.save();
+};
+QuestionSchema.methods.getSuccessRate = function () {
+    if (this.analytics.totalAttempts === 0)
+        return 0;
+    return (this.analytics.correctAnswers / this.analytics.totalAttempts) * 100;
+};
+QuestionSchema.methods.getSuggestedDifficulty = function () {
+    const successRate = this.getSuccessRate();
+    if (successRate >= 80)
+        return 'Easy';
+    if (successRate >= 60)
+        return 'Medium';
+    return 'Hard';
+};
+QuestionSchema.statics.getAnalyticsSummary = function (criteria = {}) {
+    const query = { isActive: true, ...criteria };
+    return this.aggregate([
+        { $match: query },
+        {
+            $group: {
+                _id: null,
+                totalQuestions: { $sum: 1 },
+                totalUsage: { $sum: '$analytics.usageCount' },
+                totalAttempts: { $sum: '$analytics.totalAttempts' },
+                totalCorrectAnswers: { $sum: '$analytics.correctAnswers' },
+                averageSuccessRate: {
+                    $avg: {
+                        $cond: [
+                            { $eq: ['$analytics.totalAttempts', 0] },
+                            0,
+                            { $multiply: [{ $divide: ['$analytics.correctAnswers', '$analytics.totalAttempts'] }, 100] }
+                        ]
+                    }
+                },
+                averageResponseTime: { $avg: '$analytics.averageResponseTime' },
+                difficultyDistribution: {
+                    $push: '$difficulty'
+                }
+            }
+        }
+    ]).exec();
+};
+QuestionSchema.statics.advancedSearch = async function (searchParams) {
+    const { keyword, category, difficulty, tags, type, createdBy, minSuccessRate, maxSuccessRate, sortBy = 'createdAt', sortOrder = 'desc', page = 1, limit = 20 } = searchParams;
+    const query = { isActive: true };
+    if (keyword) {
+        query.$or = [
+            { text: { $regex: keyword, $options: 'i' } },
+            { explanation: { $regex: keyword, $options: 'i' } }
+        ];
+    }
+    if (category)
+        query.category = category;
+    if (difficulty)
+        query.difficulty = difficulty;
+    if (type)
+        query.type = type;
+    if (createdBy)
+        query.createdBy = createdBy;
+    if (tags && tags.length > 0)
+        query.tags = { $in: tags };
+    const skip = (Number(page) - 1) * Number(limit);
+    const sortOptions = {};
+    sortOptions[sortBy] = sortOrder === 'desc' ? -1 : 1;
+    const pipeline = [
+        { $match: query },
+        {
+            $addFields: {
+                successRate: {
+                    $cond: [
+                        { $eq: ['$analytics.totalAttempts', 0] },
+                        0,
+                        { $multiply: [{ $divide: ['$analytics.correctAnswers', '$analytics.totalAttempts'] }, 100] }
+                    ]
+                }
+            }
+        }
+    ];
+    if (minSuccessRate !== undefined || maxSuccessRate !== undefined) {
+        const successRateFilter = {};
+        if (minSuccessRate !== undefined)
+            successRateFilter.$gte = minSuccessRate;
+        if (maxSuccessRate !== undefined)
+            successRateFilter.$lte = maxSuccessRate;
+        pipeline.push({ $match: { successRate: successRateFilter } });
+    }
+    const countPipeline = [...pipeline, { $count: 'total' }];
+    const dataPipeline = [
+        ...pipeline,
+        { $sort: sortOptions },
+        { $skip: skip },
+        { $limit: Number(limit) },
+        {
+            $lookup: {
+                from: 'categories',
+                localField: 'category',
+                foreignField: '_id',
+                as: 'categoryObj' // Use a different name to avoid conflict
+            }
+        },
+        { $unwind: { path: '$categoryObj', preserveNullAndEmptyArrays: true } }, // Handle if category is not found
+        {
+            $lookup: {
+                from: 'lessons',
+                localField: 'lesson',
+                foreignField: '_id',
+                as: 'lessonObj'
+            }
+        },
+        { $unwind: { path: '$lessonObj', preserveNullAndEmptyArrays: true } },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'createdBy',
+                foreignField: '_id',
+                as: 'createdByUser'
+            }
+        },
+        { $unwind: { path: '$createdByUser', preserveNullAndEmptyArrays: true } },
+        {
+            $project: {
+                text: 1, type: 1, options: 1, difficulty: 1, points: 1, explanation: 1, tags: 1, thumbnail: 1, isActive: 1,
+                analytics: 1, source: 1, version: 1, createdAt: 1, updatedAt: 1, successRate: 1,
+                category: '$categoryObj',
+                lesson: '$lessonObj',
+                createdBy: '$createdByUser'
+            }
+        }
+    ];
+    const [totalResults, questions] = await Promise.all([
+        this.aggregate(countPipeline).exec(),
+        this.aggregate(dataPipeline).exec()
+    ]);
+    const total = totalResults.length > 0 ? totalResults[0].total : 0;
+    const pages = Math.ceil(total / Number(limit));
+    return { questions, total, pages };
+};
+exports.default = mongoose_1.default.model('Question', QuestionSchema);
+//# sourceMappingURL=question.model.js.map

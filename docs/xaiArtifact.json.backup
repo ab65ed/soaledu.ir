@@ -1,0 +1,241 @@
+{
+  "version": "1.3.1",
+  "sections": [
+    {
+      "name": "درس-آزمون",
+      "path": "/frontend/src/app/course-exam",
+      "dependencies": [],
+      "status": "pending",
+      "prompts": [
+        {
+          "type": "main",
+          "checklist": [
+            {"item": "فرم چندمرحله‌ای با 40 سوال و قیمت 30,000 تومان", "completed": true},
+            {"item": "دکمه‌های آزمون بدون سوالات تکراری و تصادفی (20,000 تومان)", "completed": true},
+            {"item": "نظر‌سنجی 5 ستاره برای آزمون‌ها", "completed": true},
+            {"item": "نمایش هدایای کیف پول در داشبورد دانشجو", "completed": true}
+          ],
+          "suggestions": ["انیمیشن برای نظر‌سنجی با @21st-dev/magic", "فیلتر جستجوی پیشرفته‌تر"]
+        },
+        {
+          "type": "connection",
+          "checklist": [
+            {"item": "نمایش نتیجه اولین آزمون در داشبورد طراح", "completed": false},
+            {"item": "شارژ کیف پول توسط ادمین", "completed": false},
+            {"item": "جستجوی پیشرفته سوالات", "completed": false}
+          ],
+          "suggestions": ["اعلان برای شارژ کیف پول", "فیلتر پیشرفته‌تر برای سوالات"]
+        }
+      ]
+    },
+    {
+      "name": "سوال",
+      "path": "/frontend/src/app/questions",
+      "dependencies": ["درس-آزمون"],
+      "status": "pending",
+      "prompts": [
+        {
+          "type": "main",
+          "checklist": [
+            {"item": "فرم سوال با 4 گزینه و اعتبارسنجی فارسی", "completed": true},
+            {"item": "ذخیره لحظه‌ای با اعلان", "completed": true},
+            {"item": "نمایش آکاردئونی سوالات", "completed": true},
+            {"item": "جستجوی پیشرفته برای سوالات", "completed": true}
+          ],
+          "suggestions": ["پیش‌نمایش سوال در فرم", "قالب‌های آماده برای شرح سوال"]
+        },
+        {
+          "type": "connection",
+          "checklist": [
+            {"item": "نمایش سوالات در درس-آزمون", "completed": true},
+            {"item": "انتخاب سوالات برای آزمون تستی", "completed": true}
+          ],
+          "suggestions": ["فیلتر پیشرفته سوالات در UI", "اعلان برای اتصال موفق"]
+        }
+      ]
+    },
+    {
+      "name": "آزمون تستی",
+      "path": "/frontend/src/app/test-exams",
+      "dependencies": ["درس-آزمون", "سوال"],
+      "status": "pending",
+      "prompts": [
+        {
+          "type": "main",
+          "checklist": [
+            {"item": "فرم آزمون با 40 سوال و قیمت 30,000 تومان", "completed": true},
+            {"item": "شخصی‌سازی تعداد/سطح با مضرب 40", "completed": true},
+            {"item": "نظر‌سنجی 5 ستاره و مدال نتایج", "completed": true},
+            {"item": "تحلیل گرافیکی نتایج با Chart.tsx", "completed": true}
+          ],
+          "suggestions": ["تایمر گرافیکی در UI", "پیشنهاد مسیر یادگیری"]
+        },
+        {
+          "type": "connection",
+          "checklist": [
+            {"item": "نمایش سوالات در آزمون با نظر‌سنجی", "completed": false},
+            {"item": "ارسال نظر‌سنجی به داشبورد ادمین/طراح/کارشناس", "completed": false}
+          ],
+          "suggestions": ["نمایش تخفیف در UI", "نمایش قیمت در مدال پرداخت"]
+        }
+      ]
+    },
+    {
+      "name": "فلش‌کارت",
+      "path": "/frontend/src/app/flashcard",
+      "dependencies": ["سوال"],
+      "status": "pending",
+      "prompts": [
+        {
+          "type": "main",
+          "checklist": [
+            {"item": "ایجاد خودکار فلش‌کارت با قیمت 200 تومان", "completed": true},
+            {"item": "دسته‌بندی مبحث در UI", "completed": true},
+            {"item": "دانلود/اشتراک فلش‌کارت با انیمیشن", "completed": true},
+            {"item": "جستجوی پیشرفته فلش‌کارت‌ها", "completed": true}
+          ],
+          "suggestions": ["یادداشت برای فلش‌کارت", "انیمیشن‌های متنوع با @21st-dev/magic"]
+        },
+        {
+          "type": "connection",
+          "checklist": [
+            {"item": "نمایش سوالات در فلش‌کارت", "completed": false},
+            {"item": "اتصال به کیف پول برای پرداخت 200 تومان", "completed": false}
+          ],
+          "suggestions": ["دسته‌بندی پیشرفته در UI", "نمایش فلش‌کارت در داشبورد"]
+        }
+      ]
+    },
+    {
+      "name": "نقش‌ها",
+      "path": "/frontend/src/app/admin",
+      "dependencies": ["درس-آزمون", "سوال", "آزمون تستی", "فلش‌کارت", "مباحث مالی"],
+      "status": "pending",
+      "prompts": [
+        {
+          "type": "main",
+          "checklist": [
+            {"item": "پنل جدا برای هر نقش با UI حرفه‌ای", "completed": true},
+            {"item": "لاگ فعالیت در داشبورد ادمین/کارشناس", "completed": true},
+            {"item": "درخواست وجه و شارژ کیف پول توسط ادمین", "completed": true},
+            {"item": "پایگاه دانش با KnowledgeBaseViewer.tsx", "completed": true}
+          ],
+          "suggestions": ["چت زنده برای پشتیبانی", "داشبورد پیشرفته ادمین با @21st-dev/magic"]
+        },
+        {
+          "type": "connection",
+          "checklist": [
+            {"item": "نمایش نظر‌سنجی آزمون‌ها برای ادمین/طراح/کارشناس", "completed": false},
+            {"item": "دسترسی طراح به درس/سوال", "completed": false}
+          ],
+          "suggestions": ["اعلان برای نقش‌ها", "نقش جدید (مدیر) در UI"]
+        }
+      ]
+    },
+    {
+      "name": "مباحث مالی",
+      "path": "/frontend/src/app/finance",
+      "dependencies": ["آزمون تستی", "فلش‌کارت", "نقش‌ها"],
+      "status": "pending",
+      "prompts": [
+        {
+          "type": "main",
+          "checklist": [
+            {"item": "تب مالی با بسته‌های 30k/60k/120k/240k", "completed": true},
+            {"item": "هدایا (15k برای 120k، 30k برای 240k)", "completed": true},
+            {"item": "نمایش گزارش هدایا (روزانه/هفتگی/ماهانه/سالانه)", "completed": true},
+            {"item": "فرم درخواست وجه با اعتبارسنجی", "completed": true}
+          ],
+          "suggestions": ["گزارش مالی گرافیکی", "پرداخت اقساطی در UI"]
+        },
+        {
+          "type": "connection",
+          "checklist": [
+            {"item": "نمایش کیف پول طراح در WalletCard.tsx", "completed": false},
+            {"item": "تب مالی برای ادمین با گزارش هدایا", "completed": false}
+          ],
+          "suggestions": ["اعلان پرداخت موفق", "تاریخچه تراکنش در UI"]
+        }
+      ]
+    },
+    {
+      "name": "تست A/B و مقیاس‌پذیری",
+      "path": "/frontend/src/app/ab-testing",
+      "dependencies": ["درس-آزمون", "سوال"],
+      "status": "pending",
+      "prompts": [
+        {
+          "type": "main",
+          "checklist": [
+            {"item": "فرم تست A/B با جستجوی پیشرفته", "completed": false},
+            {"item": "داشبورد مقیاس‌پذیری با UI حرفه‌ای", "completed": false},
+            {"item": "تبدیل فایل‌های جاوااسکریپت به تایپ‌اسکریپت", "completed": false},
+            {"item": "نمایش نتایج تست در ScalabilityDashboard.tsx", "completed": false}
+          ],
+          "suggestions": ["مانیتورینگ زنده تست A/B", "کش برای داشبورد با React Query"]
+        },
+        {
+          "type": "connection",
+          "checklist": [
+            {"item": "اتصال تست A/B به درس-آزمون", "completed": false},
+            {"item": "نمایش سوالات در UI تست", "completed": false}
+          ],
+          "suggestions": ["گزارش گرافیکی تست", "تست برای نقش‌ها"]
+        }
+      ]
+    },
+    {
+      "name": "تماس با ما",
+      "path": "/frontend/src/app/contact",
+      "dependencies": [],
+      "status": "pending",
+      "prompts": [
+        {
+          "type": "main",
+          "checklist": [
+            {"item": "فرم تماس با اعتبارسنجی فارسی", "completed": false},
+            {"item": "بخش FAQ آکاردئونی با RTL", "completed": false},
+            {"item": "اعلان ارسال پیام", "completed": false},
+            {"item": "هدر مینیمال با لوگو و IRANSans", "completed": false}
+          ],
+          "suggestions": ["انیمیشن برای FAQ با @21st-dev/magic", "نقشه تعاملی در صفحه"]
+        },
+        {
+          "type": "connection",
+          "checklist": [
+            {"item": "نمایش پیام‌ها در داشبورد پشتیبانی", "completed": false},
+            {"item": "اعلان برای ادمین/پشتیبانی", "completed": false}
+          ],
+          "suggestions": ["چت زنده در تماس با ما", "دسته‌بندی پیام‌ها"]
+        }
+      ]
+    },
+    {
+      "name": "بلاگ",
+      "path": "/frontend/src/app/blog",
+      "dependencies": [],
+      "status": "pending",
+      "prompts": [
+        {
+          "type": "main",
+          "checklist": [
+            {"item": "گرید پست‌ها با جستجوی پیشرفته", "completed": false},
+            {"item": "فرم ارسال پست برای ادمین", "completed": false},
+            {"item": "فیلتر دسته‌بندی با RTL", "completed": false},
+            {"item": "استایل حرفه‌ای با IRANSans", "completed": false}
+          ],
+          "suggestions": ["بخش نظرات زیر پست‌ها", "اشتراک‌گذاری پست‌ها"]
+        },
+        {
+          "type": "connection",
+          "checklist": [
+            {"item": "مدیریت پست‌ها در داشبورد ادمین", "completed": false},
+            {"item": "حذف/ویرایش پست‌ها", "completed": false}
+          ],
+          "suggestions": ["اعلان برای پست جدید", "آمار بازدید پست‌ها"]
+        }
+      ]
+    }
+  ],
+  "last_updated": "2025-06-05T15:17:00+03:00"
+}
