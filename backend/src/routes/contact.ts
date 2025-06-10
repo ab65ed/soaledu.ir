@@ -3,7 +3,7 @@
  * @description تعریف مسیرهای API برای مدیریت پیام‌های تماس
  */
 
-import express from 'express';
+import express, { Request, Response, RequestHandler } from 'express';
 import Contact, { ContactCreateData, ContactUpdateData } from '../models/contact';
 
 const router = express.Router();
@@ -13,7 +13,7 @@ const router = express.Router();
  */
 
 // دریافت آمار پیام‌ها (باید قبل از /:id باشد)
-router.get('/stats', async (req, res) => {
+const getStats: RequestHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const stats = await Contact.getStats();
 
@@ -29,19 +29,20 @@ router.get('/stats', async (req, res) => {
       message: 'خطا در دریافت آمار'
     });
   }
-});
+};
 
 // ایجاد پیام تماس جدید (عمومی)
-router.post('/', async (req, res) => {
+const createContact: RequestHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, email, message, userAgent, ipAddress, userId } = req.body;
 
     // Validation
     if (!name || !email || !message) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: 'نام، ایمیل و پیام الزامی هستند'
       });
+      return;
     }
 
     const contactData: ContactCreateData = {
@@ -68,10 +69,10 @@ router.post('/', async (req, res) => {
       message: 'خطا در ارسال پیام'
     });
   }
-});
+};
 
 // دریافت لیست پیام‌ها (عمومی برای تست)
-router.get('/', async (req, res) => {
+const getContacts: RequestHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const { 
       page = 1, 
@@ -109,19 +110,20 @@ router.get('/', async (req, res) => {
       message: 'خطا در دریافت پیام‌ها'
     });
   }
-});
+};
 
 // دریافت پیام بر اساس ID
-router.get('/:id', async (req, res) => {
+const getContactById: RequestHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const contact = await Contact.findById(id);
 
     if (!contact) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: 'پیام یافت نشد'
       });
+      return;
     }
 
     // Mark as read
@@ -140,20 +142,21 @@ router.get('/:id', async (req, res) => {
       message: 'خطا در دریافت پیام'
     });
   }
-});
+};
 
 // بروزرسانی پیام
-router.put('/:id', async (req, res) => {
+const updateContact: RequestHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const updateData: ContactUpdateData = req.body;
 
     const contact = await Contact.findById(id);
     if (!contact) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: 'پیام یافت نشد'
       });
+      return;
     }
 
     await contact.updateContact(updateData);
@@ -171,19 +174,20 @@ router.put('/:id', async (req, res) => {
       message: 'خطا در به‌روزرسانی پیام'
     });
   }
-});
+};
 
 // حذف پیام
-router.delete('/:id', async (req, res) => {
+const deleteContact: RequestHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const contact = await Contact.findById(id);
 
     if (!contact) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: 'پیام یافت نشد'
       });
+      return;
     }
 
     await contact.destroy();
@@ -200,27 +204,29 @@ router.delete('/:id', async (req, res) => {
       message: 'خطا در حذف پیام'
     });
   }
-});
+};
 
 // پاسخ به پیام تماس
-router.post('/:id/reply', async (req, res) => {
+const replyToContact: RequestHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const { response, assignedTo } = req.body;
 
     if (!response) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: 'متن پاسخ الزامی است'
       });
+      return;
     }
 
     const contact = await Contact.findById(id);
     if (!contact) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: 'پیام یافت نشد'
       });
+      return;
     }
 
     contact.markAsReplied(response, assignedTo);
@@ -239,6 +245,15 @@ router.post('/:id/reply', async (req, res) => {
       message: 'خطا در ارسال پاسخ'
     });
   }
-});
+};
+
+// تعریف routes
+router.get('/stats', getStats);
+router.post('/', createContact);
+router.get('/', getContacts);
+router.get('/:id', getContactById);
+router.put('/:id', updateContact);
+router.delete('/:id', deleteContact);
+router.post('/:id/reply', replyToContact);
 
 export default router; 

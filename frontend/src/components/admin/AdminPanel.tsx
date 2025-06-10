@@ -23,7 +23,7 @@ import { adminService, type AdminStats, type AdminUser } from '@/services/api';
  * Main Admin Panel Component
  */
 export const AdminPanel: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'content' | 'finance' | 'logs'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'content' | 'discounts' | 'finance' | 'logs'>('overview');
 
   // دریافت آمار کلی سیستم
   const { data: stats, isLoading: statsLoading } = useQuery<AdminStats>({
@@ -128,6 +128,7 @@ export const AdminPanel: React.FC = () => {
     { id: 'overview', name: 'نمای کلی', icon: ChartBarIcon },
     { id: 'users', name: 'کاربران', icon: UsersIcon },
     { id: 'content', name: 'محتوا', icon: BookOpenIcon },
+    { id: 'discounts', name: 'تخفیف‌های سازمانی', icon: CurrencyDollarIcon },
     { id: 'finance', name: 'مالی', icon: CurrencyDollarIcon },
     { id: 'logs', name: 'لاگ‌ها', icon: ClockIcon }
   ];
@@ -153,7 +154,7 @@ export const AdminPanel: React.FC = () => {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as 'overview' | 'users' | 'content' | 'finance' | 'logs')}
+              onClick={() => setActiveTab(tab.id as 'overview' | 'users' | 'content' | 'discounts' | 'finance' | 'logs')}
               className={`
                 flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm
                 ${activeTab === tab.id
@@ -391,6 +392,55 @@ export const AdminPanel: React.FC = () => {
               <p className="text-gray-600">
                 این بخش در حال توسعه است...
               </p>
+            </motion.div>
+          )}
+
+          {activeTab === 'discounts' && (
+            <motion.div
+              key="discounts"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-2">
+                  <CurrencyDollarIcon className="w-6 h-6 text-blue-600" />
+                  <h2 className="text-xl font-semibold text-gray-900">تخفیف‌های سازمانی</h2>
+                </div>
+                <a
+                  href="/admin/institutional-discounts"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  مدیریت کامل
+                </a>
+              </div>
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6">
+                <div className="text-center">
+                  <CurrencyDollarIcon className="mx-auto w-16 h-16 text-blue-500 mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    سیستم تخفیف‌های سازمانی
+                  </h3>
+                  <p className="text-gray-600 mb-4 max-w-2xl mx-auto">
+                    مدیریت تخفیف‌های اختصاصی برای نهادهای آموزشی و دانش‌آموزان. 
+                    امکان بارگذاری فایل اکسل شامل اطلاعات دانش‌آموزان و اعمال تخفیف خودکار.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div className="bg-white rounded-lg p-4 shadow-sm">
+                      <div className="text-blue-600 font-semibold">بارگذاری فایل</div>
+                      <div className="text-gray-600">آپلود فایل اکسل با اطلاعات دانش‌آموزان</div>
+                    </div>
+                    <div className="bg-white rounded-lg p-4 shadow-sm">
+                      <div className="text-green-600 font-semibold">تطبیق خودکار</div>
+                      <div className="text-gray-600">تشخیص و اعمال تخفیف بر اساس کد ملی/تلفن</div>
+                    </div>
+                    <div className="bg-white rounded-lg p-4 shadow-sm">
+                      <div className="text-purple-600 font-semibold">گزارش‌گیری</div>
+                      <div className="text-gray-600">مشاهده آمار و نتایج پردازش</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           )}
 

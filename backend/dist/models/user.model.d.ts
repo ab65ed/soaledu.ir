@@ -20,6 +20,10 @@ export interface IUser extends Document {
     password: string;
     role: 'student' | 'admin' | 'support' | 'Question Designer';
     educationalGroup?: mongoose.Types.ObjectId;
+    nationalCode?: string;
+    phoneNumber?: string;
+    institutionalDiscountPercentage?: number;
+    institutionalDiscountGroupId?: mongoose.Types.ObjectId;
     wallet: IWallet;
     createdAt: Date;
     updatedAt: Date;

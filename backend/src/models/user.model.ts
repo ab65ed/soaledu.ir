@@ -28,6 +28,10 @@ export interface IUser extends Document {
   password: string;
   role: 'student' | 'admin' | 'support' | 'Question Designer';
   educationalGroup?: mongoose.Types.ObjectId;
+  nationalCode?: string; // کد ملی برای شناسایی در تخفیف‌های سازمانی
+  phoneNumber?: string; // شماره تلفن برای شناسایی در تخفیف‌های سازمانی
+  institutionalDiscountPercentage?: number; // درصد تخفیف سازمانی
+  institutionalDiscountGroupId?: mongoose.Types.ObjectId; // ارجاع به گروه تخفیف سازمانی
   wallet: IWallet;
   createdAt: Date;
   updatedAt: Date;
@@ -132,6 +136,45 @@ const UserSchema = new Schema<IUser>(
     educationalGroup: {
       type: Schema.Types.ObjectId,
       ref: "Category",
+    },
+    nationalCode: {
+      type: String,
+      trim: true,
+      validate: {
+        validator: function(value: string) {
+          if (!value) return true; // اختیاری است
+          // اعتبارسنجی کد ملی ایرانی
+          const code = value.toString();
+          if (code.length !== 10) return false;
+          const check = parseInt(code[9]);
+          const sum = code.split('').slice(0, 9).reduce((acc, x, i) => acc + parseInt(x) * (10 - i), 0) % 11;
+          return (sum < 2) ? (check === sum) : (check === 11 - sum);
+        },
+        message: 'کد ملی وارد شده نامعتبر است'
+      }
+    },
+    phoneNumber: {
+      type: String,
+      trim: true,
+      validate: {
+        validator: function(value: string) {
+          if (!value) return true; // اختیاری است
+          // اعتبارسنجی شماره تلفن ایرانی
+          const phoneRegex = /^(09\d{9}|9\d{9})$/;
+          return phoneRegex.test(value);
+        },
+        message: 'شماره تلفن وارد شده نامعتبر است'
+      }
+    },
+    institutionalDiscountPercentage: {
+      type: Number,
+      min: [0, 'درصد تخفیف نمی‌تواند منفی باشد'],
+      max: [100, 'درصد تخفیف نمی‌تواند بیش از ۱۰۰ باشد'],
+      default: 0
+    },
+    institutionalDiscountGroupId: {
+      type: Schema.Types.ObjectId,
+      ref: "InstitutionalDiscountGroup",
     },
     wallet: {
       balance: {

@@ -4,10 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const institutionalDiscountRoutes_1 = __importDefault(require("./institutionalDiscountRoutes"));
 // import authRoutes from './auth.routes'; // موقتاً غیرفعال
 // import rolesRoutes from './roles'; // موقتاً غیرفعال - فایل rename شده
 // import walletRoutes from './wallet'; // موقتاً غیرفعال - فایل rename شده
 const router = express_1.default.Router();
+// Mount routes
+router.use('/admin/institutional-discounts', institutionalDiscountRoutes_1.default);
 // Mount routes - موقتاً غیرفعال
 // router.use('/auth', authRoutes);
 // router.use('/roles', rolesRoutes);

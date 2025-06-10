@@ -1,9 +1,13 @@
 import express from 'express';
+import institutionalDiscountRoutes from './institutionalDiscountRoutes';
 // import authRoutes from './auth.routes'; // موقتاً غیرفعال
 // import rolesRoutes from './roles'; // موقتاً غیرفعال - فایل rename شده
 // import walletRoutes from './wallet'; // موقتاً غیرفعال - فایل rename شده
 
 const router = express.Router();
+
+// Mount routes
+router.use('/admin/institutional-discounts', institutionalDiscountRoutes);
 
 // Mount routes - موقتاً غیرفعال
 // router.use('/auth', authRoutes);
