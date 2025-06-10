@@ -120,6 +120,29 @@ export interface User {
   updatedAt: string;
 }
 
+// فراموشی رمز عبور
+export interface ForgotPasswordData {
+  email: string;
+  nationalId: string;
+}
+
+export interface ForgotPasswordResponse {
+  token: string;
+  expiresAt: string;
+  message: string;
+}
+
+export interface ResetPasswordData {
+  token: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface VerifyCodeData {
+  token: string;
+  code: string;
+}
+
 export const authService = {
   async login(credentials: LoginCredentials): Promise<{ user: User; token: string }> {
     return apiRequest('/auth/login', {
@@ -142,6 +165,38 @@ export const authService = {
   async logout(): Promise<void> {
     localStorage.removeItem('token');
     queryClient.clear();
+  },
+
+  // درخواست فراموشی رمز عبور
+  async forgotPassword(data: ForgotPasswordData): Promise<ForgotPasswordResponse> {
+    return apiRequest('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // تأیید کد ارسالی
+  async verifyResetCode(data: VerifyCodeData): Promise<{ success: boolean; message: string }> {
+    return apiRequest('/auth/verify-reset-code', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // ریست رمز عبور
+  async resetPassword(data: ResetPasswordData): Promise<{ success: boolean; message: string }> {
+    return apiRequest('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // ارسال مجدد کد تأیید
+  async resendResetCode(token: string): Promise<{ success: boolean; message: string }> {
+    return apiRequest('/auth/resend-reset-code', {
+      method: 'POST',
+      body: JSON.stringify({ token }),
+    });
   },
 };
 
@@ -1226,6 +1281,282 @@ export const expertService = {
   },
 };
 
+// ===================
+// Test Exams Services
+// ===================
+
+export interface TestExamQuestion {
+  id: string;
+  text: string;
+  type: 'multiple-choice' | 'true-false';
+  options?: string[];
+  correctAnswer?: number | boolean;
+  difficulty: 'easy' | 'medium' | 'hard';
+  points: number;
+  timeLimit?: number; // به ثانیه
+  category: string;
+  lesson: string;
+  sourceBook: string;
+  sourceChapter: string;
+}
+
+export interface TestExam {
+  id: string;
+  title: string;
+  description: string;
+  grade: string;
+  courseType: string;
+  timeLimit: number; // به دقیقه
+  questionsCount: number;
+  price: number;
+  difficulty: 'easy' | 'medium' | 'hard';
+  estimatedTime: number;
+  questions: TestExamQuestion[];
+  difficultyDistribution: {
+    easy: number; // حداکثر 20%
+    medium: number; // حداکثر 30%
+    hard: number; // بقیه سوالات
+  };
+  tags: string[];
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TestExamSession {
+  id: string;
+  examId: string;
+  startTime: string;
+  endTime?: string;
+  timeRemaining: number; // به ثانیه
+  currentQuestionIndex: number;
+  answers: Record<string, number | boolean | string>;
+  isCompleted: boolean;
+  isSubmitted: boolean;
+  score?: number;
+  correctAnswers?: number;
+  createdAt: string;
+}
+
+export interface TestExamSubmission {
+  examId: string;
+  sessionId: string;
+  answers: Record<string, number | boolean | string>;
+  timeSpent: number; // به ثانیه
+  endTime: string;
+}
+
+export interface TestExamResult {
+  id: string;
+  examId: string;
+  sessionId: string;
+  score: number;
+  maxScore: number;
+  percentage: number;
+  correctAnswers: number;
+  totalQuestions: number;
+  timeSpent: number;
+  answers: Record<string, number | boolean | string>;
+  questionResults: Array<{
+    questionId: string;
+    isCorrect: boolean;
+    userAnswer: number | boolean | string;
+    correctAnswer: number | boolean | string;
+    points: number;
+    pointsEarned: number;
+  }>;
+  completedAt: string;
+  grade: string;
+}
+
+export interface TestExamPricing {
+  basePrice: number;
+  currentPrice: number;
+  discount?: {
+    type: 'percentage' | 'fixed';
+    value: number;
+    description: string;
+    expiresAt?: string;
+  };
+  pricePerQuestion: number;
+  bulkDiscounts: Array<{
+    minQuestions: number;
+    discountPercentage: number;
+  }>;
+}
+
+export const testExamService = {
+  // دریافت لیست آزمون‌های تستی
+  async getTestExams(filters: {
+    grade?: string;
+    courseType?: string;
+    difficulty?: string;
+    search?: string;
+    limit?: number;
+    skip?: number;
+  } = {}): Promise<{
+    exams: TestExam[];
+    pagination: {
+      total: number;
+      count: number;
+      limit: number;
+      skip: number;
+    };
+  }> {
+    const queryParams = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined) {
+        queryParams.append(key, value.toString());
+      }
+    });
+
+    return apiRequest(`/testExams?${queryParams.toString()}`);
+  },
+
+  // دریافت آزمون تستی مشخص
+  async getTestExamById(id: string): Promise<TestExam> {
+    return apiRequest(`/testExams/${id}`);
+  },
+
+  // دریافت سوالات آزمون
+  async getTestExamQuestions(examId: string): Promise<TestExamQuestion[]> {
+    return apiRequest(`/testExams/${examId}/questions`);
+  },
+
+  // شروع آزمون جدید
+  async startTestExam(examId: string): Promise<TestExamSession> {
+    return apiRequest(`/testExams/${examId}/start`, {
+      method: 'POST',
+    });
+  },
+
+  // ادامه آزمون (در صورت قطع شدن)
+  async resumeTestExam(sessionId: string): Promise<TestExamSession> {
+    return apiRequest(`/testExams/sessions/${sessionId}/resume`);
+  },
+
+  // ذخیره پاسخ
+  async saveAnswer(sessionId: string, questionId: string, answer: number | boolean | string): Promise<void> {
+    return apiRequest(`/testExams/sessions/${sessionId}/answer`, {
+      method: 'POST',
+      body: JSON.stringify({ questionId, answer }),
+    });
+  },
+
+  // ارسال آزمون
+  async submitTestExam(submission: TestExamSubmission): Promise<TestExamResult> {
+    return apiRequest('/testExams/submit', {
+      method: 'POST',
+      body: JSON.stringify(submission),
+    });
+  },
+
+  // دریافت نتیجه آزمون
+  async getTestExamResult(resultId: string): Promise<TestExamResult> {
+    return apiRequest(`/testExams/results/${resultId}`);
+  },
+
+  // دریافت تاریخچه آزمون‌های کاربر
+  async getUserTestExamHistory(filters: {
+    examId?: string;
+    status?: 'completed' | 'in-progress';
+    limit?: number;
+    skip?: number;
+  } = {}): Promise<{
+    results: TestExamResult[];
+    sessions: TestExamSession[];
+    pagination: {
+      total: number;
+      count: number;
+      limit: number;
+      skip: number;
+    };
+  }> {
+    const queryParams = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined) {
+        queryParams.append(key, value.toString());
+      }
+    });
+
+    return apiRequest(`/testExams/user/history?${queryParams.toString()}`);
+  },
+};
+
+// ===================
+// Finance Services for Test Exams
+// ===================
+
+export const financeService = {
+  // دریافت قیمت‌گذاری آزمون تستی
+  async getTestExamPricing(examId: string, questionsCount?: number): Promise<TestExamPricing> {
+    const queryParams = new URLSearchParams();
+    if (questionsCount) {
+      queryParams.append('questionsCount', questionsCount.toString());
+    }
+
+    return apiRequest(`/finance/testExams/${examId}/price?${queryParams.toString()}`);
+  },
+
+  // خرید آزمون تستی
+  async purchaseTestExam(examId: string, paymentMethod?: string): Promise<{
+    success: boolean;
+    transactionId: string;
+    paymentUrl?: string;
+    message: string;
+  }> {
+    return apiRequest(`/finance/testExams/${examId}/purchase`, {
+      method: 'POST',
+      body: JSON.stringify({ paymentMethod }),
+    });
+  },
+
+  // تأیید پرداخت
+  async verifyTestExamPayment(transactionId: string): Promise<{
+    success: boolean;
+    examAccess: boolean;
+    message: string;
+  }> {
+    return apiRequest(`/finance/testExams/verify-payment/${transactionId}`, {
+      method: 'POST',
+    });
+  },
+
+  // دریافت لیست تخفیف‌ها
+  async getAvailableDiscounts(examId?: string): Promise<Array<{
+    id: string;
+    code: string;
+    type: 'percentage' | 'fixed';
+    value: number;
+    description: string;
+    minAmount?: number;
+    maxUsage?: number;
+    currentUsage: number;
+    expiresAt: string;
+    isActive: boolean;
+  }>> {
+    const queryParams = examId ? `?examId=${examId}` : '';
+    return apiRequest(`/finance/discounts${queryParams}`);
+  },
+
+  // اعمال کد تخفیف
+  async applyDiscountCode(code: string, examId: string): Promise<{
+    success: boolean;
+    discount: {
+      type: 'percentage' | 'fixed';
+      value: number;
+      description: string;
+    };
+    newPrice: number;
+    message: string;
+  }> {
+    return apiRequest('/finance/apply-discount', {
+      method: 'POST',
+      body: JSON.stringify({ code, examId }),
+    });
+  },
+};
+
 const apiServices = {
   authService,
   courseExamService,
@@ -1235,6 +1566,10 @@ const apiServices = {
   testimonialService,
   blogService,
   adminService,
+  learnerService,
+  expertService,
+  testExamService,
+  financeService,
   queryClient,
 };
 
