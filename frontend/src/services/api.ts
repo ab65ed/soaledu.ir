@@ -1456,6 +1456,37 @@ export const testExamService = {
     return apiRequest(`/testExams/results/${resultId}`);
   },
 
+  // دریافت تحلیل جامع نتایج آزمون با analytics
+  async getTestExamAnalytics(resultId: string): Promise<TestExamResult & {
+    analytics: {
+      categoryPerformance: Array<{
+        category: string;
+        correct: number;
+        total: number;
+        percentage: number;
+      }>;
+      difficultyPerformance: Array<{
+        difficulty: 'easy' | 'medium' | 'hard';
+        correct: number;
+        total: number;
+        percentage: number;
+      }>;
+      timeAnalysis: {
+        averageTimePerQuestion: number;
+        fastestQuestion: { questionId: string; timeSpent: number };
+        slowestQuestion: { questionId: string; timeSpent: number };
+      };
+      learningRecommendations: Array<{
+        type: 'strength' | 'weakness' | 'improvement';
+        title: string;
+        description: string;
+        priority: 'high' | 'medium' | 'low';
+      }>;
+    };
+  }> {
+    return apiRequest(`/testExams/results/${resultId}/analytics`);
+  },
+
   // دریافت تاریخچه آزمون‌های کاربر
   async getUserTestExamHistory(filters: {
     examId?: string;

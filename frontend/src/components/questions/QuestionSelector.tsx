@@ -174,6 +174,61 @@ export default function QuestionSelector({
     onQuestionsChange(newSelected);
   }, [selectedQuestions, onQuestionsChange]);
 
+  // الگوریتم انتخاب هوشمند سوالات
+  const handleSmartSelection = useCallback((count: number, mode: 'balanced' | 'random' = 'balanced') => {
+    if (questions.length === 0) return;
+
+    let selectedIds: string[] = [];
+
+    if (mode === 'balanced') {
+      // توزیع متعادل: 40% آسان، 40% متوسط، 20% سخت
+      const easyQuestions = questions.filter(q => q.difficulty === 'easy');
+      const mediumQuestions = questions.filter(q => q.difficulty === 'medium');
+      const hardQuestions = questions.filter(q => q.difficulty === 'hard');
+
+      const easyCount = Math.floor(count * 0.4);
+      const mediumCount = Math.floor(count * 0.4);
+      const hardCount = count - easyCount - mediumCount;
+
+      // انتخاب تصادفی از هر دسته
+      const selectedEasy = easyQuestions
+        .sort(() => Math.random() - 0.5)
+        .slice(0, Math.min(easyCount, easyQuestions.length))
+        .map(q => q.id);
+
+      const selectedMedium = mediumQuestions
+        .sort(() => Math.random() - 0.5)
+        .slice(0, Math.min(mediumCount, mediumQuestions.length))
+        .map(q => q.id);
+
+      const selectedHard = hardQuestions
+        .sort(() => Math.random() - 0.5)
+        .slice(0, Math.min(hardCount, hardQuestions.length))
+        .map(q => q.id);
+
+      selectedIds = [...selectedEasy, ...selectedMedium, ...selectedHard];
+
+      // اگر تعداد کافی سوال نداشتیم، از بقیه سوالات انتخاب کن
+      if (selectedIds.length < count) {
+        const remainingQuestions = questions
+          .filter(q => !selectedIds.includes(q.id))
+          .sort(() => Math.random() - 0.5)
+          .slice(0, count - selectedIds.length)
+          .map(q => q.id);
+        
+        selectedIds = [...selectedIds, ...remainingQuestions];
+      }
+    } else {
+      // انتخاب تصادفی
+      selectedIds = questions
+        .sort(() => Math.random() - 0.5)
+        .slice(0, count)
+        .map(q => q.id);
+    }
+
+    onQuestionsChange(selectedIds);
+  }, [questions, onQuestionsChange]);
+
   // تابع انتخاب همه سوالات
   const handleSelectAll = useCallback(() => {
     const allQuestionIds = questions.map(q => q.id);
@@ -210,6 +265,48 @@ export default function QuestionSelector({
         
         {/* دکمه‌های عملیات */}
         <div className="flex gap-2">
+          <div className="relative group">
+            <button
+              className="px-4 py-2 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50"
+              disabled={questions.length === 0}
+            >
+              انتخاب هوشمند
+            </button>
+            <div className="absolute left-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+              <button
+                onClick={() => handleSmartSelection(10, 'balanced')}
+                className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-right"
+              >
+                10 سوال متعادل
+              </button>
+              <button
+                onClick={() => handleSmartSelection(20, 'balanced')}
+                className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-right"
+              >
+                20 سوال متعادل
+              </button>
+              <button
+                onClick={() => handleSmartSelection(30, 'balanced')}
+                className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-right"
+              >
+                30 سوال متعادل
+              </button>
+              <hr className="my-1" />
+              <button
+                onClick={() => handleSmartSelection(10, 'random')}
+                className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-right"
+              >
+                10 سوال تصادفی
+              </button>
+              <button
+                onClick={() => handleSmartSelection(20, 'random')}
+                className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-right"
+              >
+                20 سوال تصادفی
+              </button>
+            </div>
+          </div>
+          
           <button
             onClick={handleSelectAll}
             disabled={questions.length === 0}
