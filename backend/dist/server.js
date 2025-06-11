@@ -28,11 +28,14 @@ const cache_1 = __importDefault(require("./routes/cache")); // Cache management 
 const performance_1 = __importDefault(require("./routes/performance")); // Performance monitoring routes
 const ab_test_1 = __importDefault(require("./routes/ab-test")); // A/B Testing management routes
 const scalability_1 = __importDefault(require("./routes/scalability")); // Database scalability and optimization routes
+// Recently activated API routes
+const questions_1 = __importDefault(require("./routes/questions")); // Question bank management - فعال شده
+const flashcard_1 = __importDefault(require("./routes/flashcard")); // Flashcard management routes - فعال شده
+const wallet_1 = __importDefault(require("./routes/wallet")); // Wallet management routes - فعال شده
 // Auth routes - موقتاً غیرفعال به دلیل مشکلات compilation
 // import authRoutes from "./routes/auth.routes";
 // import categoryRoutes from "./routes/category.routes";
 // import examsRoutes from "./routes/exams"; // New exam management routes
-// import questionsRoutes from "./routes/questions"; // New question bank management
 // import categoriesRoutes from "./routes/categories"; // New category management
 // import analyticsRoutes from "./routes/analytics"; // Analytics and reporting
 // import ticketRoutes from "./routes/tickets";
@@ -41,7 +44,6 @@ const scalability_1 = __importDefault(require("./routes/scalability")); // Datab
 // import financeRoutes from "./routes/finance"; // Finance and pricing routes
 // import designerFinanceRoutes from "./routes/designer-finance"; // Designer finance management routes
 // import financeSettingsRoutes from "./routes/financeSettings"; // Finance settings management routes
-// import flashcardRoutes from "./routes/flashcard"; // Flashcard management routes
 // import examPurchaseRoutes from "./routes/exam-purchase"; // Exam purchase cache management routes
 // import blogRoutes from "./routes/blogRoutes"; // Blog management routes
 // Import middleware
@@ -134,11 +136,14 @@ app.use("/api/v1/cache", cache_1.default); // Cache management routes
 app.use("/api/v1/performance", performance_1.default); // Performance monitoring routes
 app.use("/api/v1/ab-test", ab_test_1.default); // A/B Testing management routes
 app.use("/api/v1/scalability", scalability_1.default); // Database scalability and optimization routes
+// Recently activated API routes
+app.use("/api/v1/questions", questions_1.default); // Question bank management - فعال شده
+app.use("/api/v1/flashcards", flashcard_1.default); // Flashcard management routes - فعال شده
+app.use("/api/v1/wallet", wallet_1.default); // Wallet management routes - فعال شده
 // Auth routes - موقتاً غیرفعال به دلیل مشکلات compilation
 // app.use("/api/v1/auth", authRoutes);
 // app.use("/api/v1/legacy-categories", categoryRoutes); // Keep legacy routes for backward compatibility
 // app.use("/api/v1/exams", examsRoutes); // New exam management routes
-// app.use("/api/v1/questions", questionsRoutes); // New question bank management
 // app.use("/api/v1/categories", categoriesRoutes); // Override with new category management
 // app.use("/api/v1/analytics", analyticsRoutes); // Analytics and reporting
 // app.use("/api/v1/tickets", ticketRoutes);
@@ -147,7 +152,6 @@ app.use("/api/v1/scalability", scalability_1.default); // Database scalability a
 // app.use("/api/v1/finance", financeRoutes); // Finance and pricing routes
 // app.use("/api/v1/designer-finance", designerFinanceRoutes); // Designer finance management routes
 // app.use("/api/finance-settings", financeSettingsRoutes); // Finance settings management routes
-// app.use("/api/v1/flashcards", flashcardRoutes); // Flashcard management routes
 // app.use("/api/exam-purchase", examPurchaseRoutes); // Exam purchase cache management routes
 // app.use("/api/v1/blog", blogRoutes); // Blog management routes
 // Swagger API Documentation

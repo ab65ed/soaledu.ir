@@ -6,12 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const questionController_1 = __importDefault(require("../controllers/questionController"));
 const auth_1 = require("../middlewares/auth");
-// import {
-//   validateQuestionCreate,
-//   validateQuestionUpdate,
-//   validateQuestionAutoSave,
-//   validateQuestionSearch
-// } from '../validations/questionValidation';
 const router = express_1.default.Router();
 /**
  * Question Routes

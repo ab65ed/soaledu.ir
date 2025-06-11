@@ -18,7 +18,7 @@ export default function InstitutionalDiscountsPage() {
 
   const { stats, loading: statsLoading, error: statsError } = useDiscountStats();
 
-  const handleUploadSuccess = (groupId: string) => {
+  const handleUploadSuccess = () => {
     // Switch to list tab and refresh
     setActiveTab('list');
     setRefreshTrigger(prev => prev + 1);

@@ -1,14 +1,11 @@
 /**
- * Wallet Controller
- * کنترلر مدیریت کیف پول
- *
- * مدیریت شارژ، کسر، تراکنش‌ها و آمار کیف پول کاربران
+ * Wallet Controller - ساده شده برای فعال‌سازی
  */
 import { Request, Response } from 'express';
 interface AuthenticatedRequest extends Request {
     user?: any;
 }
-export declare class WalletController {
+declare class WalletController {
     /**
      * Get wallet statistics
      * GET /api/wallet/stats
@@ -35,7 +32,7 @@ export declare class WalletController {
      */
     static getUserWalletBalance(req: AuthenticatedRequest, res: Response): Promise<void>;
     /**
-     * Get user transactions
+     * Get user transaction history
      * GET /api/wallet/user/:userId/transactions
      */
     static getUserTransactions(req: AuthenticatedRequest, res: Response): Promise<void>;
@@ -59,9 +56,5 @@ export declare class WalletController {
      * POST /api/wallet/bulk
      */
     static bulkWalletOperations(req: AuthenticatedRequest, res: Response): Promise<void>;
-    /**
-     * Log wallet activity
-     */
-    private static logWalletActivity;
 }
-export {};
+export { WalletController };

@@ -19,7 +19,7 @@ import {
   recordStudySession,
   getCategories,
   getUserStats
-} from '../flashcard';
+} from './flashcard.controller';
 
 export {
   getFlashcards,

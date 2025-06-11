@@ -35,11 +35,15 @@ import performanceRoutes from "./routes/performance"; // Performance monitoring 
 import abTestRoutes from "./routes/ab-test"; // A/B Testing management routes
 import scalabilityRoutes from "./routes/scalability"; // Database scalability and optimization routes
 
+// Recently activated API routes
+import questionsRoutes from "./routes/questions"; // Question bank management - فعال شده
+import flashcardRoutes from "./routes/flashcard"; // Flashcard management routes - فعال شده
+import walletRoutes from "./routes/wallet"; // Wallet management routes - فعال شده
+
 // Auth routes - موقتاً غیرفعال به دلیل مشکلات compilation
 // import authRoutes from "./routes/auth.routes";
 // import categoryRoutes from "./routes/category.routes";
 // import examsRoutes from "./routes/exams"; // New exam management routes
-// import questionsRoutes from "./routes/questions"; // New question bank management
 // import categoriesRoutes from "./routes/categories"; // New category management
 // import analyticsRoutes from "./routes/analytics"; // Analytics and reporting
 // import ticketRoutes from "./routes/tickets";
@@ -48,7 +52,6 @@ import scalabilityRoutes from "./routes/scalability"; // Database scalability an
 // import financeRoutes from "./routes/finance"; // Finance and pricing routes
 // import designerFinanceRoutes from "./routes/designer-finance"; // Designer finance management routes
 // import financeSettingsRoutes from "./routes/financeSettings"; // Finance settings management routes
-// import flashcardRoutes from "./routes/flashcard"; // Flashcard management routes
 // import examPurchaseRoutes from "./routes/exam-purchase"; // Exam purchase cache management routes
 // import blogRoutes from "./routes/blogRoutes"; // Blog management routes
 
@@ -157,11 +160,15 @@ app.use("/api/v1/performance", performanceRoutes); // Performance monitoring rou
 app.use("/api/v1/ab-test", abTestRoutes); // A/B Testing management routes
 app.use("/api/v1/scalability", scalabilityRoutes); // Database scalability and optimization routes
 
+// Recently activated API routes
+app.use("/api/v1/questions", questionsRoutes); // Question bank management - فعال شده
+app.use("/api/v1/flashcards", flashcardRoutes); // Flashcard management routes - فعال شده
+app.use("/api/v1/wallet", walletRoutes); // Wallet management routes - فعال شده
+
 // Auth routes - موقتاً غیرفعال به دلیل مشکلات compilation
 // app.use("/api/v1/auth", authRoutes);
 // app.use("/api/v1/legacy-categories", categoryRoutes); // Keep legacy routes for backward compatibility
 // app.use("/api/v1/exams", examsRoutes); // New exam management routes
-// app.use("/api/v1/questions", questionsRoutes); // New question bank management
 // app.use("/api/v1/categories", categoriesRoutes); // Override with new category management
 // app.use("/api/v1/analytics", analyticsRoutes); // Analytics and reporting
 // app.use("/api/v1/tickets", ticketRoutes);
@@ -170,7 +177,6 @@ app.use("/api/v1/scalability", scalabilityRoutes); // Database scalability and o
 // app.use("/api/v1/finance", financeRoutes); // Finance and pricing routes
 // app.use("/api/v1/designer-finance", designerFinanceRoutes); // Designer finance management routes
 // app.use("/api/finance-settings", financeSettingsRoutes); // Finance settings management routes
-// app.use("/api/v1/flashcards", flashcardRoutes); // Flashcard management routes
 // app.use("/api/exam-purchase", examPurchaseRoutes); // Exam purchase cache management routes
 // app.use("/api/v1/blog", blogRoutes); // Blog management routes
 

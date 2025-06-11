@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { 
   Wallet, 
   TrendingUp, 
-  TrendingDown, 
+   
   DollarSign, 
   Clock,
   ArrowUpRight,
