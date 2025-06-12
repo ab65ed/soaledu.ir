@@ -1,23 +1,53 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { Providers } from './providers';
-import Header from '@/components/organisms/Header';
-import Footer from '@/components/organisms/Footer';
+import type { Metadata, Viewport } from 'next'
+import './globals.css'
 
 export const metadata: Metadata = {
-  title: "سؤال‌ساز - سیستم آموزشی",
-  description: "پلتفرم جامع ایجاد و مدیریت آزمون‌های آموزشی",
-  keywords: ["آزمون", "سؤال", "آموزش", "تحصیل", "امتحان"],
-  authors: [{ name: "تیم توسعه سؤال‌ساز" }],
-  viewport: "width=device-width, initial-scale=1",
-  robots: "index, follow",
-  openGraph: {
-    title: "سؤال‌ساز - سیستم آموزشی",
-    description: "پلتفرم جامع ایجاد و مدیریت آزمون‌های آموزشی",
-    type: "website",
-    locale: "fa_IR",
+  title: 'سؤال‌ساز - سیستم آموزشی پیشرفته',
+  description: 'پلتفرم جامع ایجاد و مدیریت آزمون‌های آموزشی با رابط کاربری مدرن و امکانات پیشرفته',
+  keywords: 'آزمون آنلاین، سؤال‌ساز، سیستم آموزشی، مدیریت آزمون، آموزش آنلاین',
+  authors: [{ name: 'تیم توسعه سؤال‌ساز' }],
+  creator: 'سؤال‌ساز',
+  publisher: 'سؤال‌ساز',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
   },
-};
+  metadataBase: new URL('https://soaledu.ir'),
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'fa_IR',
+    url: 'https://soaledu.ir',
+    title: 'سؤال‌ساز - سیستم آموزشی پیشرفته',
+    description: 'پلتفرم جامع ایجاد و مدیریت آزمون‌های آموزشی',
+    siteName: 'سؤال‌ساز',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'سؤال‌ساز - سیستم آموزشی پیشرفته',
+    description: 'پلتفرم جامع ایجاد و مدیریت آزمون‌های آموزشی',
+  },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+}
 
 export default function RootLayout({
   children,
@@ -25,42 +55,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="fa" dir="rtl" className="rtl">
+    <html lang="fa" dir="rtl" suppressHydrationWarning>
       <head>
-        {/* Preload critical fonts */}
-        <link 
-          rel="preload" 
-          href="/fonts/IRANSans-Regular.woff2" 
-          as="font" 
-          type="font/woff2" 
-          crossOrigin="anonymous" 
-        />
-        <link 
-          rel="preload" 
-          href="/fonts/IRANSans-Medium.woff2" 
-          as="font" 
-          type="font/woff2" 
-          crossOrigin="anonymous" 
-        />
-        <link 
-          rel="preload" 
-          href="/fonts/IRANSans-Bold.woff2" 
-          as="font" 
-          type="font/woff2" 
-          crossOrigin="anonymous" 
-        />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+        <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
       </head>
-      <body className="font-sans antialiased min-h-screen bg-background text-foreground">
-        <Providers>
-          <div id="root" className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </div>
-        </Providers>
+      <body className="font-iran-sans antialiased min-h-screen bg-white text-gray-900">
+        <div id="root" className="min-h-screen">
+          {children}
+        </div>
       </body>
     </html>
-  );
-}
+  )
+} 
