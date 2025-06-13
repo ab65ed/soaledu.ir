@@ -20,11 +20,11 @@ export declare const DiscountCodeSchema: z.ZodObject<{
     code: z.ZodString;
     amount: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
-    code?: string;
     amount?: number;
+    code?: string;
 }, {
-    code?: string;
     amount?: number;
+    code?: string;
 }>;
 export declare const CreateDiscountCodeSchema: z.ZodObject<{
     code: z.ZodString;
@@ -35,17 +35,17 @@ export declare const CreateDiscountCodeSchema: z.ZodObject<{
     maxDiscount: z.ZodOptional<z.ZodNumber>;
     description: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    code?: string;
     description?: string;
     discountPercentage?: number;
+    code?: string;
     expiryDate?: Date;
     usageLimit?: number;
     minAmount?: number;
     maxDiscount?: number;
 }, {
-    code?: string;
     description?: string;
     discountPercentage?: number;
+    code?: string;
     expiryDate?: Date;
     usageLimit?: number;
     minAmount?: number;
@@ -59,31 +59,31 @@ export declare const TransactionFilterSchema: z.ZodEffects<z.ZodObject<{
     startDate: z.ZodOptional<z.ZodDate>;
     endDate: z.ZodOptional<z.ZodDate>;
 }, "strip", z.ZodTypeAny, {
-    userId?: string;
-    status?: "pending" | "completed" | "failed" | "refunded";
-    limit?: number;
     page?: number;
+    limit?: number;
+    userId?: string;
+    status?: "pending" | "failed" | "completed" | "refunded";
     startDate?: Date;
     endDate?: Date;
 }, {
-    userId?: string;
-    status?: "pending" | "completed" | "failed" | "refunded";
-    limit?: number;
     page?: number;
+    limit?: number;
+    userId?: string;
+    status?: "pending" | "failed" | "completed" | "refunded";
     startDate?: Date;
     endDate?: Date;
 }>, {
-    userId?: string;
-    status?: "pending" | "completed" | "failed" | "refunded";
-    limit?: number;
     page?: number;
+    limit?: number;
+    userId?: string;
+    status?: "pending" | "failed" | "completed" | "refunded";
     startDate?: Date;
     endDate?: Date;
 }, {
-    userId?: string;
-    status?: "pending" | "completed" | "failed" | "refunded";
-    limit?: number;
     page?: number;
+    limit?: number;
+    userId?: string;
+    status?: "pending" | "failed" | "completed" | "refunded";
     startDate?: Date;
     endDate?: Date;
 }>;

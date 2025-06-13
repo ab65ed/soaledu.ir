@@ -4,20 +4,31 @@
  */
 import { PricingCalculation, FlashcardPricingCalculation } from './types';
 /**
+ * Calculate institutional discount for a user
+ * محاسبه تخفیف سازمانی برای کاربر
+ */
+export declare function calculateInstitutionalDiscount(userId: string, basePrice: number): Promise<{
+    discountAmount: number;
+    discountPercentage: number;
+    groupId?: string;
+    isTimedDiscount: boolean;
+    isTieredDiscount: boolean;
+}>;
+/**
  * Calculate exam pricing based on question count and user parameters
  * محاسبه قیمت آزمون بر اساس تعداد سوالات و پارامترهای کاربر
  */
-export declare function calculateExamPrice(questionCount: number, userType?: string, isFirstPurchase?: boolean, bulkCount?: number): Promise<PricingCalculation>;
+export declare function calculateExamPrice(questionCount: number, userType?: string, isFirstPurchase?: boolean, bulkCount?: number, userId?: string): Promise<PricingCalculation>;
 /**
  * Calculate single flashcard price
  * محاسبه قیمت تک فلش‌کارت
  */
-export declare function calculateSingleFlashcardPrice(basePrice?: number, userType?: string, isFirstPurchase?: boolean): Promise<PricingCalculation>;
+export declare function calculateSingleFlashcardPrice(basePrice?: number, userType?: string, isFirstPurchase?: boolean, userId?: string): Promise<PricingCalculation>;
 /**
  * Calculate bulk flashcard price
  * محاسبه قیمت عمده فلش‌کارت‌ها
  */
-export declare function calculateFlashcardBulkPrice(flashcards: any[], userType?: string, isFirstPurchase?: boolean): Promise<FlashcardPricingCalculation>;
+export declare function calculateFlashcardBulkPrice(flashcards: any[], userType?: string, isFirstPurchase?: boolean, userId?: string): Promise<FlashcardPricingCalculation>;
 /**
  * Group transactions by field
  * گروه‌بندی تراکنش‌ها بر اساس فیلد

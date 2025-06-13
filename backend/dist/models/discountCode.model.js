@@ -96,7 +96,7 @@ const DiscountCodeSchema = new mongoose_1.Schema({
     code: {
         type: String,
         required: [true, 'Please provide a discount code'],
-        unique: true,
+        unique: true, // این unique index را نگه می‌داریم و explicit index را حذف می‌کنیم
         uppercase: true,
         trim: true,
         minlength: [3, 'Discount code must be at least 3 characters'],
@@ -156,7 +156,7 @@ const DiscountCodeSchema = new mongoose_1.Schema({
     timestamps: true,
 });
 // Index for faster queries
-DiscountCodeSchema.index({ code: 1 });
+// حذف شد: DiscountCodeSchema.index({ code: 1 }); // چون unique: true در schema خودش index می‌سازد
 DiscountCodeSchema.index({ isActive: 1, expiryDate: 1 });
 // Method to check if discount code is valid
 DiscountCodeSchema.methods.isValid = function () {

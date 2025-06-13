@@ -9,7 +9,15 @@ import {
   InstitutionalDiscountGroup,
   DiscountGroupFilters,
   UploadDiscountFileRequest,
+  ReportFilters,
+  UsageReportResponse,
+  RevenueReportResponse,
+  ConversionReportResponse,
+  ComparisonReportResponse,
+  DashboardStats,
 } from '@/types/institutionalDiscount';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-hot-toast';
 
 interface UseDiscountGroupsResult {
   groups: InstitutionalDiscountGroup[];
@@ -241,4 +249,71 @@ export const useDiscountStats = (): UseDiscountStatsResult => {
     error,
     fetchStats,
   };
+};
+
+// =================== Hooks گزارش‌گیری پیشرفته ===================
+
+/**
+ * Hook برای دریافت گزارش استفاده از تخفیف‌های سازمانی
+ */
+export const useUsageReport = (filters: ReportFilters) => {
+  return useQuery({
+    queryKey: ['institutional-discount-usage-report', filters],
+    queryFn: () => institutionalDiscountService.getUsageReport(filters),
+    enabled: !!filters,
+    staleTime: 5 * 60 * 1000, // 5 دقیقه
+    refetchOnWindowFocus: false,
+  });
+};
+
+/**
+ * Hook برای دریافت گزارش درآمد از تخفیف‌های سازمانی
+ */
+export const useRevenueReport = (filters: ReportFilters) => {
+  return useQuery({
+    queryKey: ['institutional-discount-revenue-report', filters],
+    queryFn: () => institutionalDiscountService.getRevenueReport(filters),
+    enabled: !!filters,
+    staleTime: 5 * 60 * 1000, // 5 دقیقه
+    refetchOnWindowFocus: false,
+  });
+};
+
+/**
+ * Hook برای دریافت گزارش نرخ تبدیل
+ */
+export const useConversionReport = (filters: ReportFilters) => {
+  return useQuery({
+    queryKey: ['institutional-discount-conversion-report', filters],
+    queryFn: () => institutionalDiscountService.getConversionReport(filters),
+    enabled: !!filters,
+    staleTime: 5 * 60 * 1000, // 5 دقیقه
+    refetchOnWindowFocus: false,
+  });
+};
+
+/**
+ * Hook برای دریافت گزارش مقایسه‌ای گروه‌های تخفیف
+ */
+export const useComparisonReport = (filters: ReportFilters) => {
+  return useQuery({
+    queryKey: ['institutional-discount-comparison-report', filters],
+    queryFn: () => institutionalDiscountService.getComparisonReport(filters),
+    enabled: !!filters,
+    staleTime: 5 * 60 * 1000, // 5 دقیقه
+    refetchOnWindowFocus: false,
+  });
+};
+
+/**
+ * Hook برای دریافت آمار کلی داشبورد
+ */
+export const useDashboardStats = () => {
+  return useQuery({
+    queryKey: ['institutional-discount-dashboard-stats'],
+    queryFn: () => institutionalDiscountService.getDashboardStats(),
+    staleTime: 10 * 60 * 1000, // 10 دقیقه
+    refetchOnWindowFocus: false,
+    refetchInterval: 5 * 60 * 1000, // هر 5 دقیقه یکبار به‌روزرسانی خودکار
+  });
 }; 

@@ -4,6 +4,39 @@
  *
  * This file contains controller functions for authentication routes.
  */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -22,18 +55,49 @@ const env_1 = require("../config/env");
  */
 const register = async (req, res, next) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, enrollmentCode } = req.body;
         // Check if user already exists
         const existingUser = await user_model_1.default.findOne({ email });
         if (existingUser) {
             return next(new errorHandler_1.ApiError("User already exists with that email", 400));
         }
-        // Create new user
-        const user = await user_model_1.default.create({
+        // اطلاعات کاربر جدید
+        const userData = {
             name,
             email,
             password,
-        });
+        };
+        // بررسی کد ثبت‌نام در صورت وجود
+        if (enrollmentCode) {
+            // Import Institution model
+            const Institution = (await Promise.resolve().then(() => __importStar(require('../models/Institution')))).default;
+            const institution = await Institution.findOne({
+                enrollmentCode: enrollmentCode.toUpperCase(),
+                isActive: true,
+                'defaultDiscountSettings.isActive': true
+            });
+            if (institution) {
+                // بررسی انقضای قرارداد
+                if (!institution.contractEndDate || institution.contractEndDate >= new Date()) {
+                    userData.institutionId = institution._id;
+                    userData.enrollmentCode = enrollmentCode.toUpperCase();
+                    userData.institutionalDiscountPercentage = institution.defaultDiscountSettings.discountPercentage || 0;
+                    userData.institutionalDiscountAmount = institution.defaultDiscountSettings.discountAmount || 0;
+                    // افزایش تعداد دانش‌آموزان نهاد
+                    await Institution.findByIdAndUpdate(institution._id, {
+                        $inc: { totalStudents: 1, activeStudents: 1 }
+                    });
+                }
+                else {
+                    return next(new errorHandler_1.ApiError("کد ثبت‌نام منقضی شده است", 400));
+                }
+            }
+            else {
+                return next(new errorHandler_1.ApiError("کد ثبت‌نام نامعتبر است", 400));
+            }
+        }
+        // Create new user
+        const user = await user_model_1.default.create(userData);
         // Generate tokens
         const tokens = (0, jwt_1.generateAuthTokens)({
             _id: user._id.toString(),

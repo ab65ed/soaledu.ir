@@ -20,7 +20,7 @@ import { RequestWithUser } from "../types";
  */
 const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, enrollmentCode } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -29,12 +29,46 @@ const register = async (req: Request, res: Response, next: NextFunction): Promis
       return next(new ApiError("User already exists with that email", 400));
     }
 
-    // Create new user
-    const user = await User.create({
+    // اطلاعات کاربر جدید
+    const userData: any = {
       name,
       email,
       password,
-    });
+    };
+
+    // بررسی کد ثبت‌نام در صورت وجود
+    if (enrollmentCode) {
+      // Import Institution model
+      const Institution = (await import('../models/Institution')).default;
+      
+      const institution = await Institution.findOne({
+        enrollmentCode: enrollmentCode.toUpperCase(),
+        isActive: true,
+        'defaultDiscountSettings.isActive': true
+      });
+
+      if (institution) {
+        // بررسی انقضای قرارداد
+        if (!institution.contractEndDate || institution.contractEndDate >= new Date()) {
+          userData.institutionId = institution._id;
+          userData.enrollmentCode = enrollmentCode.toUpperCase();
+          userData.institutionalDiscountPercentage = institution.defaultDiscountSettings.discountPercentage || 0;
+          userData.institutionalDiscountAmount = institution.defaultDiscountSettings.discountAmount || 0;
+          
+          // افزایش تعداد دانش‌آموزان نهاد
+          await Institution.findByIdAndUpdate(institution._id, {
+            $inc: { totalStudents: 1, activeStudents: 1 }
+          });
+        } else {
+          return next(new ApiError("کد ثبت‌نام منقضی شده است", 400));
+        }
+      } else {
+        return next(new ApiError("کد ثبت‌نام نامعتبر است", 400));
+      }
+    }
+
+    // Create new user
+    const user = await User.create(userData);
 
     // Generate tokens
     const tokens = generateAuthTokens({

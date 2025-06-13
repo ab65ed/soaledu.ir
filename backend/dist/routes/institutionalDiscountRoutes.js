@@ -32,5 +32,25 @@ router.get('/groups/:id', auth_1.authenticateToken, (0, auth_1.requireRole)('adm
  * DELETE /api/admin/institutional-discounts/groups/:id
  */
 router.delete('/groups/:id', auth_1.authenticateToken, (0, auth_1.requireRole)('admin'), institutionalDiscountController_1.deleteInstitutionalDiscountGroup);
+/**
+ * گزارش استفاده از تخفیف‌های سازمانی
+ * GET /api/admin/institutional-discounts/reports/usage
+ */
+router.get('/reports/usage', auth_1.authenticateToken, (0, auth_1.requireRole)('admin'), institutionalDiscountController_1.getUsageReport);
+/**
+ * گزارش درآمد از تخفیف‌های سازمانی
+ * GET /api/admin/institutional-discounts/reports/revenue
+ */
+router.get('/reports/revenue', auth_1.authenticateToken, (0, auth_1.requireRole)('admin'), institutionalDiscountController_1.getRevenueReport);
+/**
+ * گزارش نرخ تبدیل (Conversion Rate)
+ * GET /api/admin/institutional-discounts/reports/conversion
+ */
+router.get('/reports/conversion', auth_1.authenticateToken, (0, auth_1.requireRole)('admin'), institutionalDiscountController_1.getConversionReport);
+/**
+ * گزارش مقایسه‌ای گروه‌های تخفیف
+ * GET /api/admin/institutional-discounts/reports/comparison
+ */
+router.get('/reports/comparison', auth_1.authenticateToken, (0, auth_1.requireRole)('admin'), institutionalDiscountController_1.getComparisonReport);
 exports.default = router;
 //# sourceMappingURL=institutionalDiscountRoutes.js.map

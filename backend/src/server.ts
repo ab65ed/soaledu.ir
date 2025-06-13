@@ -29,31 +29,34 @@ import logger from "./config/logger";
 
 // Import routes
 // Import working routes
-// import contactRoutes from "./routes/contact"; // Contact management routes - موقتاً غیرفعال
+import contactRoutes from "./routes/contact"; // Contact management routes - فعال شده
 import cacheRoutes from "./routes/cache"; // Cache management routes
 import performanceRoutes from "./routes/performance"; // Performance monitoring routes
 import abTestRoutes from "./routes/ab-test"; // A/B Testing management routes
 import scalabilityRoutes from "./routes/scalability"; // Database scalability and optimization routes
+import apiRoutes from "./routes/index"; // Main API routes including institutional discounts - فعال شده
 
 // Recently activated API routes
 import questionsRoutes from "./routes/questions"; // Question bank management - فعال شده
+import questionBulkRoutes from "./routes/question.routes"; // Question bulk upload routes - جدید
 import flashcardRoutes from "./routes/flashcard"; // Flashcard management routes - فعال شده
 import walletRoutes from "./routes/wallet"; // Wallet management routes - فعال شده
+import institutionRoutes from "./routes/institutionRoutes"; // Institution management routes - جدید
 
-// Auth routes - موقتاً غیرفعال به دلیل مشکلات compilation
-// import authRoutes from "./routes/auth.routes";
-// import categoryRoutes from "./routes/category.routes";
-// import examsRoutes from "./routes/exams"; // New exam management routes
-// import categoriesRoutes from "./routes/categories"; // New category management
-// import analyticsRoutes from "./routes/analytics"; // Analytics and reporting
-// import ticketRoutes from "./routes/tickets";
-// import paymentRoutes from "./routes/payment";
-// import resultsRoutes from "./routes/results";
-// import financeRoutes from "./routes/finance"; // Finance and pricing routes
-// import designerFinanceRoutes from "./routes/designer-finance"; // Designer finance management routes
-// import financeSettingsRoutes from "./routes/financeSettings"; // Finance settings management routes
-// import examPurchaseRoutes from "./routes/exam-purchase"; // Exam purchase cache management routes
-// import blogRoutes from "./routes/blogRoutes"; // Blog management routes
+// Auth routes - فعال شده
+import authRoutes from "./routes/auth.routes";
+import categoryRoutes from "./routes/category.routes";
+import examsRoutes from "./routes/exams"; // New exam management routes
+import categoriesRoutes from "./routes/categories"; // New category management
+import analyticsRoutes from "./routes/analytics"; // Analytics and reporting
+import ticketRoutes from "./routes/tickets";
+import paymentRoutes from "./routes/payment";
+import resultsRoutes from "./routes/results";
+import examPurchaseRoutes from "./routes/exam-purchase"; // Exam purchase cache management routes
+// import financeRoutes from "./routes/finance"; // Finance and pricing routes - فایل موجود نیست
+// import designerFinanceRoutes from "./routes/designer-finance"; // Designer finance management routes - فایل موجود نیست
+// import financeSettingsRoutes from "./routes/financeSettings"; // Finance settings management routes - فایل موجود نیست
+// import blogRoutes from "./routes/blogRoutes"; // Blog management routes - فایل موجود نیست
 
 // Import middleware
 import { errorHandler } from "./middlewares/errorHandler";
@@ -154,31 +157,34 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use('/parse', parseServer.app);
 
 // API Routes - Working routes
-// app.use("/api/v1/contact", contactRoutes); // Contact management routes - موقتاً غیرفعال
+app.use("/api/v1/contact", contactRoutes); // Contact management routes - فعال شده
 app.use("/api/v1/cache", cacheRoutes); // Cache management routes
 app.use("/api/v1/performance", performanceRoutes); // Performance monitoring routes
 app.use("/api/v1/ab-test", abTestRoutes); // A/B Testing management routes
 app.use("/api/v1/scalability", scalabilityRoutes); // Database scalability and optimization routes
+app.use("/api/v1", apiRoutes); // Main API routes including institutional discounts - فعال شده
 
 // Recently activated API routes
 app.use("/api/v1/questions", questionsRoutes); // Question bank management - فعال شده
+app.use("/api/v1/questions", questionBulkRoutes); // Question bulk upload routes - جدید
 app.use("/api/v1/flashcards", flashcardRoutes); // Flashcard management routes - فعال شده
 app.use("/api/v1/wallet", walletRoutes); // Wallet management routes - فعال شده
+app.use("/api/v1/institutions", institutionRoutes); // Institution management routes - جدید
 
-// Auth routes - موقتاً غیرفعال به دلیل مشکلات compilation
-// app.use("/api/v1/auth", authRoutes);
-// app.use("/api/v1/legacy-categories", categoryRoutes); // Keep legacy routes for backward compatibility
-// app.use("/api/v1/exams", examsRoutes); // New exam management routes
-// app.use("/api/v1/categories", categoriesRoutes); // Override with new category management
-// app.use("/api/v1/analytics", analyticsRoutes); // Analytics and reporting
-// app.use("/api/v1/tickets", ticketRoutes);
-// app.use("/api/v1/payments", paymentRoutes);
-// app.use("/api/v1/results", resultsRoutes);
-// app.use("/api/v1/finance", financeRoutes); // Finance and pricing routes
-// app.use("/api/v1/designer-finance", designerFinanceRoutes); // Designer finance management routes
-// app.use("/api/finance-settings", financeSettingsRoutes); // Finance settings management routes
-// app.use("/api/exam-purchase", examPurchaseRoutes); // Exam purchase cache management routes
-// app.use("/api/v1/blog", blogRoutes); // Blog management routes
+// Auth routes - فعال شده
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/legacy-categories", categoryRoutes); // Keep legacy routes for backward compatibility
+app.use("/api/v1/exams", examsRoutes); // New exam management routes
+app.use("/api/v1/categories", categoriesRoutes); // Override with new category management
+app.use("/api/v1/analytics", analyticsRoutes); // Analytics and reporting
+app.use("/api/v1/tickets", ticketRoutes);
+app.use("/api/v1/payments", paymentRoutes);
+app.use("/api/v1/results", resultsRoutes);
+app.use("/api/exam-purchase", examPurchaseRoutes); // Exam purchase cache management routes
+// app.use("/api/v1/finance", financeRoutes); // Finance and pricing routes - فایل موجود نیست
+// app.use("/api/v1/designer-finance", designerFinanceRoutes); // Designer finance management routes - فایل موجود نیست
+// app.use("/api/finance-settings", financeSettingsRoutes); // Finance settings management routes - فایل موجود نیست
+// app.use("/api/v1/blog", blogRoutes); // Blog management routes - فایل موجود نیست
 
 // Swagger API Documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));

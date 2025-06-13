@@ -18,12 +18,12 @@ declare const schemas: {
         email: z.ZodString;
         password: z.ZodString;
     }, "strip", z.ZodTypeAny, {
-        email?: string;
         name?: string;
+        email?: string;
         password?: string;
     }, {
-        email?: string;
         name?: string;
+        email?: string;
         password?: string;
     }>;
     readonly login: z.ZodObject<{
@@ -78,11 +78,11 @@ declare const schemas: {
         priority: z.ZodOptional<z.ZodEnum<["low", "medium", "high"]>>;
     }, "strip", z.ZodTypeAny, {
         message?: string;
-        priority?: "low" | "medium" | "high";
+        priority?: "medium" | "low" | "high";
         subject?: string;
     }, {
         message?: string;
-        priority?: "low" | "medium" | "high";
+        priority?: "medium" | "low" | "high";
         subject?: string;
     }>;
     readonly addTicketResponse: z.ZodObject<{
@@ -115,20 +115,20 @@ declare const schemas: {
         metaDescription: z.ZodOptional<z.ZodString>;
         status: z.ZodOptional<z.ZodEnum<["draft", "published", "archived"]>>;
     }, "strip", z.ZodTypeAny, {
-        status?: "draft" | "published" | "archived";
-        category?: string;
         tags?: string[];
         title?: string;
         content?: string;
+        category?: string;
+        status?: "draft" | "published" | "archived";
         metaTitle?: string;
         metaDescription?: string;
         coverImage?: string;
     }, {
-        status?: "draft" | "published" | "archived";
-        category?: string;
         tags?: string[];
         title?: string;
         content?: string;
+        category?: string;
+        status?: "draft" | "published" | "archived";
         metaTitle?: string;
         metaDescription?: string;
         coverImage?: string;

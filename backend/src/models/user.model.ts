@@ -31,7 +31,10 @@ export interface IUser extends Document {
   nationalCode?: string; // کد ملی برای شناسایی در تخفیف‌های سازمانی
   phoneNumber?: string; // شماره تلفن برای شناسایی در تخفیف‌های سازمانی
   institutionalDiscountPercentage?: number; // درصد تخفیف سازمانی
+  institutionalDiscountAmount?: number; // مبلغ ثابت تخفیف سازمانی
   institutionalDiscountGroupId?: mongoose.Types.ObjectId; // ارجاع به گروه تخفیف سازمانی
+  institutionId?: mongoose.Types.ObjectId; // ارجاع به نهاد آموزشی
+  enrollmentCode?: string; // کد ثبت‌نام استفاده شده
   wallet: IWallet;
   createdAt: Date;
   updatedAt: Date;
@@ -172,9 +175,23 @@ const UserSchema = new Schema<IUser>(
       max: [100, 'درصد تخفیف نمی‌تواند بیش از ۱۰۰ باشد'],
       default: 0
     },
+    institutionalDiscountAmount: {
+      type: Number,
+      min: [0, 'مبلغ تخفیف نمی‌تواند منفی باشد'],
+      default: 0
+    },
     institutionalDiscountGroupId: {
       type: Schema.Types.ObjectId,
       ref: "InstitutionalDiscountGroup",
+    },
+    institutionId: {
+      type: Schema.Types.ObjectId,
+      ref: "Institution",
+    },
+    enrollmentCode: {
+      type: String,
+      trim: true,
+      maxlength: [20, "کد ثبت‌نام نمی‌تواند بیش از ۲۰ کاراکتر باشد"],
     },
     wallet: {
       balance: {

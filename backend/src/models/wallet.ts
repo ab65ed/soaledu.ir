@@ -35,6 +35,15 @@ export interface WalletTransaction {
   status: TransactionStatus;
   processedBy?: string;
   metadata?: Record<string, any>;
+  
+  // فیلدهای جدید برای تخفیف‌های سازمانی
+  institutionalDiscountGroupId?: string;
+  institutionId?: string;
+  discountAmount?: number;
+  discountPercentage?: number;
+  originalAmount?: number; // مبلغ اصلی قبل از اعمال تخفیف
+  isInstitutionalDiscount?: boolean; // آیا از تخفیف سازمانی استفاده شده
+  
   createdAt: Date;
   updatedAt: Date;
 }
@@ -154,6 +163,15 @@ export interface ExportData {
   'مبلغ (تومان)': number;
   'توضیحات': string;
   'وضعیت': TransactionStatus;
+  
+  // فیلدهای جدید برای تخفیف‌های سازمانی
+  'شناسه گروه تخفیف': string;
+  'شناسه سازمان': string;
+  'مبلغ تخفیف (تومان)': number;
+  'درصد تخفیف': number;
+  'مبلغ اصلی (تومان)': number;
+  'تخفیف سازمانی': string;
+  
   'تاریخ ایجاد': string;
   'تاریخ به‌روزرسانی': string;
 }

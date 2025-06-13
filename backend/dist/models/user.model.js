@@ -176,9 +176,23 @@ const UserSchema = new mongoose_1.Schema({
         max: [100, 'درصد تخفیف نمی‌تواند بیش از ۱۰۰ باشد'],
         default: 0
     },
+    institutionalDiscountAmount: {
+        type: Number,
+        min: [0, 'مبلغ تخفیف نمی‌تواند منفی باشد'],
+        default: 0
+    },
     institutionalDiscountGroupId: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "InstitutionalDiscountGroup",
+    },
+    institutionId: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "Institution",
+    },
+    enrollmentCode: {
+        type: String,
+        trim: true,
+        maxlength: [20, "کد ثبت‌نام نمی‌تواند بیش از ۲۰ کاراکتر باشد"],
     },
     wallet: {
         balance: {

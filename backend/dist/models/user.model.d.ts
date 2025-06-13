@@ -23,7 +23,10 @@ export interface IUser extends Document {
     nationalCode?: string;
     phoneNumber?: string;
     institutionalDiscountPercentage?: number;
+    institutionalDiscountAmount?: number;
     institutionalDiscountGroupId?: mongoose.Types.ObjectId;
+    institutionId?: mongoose.Types.ObjectId;
+    enrollmentCode?: string;
     wallet: IWallet;
     createdAt: Date;
     updatedAt: Date;

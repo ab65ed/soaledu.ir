@@ -4,6 +4,117 @@
  */
 
 import { PRICING_CONFIG, PricingCalculation, FlashcardPricingCalculation } from './types';
+import mongoose from 'mongoose';
+import InstitutionalDiscountGroup, { IInstitutionalDiscountGroup } from '../../models/InstitutionalDiscountGroup';
+
+/**
+ * Calculate institutional discount for a user
+ * محاسبه تخفیف سازمانی برای کاربر
+ */
+export async function calculateInstitutionalDiscount(
+  userId: string,
+  basePrice: number
+): Promise<{ discountAmount: number; discountPercentage: number; groupId?: string; isTimedDiscount: boolean; isTieredDiscount: boolean }> {
+  try {
+    // پیدا کردن تخفیف‌های فعال و معتبر برای کاربر
+    const now = new Date();
+    
+    // جستجوی تخفیف‌های معتبر
+    const discountGroups = await InstitutionalDiscountGroup.find({
+      isActive: true,
+      status: 'completed',
+      $or: [
+        // تخفیف‌های بدون محدودیت زمانی
+        { startDate: { $exists: false }, endDate: { $exists: false } },
+        // تخفیف‌های زمان‌دار فعال
+        {
+          $and: [
+            { $or: [{ startDate: { $exists: false } }, { startDate: { $lte: now } }] },
+            { $or: [{ endDate: { $exists: false } }, { endDate: { $gte: now } }] }
+          ]
+        }
+      ]
+    }).populate('uploadedBy');
+
+    if (discountGroups.length === 0) {
+      return { discountAmount: 0, discountPercentage: 0, isTimedDiscount: false, isTieredDiscount: false };
+    }
+
+    // بررسی عضویت کاربر در هر گروه تخفیف و محاسبه بهترین تخفیف
+    let bestDiscount = { 
+      discountAmount: 0, 
+      discountPercentage: 0, 
+      groupId: undefined as string | undefined,
+      isTimedDiscount: false,
+      isTieredDiscount: false
+    };
+
+    for (const group of discountGroups) {
+      // TODO: بررسی عضویت کاربر در گروه
+      // فعلاً فرض می‌کنیم کاربر در گروه عضو است
+      const isMember = await checkUserMembershipInGroup(userId, group._id.toString());
+      
+      if (!isMember) {
+        continue;
+      }
+
+      let currentDiscount = { discountAmount: 0, discountPercentage: 0 };
+      const isTimedDiscount = !!(group.startDate || group.endDate);
+      const isTieredDiscount = !!(group.tiers && group.tiers.length > 0);
+
+      if (isTieredDiscount && group.tiers) {
+        // محاسبه تخفیف پلکانی بر اساس تعداد کاربران گروه
+        const userCount = group.matchedUsersCount;
+        const tieredDiscount = (group as any).calculateTieredDiscount(userCount);
+        
+        if (tieredDiscount) {
+          if (tieredDiscount.discountPercentage) {
+            currentDiscount.discountPercentage = tieredDiscount.discountPercentage;
+            currentDiscount.discountAmount = (basePrice * tieredDiscount.discountPercentage) / 100;
+          } else if (tieredDiscount.discountAmount) {
+            currentDiscount.discountAmount = tieredDiscount.discountAmount;
+            currentDiscount.discountPercentage = (tieredDiscount.discountAmount / basePrice) * 100;
+          }
+        }
+      } else {
+        // تخفیف ساده
+        if (group.discountPercentage) {
+          currentDiscount.discountPercentage = group.discountPercentage;
+          currentDiscount.discountAmount = (basePrice * group.discountPercentage) / 100;
+        } else if (group.discountAmount) {
+          currentDiscount.discountAmount = group.discountAmount;
+          currentDiscount.discountPercentage = (group.discountAmount / basePrice) * 100;
+        }
+      }
+
+      // انتخاب بهترین تخفیف (بیشترین مقدار)
+      if (currentDiscount.discountAmount > bestDiscount.discountAmount) {
+        bestDiscount = {
+          ...currentDiscount,
+          groupId: group._id.toString(),
+          isTimedDiscount,
+          isTieredDiscount
+        };
+      }
+    }
+
+    return bestDiscount;
+  } catch (error) {
+    console.error('Error calculating institutional discount:', error);
+    return { discountAmount: 0, discountPercentage: 0, isTimedDiscount: false, isTieredDiscount: false };
+  }
+}
+
+/**
+ * Check if user is member of a discount group
+ * بررسی عضویت کاربر در گروه تخفیف
+ * TODO: پیاده‌سازی منطق بررسی عضویت بر اساس جدول UserDiscountGroupMembership
+ */
+async function checkUserMembershipInGroup(userId: string, groupId: string): Promise<boolean> {
+  // فعلاً true برمی‌گردانیم تا سیستم کار کند
+  // در آینده باید با جدول عضویت‌ها چک شود
+  return true;
+}
 
 /**
  * Calculate exam pricing based on question count and user parameters
@@ -13,7 +124,8 @@ export async function calculateExamPrice(
   questionCount: number,
   userType: string = 'regular',
   isFirstPurchase: boolean = false,
-  bulkCount: number = 0
+  bulkCount: number = 0,
+  userId?: string
 ): Promise<PricingCalculation> {
   // Determine price category
   let priceCategory: string;
@@ -63,6 +175,18 @@ export async function calculateExamPrice(
     });
   }
 
+  // Institutional discount (اضافه شده جدید)
+  if (userId) {
+    const institutionalDiscount = await calculateInstitutionalDiscount(userId, basePrice);
+    if (institutionalDiscount.discountAmount > 0) {
+      discounts.push({
+        type: `institutional${institutionalDiscount.isTimedDiscount ? '_timed' : ''}${institutionalDiscount.isTieredDiscount ? '_tiered' : ''}`,
+        amount: institutionalDiscount.discountAmount,
+        percentage: institutionalDiscount.discountPercentage
+      });
+    }
+  }
+
   // Calculate total discount
   const totalDiscount = discounts.reduce((sum, discount) => sum + discount.amount, 0);
   let finalPrice = basePrice - totalDiscount;
@@ -88,7 +212,8 @@ export async function calculateExamPrice(
 export async function calculateSingleFlashcardPrice(
   basePrice: number = PRICING_CONFIG.FLASHCARD_PRICES.DEFAULT,
   userType: string = 'regular',
-  isFirstPurchase: boolean = false
+  isFirstPurchase: boolean = false,
+  userId?: string
 ): Promise<PricingCalculation> {
   // Calculate discounts
   const discounts: { type: string; amount: number; percentage: number }[] = [];
@@ -111,6 +236,18 @@ export async function calculateSingleFlashcardPrice(
       amount: discountAmount,
       percentage: PRICING_CONFIG.DISCOUNTS.STUDENT * 100
     });
+  }
+
+  // Institutional discount (اضافه شده جدید)
+  if (userId) {
+    const institutionalDiscount = await calculateInstitutionalDiscount(userId, basePrice);
+    if (institutionalDiscount.discountAmount > 0) {
+      discounts.push({
+        type: `institutional${institutionalDiscount.isTimedDiscount ? '_timed' : ''}${institutionalDiscount.isTieredDiscount ? '_tiered' : ''}`,
+        amount: institutionalDiscount.discountAmount,
+        percentage: institutionalDiscount.discountPercentage
+      });
+    }
   }
 
   // Calculate total discount
@@ -139,7 +276,8 @@ export async function calculateSingleFlashcardPrice(
 export async function calculateFlashcardBulkPrice(
   flashcards: any[],
   userType: string = 'regular',
-  isFirstPurchase: boolean = false
+  isFirstPurchase: boolean = false,
+  userId?: string
 ): Promise<FlashcardPricingCalculation> {
   const flashcardCount = flashcards.length;
   let totalBasePrice = 0;
@@ -181,6 +319,18 @@ export async function calculateFlashcardBulkPrice(
       amount: discountAmount,
       percentage: PRICING_CONFIG.DISCOUNTS.FLASHCARD_BULK * 100
     });
+  }
+
+  // Institutional discount (اضافه شده جدید)
+  if (userId) {
+    const institutionalDiscount = await calculateInstitutionalDiscount(userId, totalBasePrice);
+    if (institutionalDiscount.discountAmount > 0) {
+      discounts.push({
+        type: `institutional${institutionalDiscount.isTimedDiscount ? '_timed' : ''}${institutionalDiscount.isTieredDiscount ? '_tiered' : ''}`,
+        amount: institutionalDiscount.discountAmount,
+        percentage: institutionalDiscount.discountPercentage
+      });
+    }
   }
 
   // Calculate total discount

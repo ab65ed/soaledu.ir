@@ -4,10 +4,18 @@
  * مدل گروه‌هاای تخفیف سازمانی برای مدیریت تخفیف‌های اعطایی به نهادهای آموزشی
  */
 import mongoose, { Document } from "mongoose";
+export interface ITieredDiscount {
+    count: number;
+    discountPercentage: number;
+    discountAmount?: number;
+}
 export interface IInstitutionalDiscountGroup extends Document {
     groupName?: string;
     discountPercentage?: number;
     discountAmount?: number;
+    startDate?: Date;
+    endDate?: Date;
+    tiers?: ITieredDiscount[];
     uploadedBy: mongoose.Types.ObjectId;
     uploadDate: Date;
     status: 'pending' | 'processing' | 'completed' | 'failed';

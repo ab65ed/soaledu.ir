@@ -10,6 +10,12 @@ import {
   UploadDiscountFileResponse,
   DeleteDiscountGroupResponse,
   DiscountGroupFilters,
+  UsageReportResponse,
+  RevenueReportResponse,
+  ConversionReportResponse,
+  ComparisonReportResponse,
+  DashboardStats,
+  ReportFilters,
 } from '@/types/institutionalDiscount';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
@@ -166,4 +172,137 @@ export const institutionalDiscountService = {
 
     return response.blob();
   },
+
+  /**
+   * دریافت گزارش استفاده از تخفیف‌های سازمانی
+   */
+  async getUsageReport(filters: ReportFilters): Promise<UsageReportResponse> {
+    const queryParams = new URLSearchParams();
+    
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, value.toString());
+      }
+    });
+
+    const response = await fetch(`${BASE_URL}/institutional-discounts/reports/usage?${queryParams}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'خطا در دریافت گزارش استفاده');
+    }
+
+    return response.json();
+  },
+
+  /**
+   * دریافت گزارش درآمد از تخفیف‌های سازمانی
+   */
+  async getRevenueReport(filters: ReportFilters): Promise<RevenueReportResponse> {
+    const queryParams = new URLSearchParams();
+    
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, value.toString());
+      }
+    });
+
+    const response = await fetch(`${BASE_URL}/institutional-discounts/reports/revenue?${queryParams}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'خطا در دریافت گزارش درآمد');
+    }
+
+    return response.json();
+  },
+
+  /**
+   * دریافت گزارش نرخ تبدیل
+   */
+  async getConversionReport(filters: ReportFilters): Promise<ConversionReportResponse> {
+    const queryParams = new URLSearchParams();
+    
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, value.toString());
+      }
+    });
+
+    const response = await fetch(`${BASE_URL}/institutional-discounts/reports/conversion?${queryParams}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'خطا در دریافت گزارش نرخ تبدیل');
+    }
+
+    return response.json();
+  },
+
+  /**
+   * دریافت گزارش مقایسه‌ای گروه‌های تخفیف
+   */
+  async getComparisonReport(filters: ReportFilters): Promise<ComparisonReportResponse> {
+    const queryParams = new URLSearchParams();
+    
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, value.toString());
+      }
+    });
+
+    const response = await fetch(`${BASE_URL}/institutional-discounts/reports/comparison?${queryParams}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'خطا در دریافت گزارش مقایسه‌ای');
+    }
+
+    return response.json();
+  },
+
+  /**
+   * دریافت آمار کلی داشبورد
+   */
+  async getDashboardStats(): Promise<DashboardStats> {
+    const [, conversionReport, comparisonReport] = await Promise.all([
+      this.getUsageReport({ limit: 1, sortBy: 'usageCount', sortOrder: 'desc' }),
+      this.getConversionReport({}),
+      this.getComparisonReport({ metric: 'revenue', limit: 1 })
+    ]);
+
+    return {
+      totalActiveGroups: conversionReport.data.summary.totalGroups,
+      totalEligibleUsers: conversionReport.data.summary.totalEligibleUsers,
+      totalActiveUsers: conversionReport.data.summary.totalActiveUsers,
+      totalRevenue: comparisonReport.data.summary.totalRevenue,
+      totalDiscountGiven: comparisonReport.data.summary.totalDiscountGiven,
+      avgConversionRate: conversionReport.data.summary.avgConversionRate,
+      topPerformingGroup: comparisonReport.data.summary.topPerformer
+    };
+  }
 }; 

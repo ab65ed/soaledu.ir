@@ -11,6 +11,10 @@ import {
   getInstitutionalDiscountGroupById,
   deleteInstitutionalDiscountGroup,
   upload,
+  getUsageReport,
+  getRevenueReport,
+  getConversionReport,
+  getComparisonReport
 } from '../controllers/institutionalDiscountController';
 import { authenticateToken, requireRole } from '../middlewares/auth';
 
@@ -59,6 +63,50 @@ router.delete(
   authenticateToken,
   requireRole('admin'),
   deleteInstitutionalDiscountGroup
+);
+
+/**
+ * گزارش استفاده از تخفیف‌های سازمانی
+ * GET /api/admin/institutional-discounts/reports/usage
+ */
+router.get(
+  '/reports/usage',
+  authenticateToken,
+  requireRole('admin'),
+  getUsageReport
+);
+
+/**
+ * گزارش درآمد از تخفیف‌های سازمانی
+ * GET /api/admin/institutional-discounts/reports/revenue
+ */
+router.get(
+  '/reports/revenue',
+  authenticateToken,
+  requireRole('admin'),
+  getRevenueReport
+);
+
+/**
+ * گزارش نرخ تبدیل (Conversion Rate)
+ * GET /api/admin/institutional-discounts/reports/conversion
+ */
+router.get(
+  '/reports/conversion',
+  authenticateToken,
+  requireRole('admin'),
+  getConversionReport
+);
+
+/**
+ * گزارش مقایسه‌ای گروه‌های تخفیف
+ * GET /api/admin/institutional-discounts/reports/comparison
+ */
+router.get(
+  '/reports/comparison',
+  authenticateToken,
+  requireRole('admin'),
+  getComparisonReport
 );
 
 export default router; 

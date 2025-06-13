@@ -28,6 +28,12 @@ export interface WalletTransaction {
     status: TransactionStatus;
     processedBy?: string;
     metadata?: Record<string, any>;
+    institutionalDiscountGroupId?: string;
+    institutionId?: string;
+    discountAmount?: number;
+    discountPercentage?: number;
+    originalAmount?: number;
+    isInstitutionalDiscount?: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -134,6 +140,12 @@ export interface ExportData {
     'مبلغ (تومان)': number;
     'توضیحات': string;
     'وضعیت': TransactionStatus;
+    'شناسه گروه تخفیف': string;
+    'شناسه سازمان': string;
+    'مبلغ تخفیف (تومان)': number;
+    'درصد تخفیف': number;
+    'مبلغ اصلی (تومان)': number;
+    'تخفیف سازمانی': string;
     'تاریخ ایجاد': string;
     'تاریخ به‌روزرسانی': string;
 }

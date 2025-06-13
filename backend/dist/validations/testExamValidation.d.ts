@@ -17,12 +17,12 @@ declare const DifficultyDistributionSchema: z.ZodObject<{
     medium: z.ZodOptional<z.ZodNumber>;
     hard: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    medium?: number;
     easy?: number;
+    medium?: number;
     hard?: number;
 }, {
-    medium?: number;
     easy?: number;
+    medium?: number;
     hard?: number;
 }>;
 declare const ExamConfigurationSchema: z.ZodEffects<z.ZodObject<{
@@ -32,12 +32,12 @@ declare const ExamConfigurationSchema: z.ZodEffects<z.ZodObject<{
         medium: z.ZodOptional<z.ZodNumber>;
         hard: z.ZodOptional<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
-        medium?: number;
         easy?: number;
+        medium?: number;
         hard?: number;
     }, {
-        medium?: number;
         easy?: number;
+        medium?: number;
         hard?: number;
     }>>;
     timeLimit: z.ZodOptional<z.ZodNumber>;
@@ -50,8 +50,8 @@ declare const ExamConfigurationSchema: z.ZodEffects<z.ZodObject<{
     tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
     tags?: string[];
-    categories?: string[];
     timeLimit?: number;
+    categories?: string[];
     passingScore?: number;
     allowReview?: boolean;
     showResults?: boolean;
@@ -59,14 +59,14 @@ declare const ExamConfigurationSchema: z.ZodEffects<z.ZodObject<{
     shuffleOptions?: boolean;
     totalQuestions?: number;
     difficultyDistribution?: {
-        medium?: number;
         easy?: number;
+        medium?: number;
         hard?: number;
     };
 }, {
     tags?: string[];
-    categories?: string[];
     timeLimit?: number;
+    categories?: string[];
     passingScore?: number;
     allowReview?: boolean;
     showResults?: boolean;
@@ -74,14 +74,14 @@ declare const ExamConfigurationSchema: z.ZodEffects<z.ZodObject<{
     shuffleOptions?: boolean;
     totalQuestions?: number;
     difficultyDistribution?: {
-        medium?: number;
         easy?: number;
+        medium?: number;
         hard?: number;
     };
 }>, {
     tags?: string[];
-    categories?: string[];
     timeLimit?: number;
+    categories?: string[];
     passingScore?: number;
     allowReview?: boolean;
     showResults?: boolean;
@@ -89,14 +89,14 @@ declare const ExamConfigurationSchema: z.ZodEffects<z.ZodObject<{
     shuffleOptions?: boolean;
     totalQuestions?: number;
     difficultyDistribution?: {
-        medium?: number;
         easy?: number;
+        medium?: number;
         hard?: number;
     };
 }, {
     tags?: string[];
-    categories?: string[];
     timeLimit?: number;
+    categories?: string[];
     passingScore?: number;
     allowReview?: boolean;
     showResults?: boolean;
@@ -104,8 +104,8 @@ declare const ExamConfigurationSchema: z.ZodEffects<z.ZodObject<{
     shuffleOptions?: boolean;
     totalQuestions?: number;
     difficultyDistribution?: {
-        medium?: number;
         easy?: number;
+        medium?: number;
         hard?: number;
     };
 }>;
@@ -124,12 +124,12 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
             medium: z.ZodOptional<z.ZodNumber>;
             hard: z.ZodOptional<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         }, {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         }>>;
         timeLimit: z.ZodOptional<z.ZodNumber>;
@@ -142,8 +142,8 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
         tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -151,14 +151,14 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     }, {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -166,14 +166,14 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     }>, {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -181,14 +181,14 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     }, {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -196,8 +196,8 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     }>>;
@@ -205,15 +205,15 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
     endTime: z.ZodOptional<z.ZodDate>;
     isPublished: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    type?: "custom" | "practice" | "official" | "timed";
-    status?: "draft" | "completed" | "active" | "cancelled";
-    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
     description?: string;
     title?: string;
+    isPublished?: boolean;
+    status?: "active" | "draft" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -221,23 +221,23 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     };
     startTime?: Date;
     endTime?: Date;
 }, {
-    type?: "custom" | "practice" | "official" | "timed";
-    status?: "draft" | "completed" | "active" | "cancelled";
-    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
     description?: string;
     title?: string;
+    isPublished?: boolean;
+    status?: "active" | "draft" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -245,23 +245,23 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     };
     startTime?: Date;
     endTime?: Date;
 }>, {
-    type?: "custom" | "practice" | "official" | "timed";
-    status?: "draft" | "completed" | "active" | "cancelled";
-    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
     description?: string;
     title?: string;
+    isPublished?: boolean;
+    status?: "active" | "draft" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -269,23 +269,23 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     };
     startTime?: Date;
     endTime?: Date;
 }, {
-    type?: "custom" | "practice" | "official" | "timed";
-    status?: "draft" | "completed" | "active" | "cancelled";
-    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
     description?: string;
     title?: string;
+    isPublished?: boolean;
+    status?: "active" | "draft" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -293,8 +293,8 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     };
@@ -316,12 +316,12 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
             medium: z.ZodOptional<z.ZodNumber>;
             hard: z.ZodOptional<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         }, {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         }>>;
         timeLimit: z.ZodOptional<z.ZodNumber>;
@@ -334,8 +334,8 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
         tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -343,14 +343,14 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     }, {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -358,14 +358,14 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     }>, {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -373,14 +373,14 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     }, {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -388,8 +388,8 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     }>>;
@@ -397,15 +397,15 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
     endTime: z.ZodOptional<z.ZodDate>;
     isPublished: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    type?: "custom" | "practice" | "official" | "timed";
-    status?: "draft" | "completed" | "active" | "cancelled";
-    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
     description?: string;
     title?: string;
+    isPublished?: boolean;
+    status?: "active" | "draft" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -413,23 +413,23 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     };
     startTime?: Date;
     endTime?: Date;
 }, {
-    type?: "custom" | "practice" | "official" | "timed";
-    status?: "draft" | "completed" | "active" | "cancelled";
-    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
     description?: string;
     title?: string;
+    isPublished?: boolean;
+    status?: "active" | "draft" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -437,23 +437,23 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     };
     startTime?: Date;
     endTime?: Date;
 }>, {
-    type?: "custom" | "practice" | "official" | "timed";
-    status?: "draft" | "completed" | "active" | "cancelled";
-    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
     description?: string;
     title?: string;
+    isPublished?: boolean;
+    status?: "active" | "draft" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -461,23 +461,23 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     };
     startTime?: Date;
     endTime?: Date;
 }, {
-    type?: "custom" | "practice" | "official" | "timed";
-    status?: "draft" | "completed" | "active" | "cancelled";
-    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
     description?: string;
     title?: string;
+    isPublished?: boolean;
+    status?: "active" | "draft" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
-        categories?: string[];
         timeLimit?: number;
+        categories?: string[];
         passingScore?: number;
         allowReview?: boolean;
         showResults?: boolean;
@@ -485,8 +485,8 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
         shuffleOptions?: boolean;
         totalQuestions?: number;
         difficultyDistribution?: {
-            medium?: number;
             easy?: number;
+            medium?: number;
             hard?: number;
         };
     };
@@ -557,21 +557,21 @@ export declare const ExamFilterSchema: z.ZodObject<{
     order: z.ZodOptional<z.ZodEnum<["asc", "desc"]>>;
     search: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    type?: "custom" | "practice" | "official" | "timed";
-    status?: "draft" | "completed" | "active" | "cancelled";
+    page?: number;
     limit?: number;
     search?: string;
+    type?: "practice" | "custom" | "official" | "timed";
     isPublished?: boolean;
-    page?: number;
+    status?: "active" | "draft" | "completed" | "cancelled";
     sortBy?: "createdAt" | "updatedAt" | "title" | "startTime";
     order?: "asc" | "desc";
 }, {
-    type?: "custom" | "practice" | "official" | "timed";
-    status?: "draft" | "completed" | "active" | "cancelled";
+    page?: number;
     limit?: number;
     search?: string;
+    type?: "practice" | "custom" | "official" | "timed";
     isPublished?: boolean;
-    page?: number;
+    status?: "active" | "draft" | "completed" | "cancelled";
     sortBy?: "createdAt" | "updatedAt" | "title" | "startTime";
     order?: "asc" | "desc";
 }>;

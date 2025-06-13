@@ -24,16 +24,16 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     correctAnswer: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     type?: "multiple-choice";
-    options?: string[];
-    category?: string;
-    tags?: string[];
     text?: string;
+    options?: string[];
+    tags?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: boolean;
     difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
+    category?: string;
     lesson?: string;
     timeLimit?: number;
     sourcePage?: number;
@@ -43,16 +43,16 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     isPublished?: boolean;
 }, {
     type?: "multiple-choice";
-    options?: string[];
-    category?: string;
-    tags?: string[];
     text?: string;
+    options?: string[];
+    tags?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: boolean;
     difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
+    category?: string;
     lesson?: string;
     timeLimit?: number;
     sourcePage?: number;
@@ -82,16 +82,16 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     correctAnswer: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     type?: "true-false";
-    options?: string[];
-    category?: string;
-    tags?: string[];
     text?: string;
+    options?: string[];
+    tags?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: false;
     difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
+    category?: string;
     lesson?: string;
     timeLimit?: number;
     sourcePage?: number;
@@ -101,16 +101,16 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     isPublished?: boolean;
 }, {
     type?: "true-false";
-    options?: string[];
-    category?: string;
-    tags?: string[];
     text?: string;
+    options?: string[];
+    tags?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: false;
     difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
+    category?: string;
     lesson?: string;
     timeLimit?: number;
     sourcePage?: number;
@@ -140,16 +140,16 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     allowMultipleCorrect: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     type?: "short-answer" | "essay";
-    options?: string[];
-    category?: string;
-    tags?: string[];
     text?: string;
+    options?: string[];
+    tags?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: boolean;
     difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
+    category?: string;
     lesson?: string;
     timeLimit?: number;
     sourcePage?: number;
@@ -159,16 +159,16 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     isPublished?: boolean;
 }, {
     type?: "short-answer" | "essay";
-    options?: string[];
-    category?: string;
-    tags?: string[];
     text?: string;
+    options?: string[];
+    tags?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: boolean;
     difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
+    category?: string;
     lesson?: string;
     timeLimit?: number;
     sourcePage?: number;
@@ -201,18 +201,18 @@ export declare const QuestionUpdateSchema: z.ZodObject<{
     allowMultipleCorrect: z.ZodOptional<z.ZodBoolean>;
     correctAnswer: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    id?: string;
     type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
-    options?: string[];
-    category?: string;
-    tags?: string[];
+    id?: string;
     text?: string;
+    options?: string[];
+    tags?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: boolean;
     difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
+    category?: string;
     lesson?: string;
     timeLimit?: number;
     sourcePage?: number;
@@ -221,18 +221,18 @@ export declare const QuestionUpdateSchema: z.ZodObject<{
     isDraft?: boolean;
     isPublished?: boolean;
 }, {
-    id?: string;
     type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
-    options?: string[];
-    category?: string;
-    tags?: string[];
+    id?: string;
     text?: string;
+    options?: string[];
+    tags?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: boolean;
     difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
+    category?: string;
     lesson?: string;
     timeLimit?: number;
     sourcePage?: number;
@@ -253,17 +253,17 @@ export declare const QuestionAutoSaveSchema: z.ZodObject<{
     tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
-    category?: string;
-    tags?: string[];
     text?: string;
+    tags?: string[];
     points?: number;
+    category?: string;
     sourcePage?: number;
 }, {
     id?: string;
-    category?: string;
-    tags?: string[];
     text?: string;
+    tags?: string[];
     points?: number;
+    category?: string;
     sourcePage?: number;
 }>;
 /**
@@ -293,18 +293,18 @@ export declare const QuestionListSchema: z.ZodObject<{
     sortBy: z.ZodOptional<z.ZodEnum<["newest", "oldest", "difficulty", "points", "category"]>>;
     publishedOnly: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
-    limit?: number;
-    difficulty?: "Medium" | "Easy" | "Hard";
     page?: number;
-    sortBy?: "category" | "difficulty" | "points" | "newest" | "oldest";
+    limit?: number;
+    type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
+    difficulty?: "Medium" | "Easy" | "Hard";
+    sortBy?: "difficulty" | "points" | "category" | "newest" | "oldest";
     publishedOnly?: boolean;
 }, {
-    type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
-    limit?: number;
-    difficulty?: "Medium" | "Easy" | "Hard";
     page?: number;
-    sortBy?: "category" | "difficulty" | "points" | "newest" | "oldest";
+    limit?: number;
+    type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
+    difficulty?: "Medium" | "Easy" | "Hard";
+    sortBy?: "difficulty" | "points" | "category" | "newest" | "oldest";
     publishedOnly?: boolean;
 }>;
 /**
