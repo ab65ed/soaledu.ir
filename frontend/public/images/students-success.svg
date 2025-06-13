@@ -1,0 +1,86 @@
+<svg width="500" height="350" viewBox="0 0 500 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="500" height="350" fill="#F2F2F2"/>
+  
+  <!-- University Building -->
+  <rect x="350" y="200" width="120" height="80" fill="#B6B09F"/>
+  <rect x="360" y="210" width="15" height="20" fill="#F2F2F2"/>
+  <rect x="380" y="210" width="15" height="20" fill="#F2F2F2"/>
+  <rect x="400" y="210" width="15" height="20" fill="#F2F2F2"/>
+  <rect x="420" y="210" width="15" height="20" fill="#F2F2F2"/>
+  <rect x="440" y="210" width="15" height="20" fill="#F2F2F2"/>
+  
+  <!-- University Entrance -->
+  <rect x="395" y="240" width="30" height="40" fill="#000000"/>
+  <rect x="400" y="245" width="20" height="35" fill="#EAE4D5"/>
+  
+  <!-- Columns -->
+  <rect x="365" y="190" width="8" height="90" fill="#EAE4D5"/>
+  <rect x="385" y="190" width="8" height="90" fill="#EAE4D5"/>
+  <rect x="405" y="190" width="8" height="90" fill="#EAE4D5"/>
+  <rect x="425" y="190" width="8" height="90" fill="#EAE4D5"/>
+  <rect x="445" y="190" width="8" height="90" fill="#EAE4D5"/>
+  
+  <!-- Students -->
+  <!-- Student 1 -->
+  <circle cx="100" cy="200" r="20" fill="#EAE4D5"/>
+  <rect x="90" y="220" width="20" height="40" fill="#B6B09F"/>
+  <rect x="85" y="230" width="30" height="15" fill="#000000"/>
+  
+  <!-- Student 2 -->
+  <circle cx="180" cy="190" r="18" fill="#EAE4D5"/>
+  <rect x="172" y="208" width="16" height="35" fill="#B6B09F"/>
+  <rect x="168" y="218" width="24" height="12" fill="#000000"/>
+  
+  <!-- Student 3 -->
+  <circle cx="250" cy="210" r="22" fill="#EAE4D5"/>
+  <rect x="238" y="232" width="24" height="45" fill="#B6B09F"/>
+  <rect x="232" y="242" width="36" height="18" fill="#000000"/>
+  
+  <!-- Graduation Caps -->
+  <polygon points="85,185 100,175 115,185 100,195" fill="#000000"/>
+  <rect x="98" y="185" width="4" height="15" fill="#000000"/>
+  <circle cx="100" cy="202" r="2" fill="#B6B09F"/>
+  
+  <polygon points="168,175 180,168 192,175 180,182" fill="#000000"/>
+  <rect x="178" y="175" width="4" height="12" fill="#000000"/>
+  <circle cx="180" cy="189" r="2" fill="#B6B09F"/>
+  
+  <polygon points="235,195 250,188 265,195 250,202" fill="#000000"/>
+  <rect x="248" y="195" width="4" height="15" fill="#000000"/>
+  <circle cx="250" cy="212" r="2" fill="#B6B09F"/>
+  
+  <!-- Books in hands -->
+  <rect x="95" y="235" width="10" height="12" fill="#EAE4D5"/>
+  <rect x="175" y="225" width="8" height="10" fill="#EAE4D5"/>
+  <rect x="245" y="250" width="12" height="15" fill="#EAE4D5"/>
+  
+  <!-- Success Stars -->
+  <polygon points="120,120 125,130 135,130 127,137 130,147 120,142 110,147 113,137 105,130 115,130" fill="#B6B09F"/>
+  <polygon points="200,100 203,107 210,107 205,112 207,119 200,116 193,119 195,112 190,107 197,107" fill="#B6B09F"/>
+  <polygon points="280,130 283,137 290,137 285,142 287,149 280,146 273,149 275,142 270,137 277,137" fill="#B6B09F"/>
+  
+  <!-- Trophy -->
+  <rect x="300" y="80" width="40" height="50" fill="#B6B09F"/>
+  <rect x="305" y="85" width="30" height="35" fill="#EAE4D5"/>
+  <rect x="315" y="130" width="10" height="15" fill="#000000"/>
+  <rect x="310" y="145" width="20" height="8" fill="#000000"/>
+  
+  <!-- Trophy Handles -->
+  <ellipse cx="295" cy="100" rx="8" ry="12" fill="none" stroke="#B6B09F" stroke-width="3"/>
+  <ellipse cx="345" cy="100" rx="8" ry="12" fill="none" stroke="#B6B09F" stroke-width="3"/>
+  
+  <!-- Persian Text -->
+  <text x="250" y="50" font-family="Arial" font-size="20" font-weight="bold" fill="#000000" text-anchor="middle">موفقیت دانشجویان</text>
+  <text x="250" y="320" font-family="Arial" font-size="14" fill="#B6B09F" text-anchor="middle">هزاران دانشجو با سؤال‌جو به دانشگاه رسیدند</text>
+  
+  <!-- Statistics -->
+  <text x="50" y="320" font-family="Arial" font-size="12" fill="#000000">+۱۰۰۰ دانشجو</text>
+  <text x="150" y="320" font-family="Arial" font-size="12" fill="#000000">۹۵٪ موفقیت</text>
+  <text x="250" y="340" font-family="Arial" font-size="12" fill="#000000">۵۰+ دانشگاه</text>
+  
+  <!-- Decorative Elements -->
+  <circle cx="50" cy="80" r="15" fill="#EAE4D5" opacity="0.6"/>
+  <circle cx="450" cy="60" r="20" fill="#B6B09F" opacity="0.4"/>
+  <circle cx="30" cy="150" r="12" fill="#EAE4D5" opacity="0.5"/>
+</svg> 

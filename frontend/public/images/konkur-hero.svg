@@ -1,0 +1,52 @@
+<svg width="600" height="400" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="400" fill="#F2F2F2"/>
+  
+  <!-- Books Stack -->
+  <rect x="100" y="250" width="120" height="15" rx="2" fill="#B6B09F"/>
+  <rect x="105" y="235" width="110" height="15" rx="2" fill="#EAE4D5"/>
+  <rect x="110" y="220" width="100" height="15" rx="2" fill="#B6B09F"/>
+  <rect x="115" y="205" width="90" height="15" rx="2" fill="#EAE4D5"/>
+  
+  <!-- Pencils -->
+  <rect x="250" y="180" width="8" height="80" rx="4" fill="#B6B09F"/>
+  <rect x="250" y="175" width="8" height="10" rx="4" fill="#000000"/>
+  <rect x="265" y="185" width="8" height="75" rx="4" fill="#EAE4D5"/>
+  <rect x="265" y="180" width="8" height="10" rx="4" fill="#000000"/>
+  
+  <!-- Calculator -->
+  <rect x="320" y="200" width="60" height="80" rx="8" fill="#000000"/>
+  <rect x="325" y="205" width="50" height="25" rx="3" fill="#F2F2F2"/>
+  
+  <!-- Calculator buttons -->
+  <circle cx="335" cy="240" r="4" fill="#B6B09F"/>
+  <circle cx="350" cy="240" r="4" fill="#B6B09F"/>
+  <circle cx="365" cy="240" r="4" fill="#B6B09F"/>
+  <circle cx="335" cy="255" r="4" fill="#B6B09F"/>
+  <circle cx="350" cy="255" r="4" fill="#B6B09F"/>
+  <circle cx="365" cy="255" r="4" fill="#B6B09F"/>
+  <circle cx="335" cy="270" r="4" fill="#B6B09F"/>
+  <circle cx="350" cy="270" r="4" fill="#B6B09F"/>
+  <circle cx="365" cy="270" r="4" fill="#B6B09F"/>
+  
+  <!-- Graduation Cap -->
+  <polygon points="450,150 500,140 550,150 500,160" fill="#000000"/>
+  <rect x="495" y="150" width="10" height="30" fill="#000000"/>
+  <circle cx="500" cy="185" r="3" fill="#B6B09F"/>
+  
+  <!-- Papers/Documents -->
+  <rect x="400" y="220" width="80" height="60" rx="4" fill="#F2F2F2" stroke="#B6B09F" stroke-width="2"/>
+  <line x1="410" y1="235" x2="470" y2="235" stroke="#B6B09F" stroke-width="2"/>
+  <line x1="410" y1="245" x2="460" y2="245" stroke="#B6B09F" stroke-width="2"/>
+  <line x1="410" y1="255" x2="465" y2="255" stroke="#B6B09F" stroke-width="2"/>
+  <line x1="410" y1="265" x2="450" y2="265" stroke="#B6B09F" stroke-width="2"/>
+  
+  <!-- Persian Text -->
+  <text x="300" y="100" font-family="Arial" font-size="24" font-weight="bold" fill="#000000" text-anchor="middle">کنکور سراسری</text>
+  <text x="300" y="130" font-family="Arial" font-size="16" fill="#B6B09F" text-anchor="middle">آمادگی برای موفقیت</text>
+  
+  <!-- Decorative Elements -->
+  <circle cx="150" cy="100" r="30" fill="#EAE4D5" opacity="0.5"/>
+  <circle cx="450" cy="80" r="25" fill="#B6B09F" opacity="0.3"/>
+  <circle cx="80" cy="150" r="20" fill="#EAE4D5" opacity="0.4"/>
+</svg> 
