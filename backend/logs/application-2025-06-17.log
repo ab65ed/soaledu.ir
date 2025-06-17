@@ -1,0 +1,1 @@
+{"timestamp":"2025-06-17 17:10:32","level":"WARN","message":"Invalid token structure in blocklist check","ip":"::ffff:127.0.0.1","userAgent":"curl/7.81.0","url":"/api/v1/questions/bulk-upload/template","eventType":"general","severity":"MEDIUM","source":"exam-edu-backend"}

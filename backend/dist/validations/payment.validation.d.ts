@@ -35,16 +35,16 @@ export declare const CreateDiscountCodeSchema: z.ZodObject<{
     maxDiscount: z.ZodOptional<z.ZodNumber>;
     description: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    description?: string;
     discountPercentage?: number;
+    description?: string;
     code?: string;
     expiryDate?: Date;
     usageLimit?: number;
     minAmount?: number;
     maxDiscount?: number;
 }, {
-    description?: string;
     discountPercentage?: number;
+    description?: string;
     code?: string;
     expiryDate?: Date;
     usageLimit?: number;
@@ -59,31 +59,31 @@ export declare const TransactionFilterSchema: z.ZodEffects<z.ZodObject<{
     startDate: z.ZodOptional<z.ZodDate>;
     endDate: z.ZodOptional<z.ZodDate>;
 }, "strip", z.ZodTypeAny, {
-    page?: number;
     limit?: number;
     userId?: string;
     status?: "pending" | "failed" | "completed" | "refunded";
+    page?: number;
     startDate?: Date;
     endDate?: Date;
 }, {
-    page?: number;
     limit?: number;
     userId?: string;
     status?: "pending" | "failed" | "completed" | "refunded";
+    page?: number;
     startDate?: Date;
     endDate?: Date;
 }>, {
-    page?: number;
     limit?: number;
     userId?: string;
     status?: "pending" | "failed" | "completed" | "refunded";
+    page?: number;
     startDate?: Date;
     endDate?: Date;
 }, {
-    page?: number;
     limit?: number;
     userId?: string;
     status?: "pending" | "failed" | "completed" | "refunded";
+    page?: number;
     startDate?: Date;
     endDate?: Date;
 }>;

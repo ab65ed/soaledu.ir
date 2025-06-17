@@ -53,14 +53,25 @@ import ticketRoutes from "./routes/tickets";
 import paymentRoutes from "./routes/payment";
 import resultsRoutes from "./routes/results";
 import examPurchaseRoutes from "./routes/exam-purchase"; // Exam purchase cache management routes
-// import financeRoutes from "./routes/finance"; // Finance and pricing routes - فایل موجود نیست
-// import designerFinanceRoutes from "./routes/designer-finance"; // Designer finance management routes - فایل موجود نیست
-// import financeSettingsRoutes from "./routes/financeSettings"; // Finance settings management routes - فایل موجود نیست
-// import blogRoutes from "./routes/blogRoutes"; // Blog management routes - فایل موجود نیست
+import financeRoutes from "./routes/finance"; // Finance and pricing routes - فعال شده
+import designerFinanceRoutes from "./routes/designer-finance"; // Designer finance management routes - فعال شده
+import financeSettingsRoutes from "./routes/financeSettings"; // Finance settings management routes - فعال شده
+import blogRoutes from "./routes/blogRoutes"; // Blog management routes - فعال شده
+
+// Newly activated routes
+import contactRoutes2 from "./routes/contact"; // Contact form routes - فعال شده
+import testExamsRoutes from "./routes/testExams"; // Test exam routes - فعال شده
+import designerFinanceRoutes2 from "./routes/designer-finance.routes"; // Designer finance routes v2 - فعال شده
+import questionRoutes from "./routes/question"; // Question management routes - فعال شده
+import rolesRoutes from "./routes/roles"; // Roles management routes - فعال شده
+import courseExamRoutes from "./routes/course-exam"; // Course exam routes - فعال شده
+import courseExamRoutes2 from "./routes/course-exam.routes"; // Course exam routes v2 - فعال شده
 
 // Import middleware
 import { errorHandler } from "./middlewares/errorHandler";
 import { createParseServer } from "./config/parse-server";
+import { setupCSRFToken, validateCSRFToken } from "./middlewares/csrf.middleware";
+import { checkTokenBlocklist } from "./middlewares/token-blocklist.middleware";
 
 // Initialize Parse Server
 const parseServer = createParseServer();
@@ -153,6 +164,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+// Security middleware - CSRF protection
+app.use(setupCSRFToken);
+
+// Token blocklist check (before authentication middleware)
+app.use(checkTokenBlocklist as any);
+
 // Parse Server endpoint
 app.use('/parse', parseServer.app);
 
@@ -180,11 +197,22 @@ app.use("/api/v1/analytics", analyticsRoutes); // Analytics and reporting
 app.use("/api/v1/tickets", ticketRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1/results", resultsRoutes);
-app.use("/api/exam-purchase", examPurchaseRoutes); // Exam purchase cache management routes
-// app.use("/api/v1/finance", financeRoutes); // Finance and pricing routes - فایل موجود نیست
-// app.use("/api/v1/designer-finance", designerFinanceRoutes); // Designer finance management routes - فایل موجود نیست
-// app.use("/api/finance-settings", financeSettingsRoutes); // Finance settings management routes - فایل موجود نیست
-// app.use("/api/v1/blog", blogRoutes); // Blog management routes - فایل موجود نیست
+app.use("/api/v1/exam-purchase", examPurchaseRoutes); // Exam purchase cache management routes - استانداردسازی شده
+
+// Finance and Blog routes - فعال شده
+app.use("/api/v1/finance", financeRoutes); // Finance and pricing routes - فعال شده
+app.use("/api/v1/designer-finance", designerFinanceRoutes); // Designer finance management routes - فعال شده
+app.use("/api/finance-settings", financeSettingsRoutes); // Finance settings management routes - فعال شده
+app.use("/api/v1/blog", blogRoutes); // Blog management routes - فعال شده
+
+// Newly activated routes
+app.use("/api/v1/contact-form", contactRoutes2); // Contact form routes - فعال شده
+app.use("/api/v1/test-exams", testExamsRoutes); // Test exam routes - فعال شده
+app.use("/api/v1/designer-finance-v2", designerFinanceRoutes2); // Designer finance routes v2 - فعال شده
+app.use("/api/v1/question", questionRoutes); // Question management routes - فعال شده
+app.use("/api/v1/roles", rolesRoutes); // Roles management routes - فعال شده
+app.use("/api/v1/course-exams", courseExamRoutes); // Course exam routes - فعال شده
+app.use("/api/v1/course-exams-v2", courseExamRoutes2); // Course exam routes v2 - فعال شده
 
 // Swagger API Documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
@@ -193,6 +221,10 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.get("/health", (req: Request, res: Response) => {
   res.status(200).json({ status: "ok", environment: NODE_ENV });
 });
+
+// CSRF Token endpoint
+import { provideCSRFToken } from "./middlewares/csrf.middleware";
+app.get("/api/v1/csrf-token", provideCSRFToken);
 
 // Error handling middleware
 app.use(errorHandler);

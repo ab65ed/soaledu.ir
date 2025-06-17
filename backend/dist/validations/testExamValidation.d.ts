@@ -206,10 +206,10 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
     isPublished: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     type?: "practice" | "custom" | "official" | "timed";
-    description?: string;
-    title?: string;
     isPublished?: boolean;
-    status?: "active" | "draft" | "completed" | "cancelled";
+    title?: string;
+    status?: "draft" | "active" | "completed" | "cancelled";
+    description?: string;
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -230,10 +230,10 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
     endTime?: Date;
 }, {
     type?: "practice" | "custom" | "official" | "timed";
-    description?: string;
-    title?: string;
     isPublished?: boolean;
-    status?: "active" | "draft" | "completed" | "cancelled";
+    title?: string;
+    status?: "draft" | "active" | "completed" | "cancelled";
+    description?: string;
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -254,10 +254,10 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
     endTime?: Date;
 }>, {
     type?: "practice" | "custom" | "official" | "timed";
-    description?: string;
-    title?: string;
     isPublished?: boolean;
-    status?: "active" | "draft" | "completed" | "cancelled";
+    title?: string;
+    status?: "draft" | "active" | "completed" | "cancelled";
+    description?: string;
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -278,10 +278,10 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
     endTime?: Date;
 }, {
     type?: "practice" | "custom" | "official" | "timed";
-    description?: string;
-    title?: string;
     isPublished?: boolean;
-    status?: "active" | "draft" | "completed" | "cancelled";
+    title?: string;
+    status?: "draft" | "active" | "completed" | "cancelled";
+    description?: string;
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -398,10 +398,10 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
     isPublished: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     type?: "practice" | "custom" | "official" | "timed";
-    description?: string;
-    title?: string;
     isPublished?: boolean;
-    status?: "active" | "draft" | "completed" | "cancelled";
+    title?: string;
+    status?: "draft" | "active" | "completed" | "cancelled";
+    description?: string;
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -422,10 +422,10 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
     endTime?: Date;
 }, {
     type?: "practice" | "custom" | "official" | "timed";
-    description?: string;
-    title?: string;
     isPublished?: boolean;
-    status?: "active" | "draft" | "completed" | "cancelled";
+    title?: string;
+    status?: "draft" | "active" | "completed" | "cancelled";
+    description?: string;
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -446,10 +446,10 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
     endTime?: Date;
 }>, {
     type?: "practice" | "custom" | "official" | "timed";
-    description?: string;
-    title?: string;
     isPublished?: boolean;
-    status?: "active" | "draft" | "completed" | "cancelled";
+    title?: string;
+    status?: "draft" | "active" | "completed" | "cancelled";
+    description?: string;
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -470,10 +470,10 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
     endTime?: Date;
 }, {
     type?: "practice" | "custom" | "official" | "timed";
-    description?: string;
-    title?: string;
     isPublished?: boolean;
-    status?: "active" | "draft" | "completed" | "cancelled";
+    title?: string;
+    status?: "draft" | "active" | "completed" | "cancelled";
+    description?: string;
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -514,14 +514,14 @@ export declare const ExamSessionSchema: z.ZodObject<{
     timeSpent: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
     examId?: string;
-    timeSpent?: number;
     answers?: Record<string, any>;
+    timeSpent?: number;
     startTime?: Date;
     currentQuestionIndex?: number;
 }, {
     examId?: string;
-    timeSpent?: number;
     answers?: Record<string, any>;
+    timeSpent?: number;
     startTime?: Date;
     currentQuestionIndex?: number;
 }>;
@@ -536,13 +536,13 @@ export declare const ExamSubmissionSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     examId?: string;
     answers?: Record<string, any>;
-    isCompleted?: boolean;
     totalTimeSpent?: number;
+    isCompleted?: boolean;
 }, {
     examId?: string;
     answers?: Record<string, any>;
-    isCompleted?: boolean;
     totalTimeSpent?: number;
+    isCompleted?: boolean;
 }>;
 /**
  * Validation schema for exam filtering and listing
@@ -557,21 +557,21 @@ export declare const ExamFilterSchema: z.ZodObject<{
     order: z.ZodOptional<z.ZodEnum<["asc", "desc"]>>;
     search: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    page?: number;
     limit?: number;
     search?: string;
     type?: "practice" | "custom" | "official" | "timed";
     isPublished?: boolean;
-    status?: "active" | "draft" | "completed" | "cancelled";
+    status?: "draft" | "active" | "completed" | "cancelled";
+    page?: number;
     sortBy?: "createdAt" | "updatedAt" | "title" | "startTime";
     order?: "asc" | "desc";
 }, {
-    page?: number;
     limit?: number;
     search?: string;
     type?: "practice" | "custom" | "official" | "timed";
     isPublished?: boolean;
-    status?: "active" | "draft" | "completed" | "cancelled";
+    status?: "draft" | "active" | "completed" | "cancelled";
+    page?: number;
     sortBy?: "createdAt" | "updatedAt" | "title" | "startTime";
     order?: "asc" | "desc";
 }>;

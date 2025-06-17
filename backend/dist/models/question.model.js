@@ -186,6 +186,19 @@ const QuestionSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
+// Database indexes for performance optimization
+QuestionSchema.index({ category: 1, isActive: 1 }); // Most common query pattern
+QuestionSchema.index({ lesson: 1, isActive: 1 }, { sparse: true }); // Sparse for optional lesson
+QuestionSchema.index({ difficulty: 1, isActive: 1 }); // Filter by difficulty and active status
+QuestionSchema.index({ type: 1, isActive: 1 }); // Filter by question type
+QuestionSchema.index({ tags: 1 }); // Search by tags
+QuestionSchema.index({ createdBy: 1, createdAt: -1 }); // User's questions, sorted by creation date
+QuestionSchema.index({ text: 'text' }); // Full-text search on question text
+QuestionSchema.index({ 'analytics.usageCount': -1 }); // Most used questions
+QuestionSchema.index({ 'analytics.lastUsed': -1 }, { sparse: true }); // Recently used questions
+QuestionSchema.index({ source: 1, createdAt: -1 }); // Filter by source and creation date
+QuestionSchema.index({ category: 1, difficulty: 1, type: 1, isActive: 1 }); // Compound index for complex queries
+QuestionSchema.index({ version: 1, _id: 1 }); // Version control and unique identification
 QuestionSchema.pre('save', async function (next) {
     if (this.lesson) {
         const Lesson = mongoose_1.default.model('Lesson'); // Consider defining ILesson and importing

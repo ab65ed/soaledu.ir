@@ -119,9 +119,15 @@ CategorySchema.virtual('children', {
     foreignField: 'parent',
     justOne: false,
 });
-CategorySchema.index({ name: 1, parent: 1 }, { unique: true });
-CategorySchema.index({ parent: 1, level: 1, sortOrder: 1 });
-CategorySchema.index({ path: 1 });
+// Database indexes for performance optimization
+CategorySchema.index({ name: 1, parent: 1 }, { unique: true }); // Unique name per parent
+CategorySchema.index({ parent: 1, level: 1, sortOrder: 1 }); // Hierarchical queries
+CategorySchema.index({ path: 1 }, { unique: true, sparse: true }); // Unique paths
+CategorySchema.index({ isActive: 1, sortOrder: 1, name: 1 }); // Active categories listing
+CategorySchema.index({ level: 1, isActive: 1 }); // Level-based queries
+CategorySchema.index({ name: 'text', description: 'text' }); // Full-text search
+CategorySchema.index({ createdBy: 1, createdAt: -1 }); // Creator's categories
+CategorySchema.index({ questionCount: -1, isActive: 1 }); // Sort by question count
 CategorySchema.pre('save', async function (next) {
     if (this.isModified('name') || this.isModified('parent')) {
         await this.generatePath();

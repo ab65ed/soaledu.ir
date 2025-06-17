@@ -17,6 +17,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FinanceController = exports.PaymentController = exports.PricingController = void 0;
 // Export types and constants
@@ -35,6 +36,7 @@ const payment_2 = require("./payment");
 class FinanceController {
 }
 exports.FinanceController = FinanceController;
+_a = FinanceController;
 // Pricing methods
 FinanceController.calculatePrice = pricing_2.PricingController.calculatePrice;
 FinanceController.calculateFlashcardPrice = pricing_2.PricingController.calculateFlashcardPrice;
@@ -44,4 +46,16 @@ FinanceController.getExamPrice = pricing_2.PricingController.getExamPrice;
 FinanceController.createPayment = payment_2.PaymentController.createPayment;
 FinanceController.verifyPayment = payment_2.PaymentController.verifyPayment;
 FinanceController.getPaymentHistory = payment_2.PaymentController.getPaymentHistory;
+// Statistics method - mock implementation
+FinanceController.getStatistics = async (req, res) => {
+    res.json({
+        success: true,
+        data: {
+            totalRevenue: 0,
+            totalTransactions: 0,
+            pendingPayments: 0
+        },
+        message: 'آمار مالی - پیاده‌سازی موقت'
+    });
+};
 //# sourceMappingURL=index.js.map

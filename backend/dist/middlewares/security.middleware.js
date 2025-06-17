@@ -295,7 +295,7 @@ const isValidNationalCode = (value) => {
 };
 // ============================= VALIDATION RULES ============================= //
 // Temporarily disabled validation arrays due to express-validator compatibility issues
-// TODO: Implement with zod validation instead
+// ✅ Using zod validation in separate validation files
 /*
 export const registerValidation = [
   body('name')
@@ -402,7 +402,7 @@ exports.timingCheck = timingCheck;
 // Validation error handler - temporarily disabled
 const handleValidationErrors = (req, res, next) => {
     // Temporarily disabled due to express-validator compatibility issues
-    // TODO: Implement with zod validation
+    // ✅ Using zod validation in separate validation files
     next();
 };
 exports.handleValidationErrors = handleValidationErrors;

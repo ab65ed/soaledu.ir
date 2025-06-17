@@ -7,27 +7,25 @@ import Exam from '../models/exam.model';
 import User from '../models/user.model';
 import { authenticateToken, requireRole } from '../middlewares/auth';
 import { validateRequest } from '../validations';
-import Validator from 'fastest-validator';
+import { z } from 'zod';
 import { RequestWithUser, IExamResult } from '../types';
 
-const validator = new Validator();
+// Validation schemas using Zod
+const getResultsSchema = z.object({
+  page: z.number().min(1).optional().default(1),
+  limit: z.number().min(1).max(100).optional().default(10),
+  examId: z.string().optional(),
+  userId: z.string().optional(),
+  status: z.enum(['completed', 'abandoned', 'timeout']).optional(),
+  dateFrom: z.string().optional(),
+  dateTo: z.string().optional()
+});
 
-// Validation schemas
-const getResultsSchema = {
-  page: { type: 'number', optional: true, min: 1, default: 1 },
-  limit: { type: 'number', optional: true, min: 1, max: 100, default: 10 },
-  examId: { type: 'string', optional: true },
-  userId: { type: 'string', optional: true },
-  status: { type: 'string', optional: true, enum: ['completed', 'abandoned', 'timeout'] },
-  dateFrom: { type: 'string', optional: true },
-  dateTo: { type: 'string', optional: true }
-};
-
-const exportResultsSchema = {
-  examId: { type: 'string', required: true },
-  format: { type: 'string', optional: true, enum: ['csv', 'json'], default: 'csv' },
-  includeAnswers: { type: 'boolean', optional: true, default: false }
-};
+const exportResultsSchema = z.object({
+  examId: z.string({ message: 'شناسه آزمون الزامی است' }),
+  format: z.enum(['csv', 'json']).optional().default('csv'),
+  includeAnswers: z.boolean().optional().default(false)
+});
 
 // Interface for query parameters
 interface GetResultsQuery {

@@ -1,8 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendNewPostNotification = exports.getBlogSurveyResults = exports.sendBlogSurvey = exports.bulkDeletePosts = exports.bulkUpdatePosts = exports.getPostAnalytics = exports.getBlogAnalytics = exports.getAdminBlogStats = exports.getAdminBlogPosts = void 0;
-const BlogPost_1 = require("../models/BlogPost");
-const BlogCategory_1 = require("../models/BlogCategory");
+const BlogPost_1 = __importDefault(require("../models/BlogPost"));
+const BlogCategory_1 = __importDefault(require("../models/BlogCategory"));
 const asyncHandler_1 = require("../utils/asyncHandler");
 const logger_1 = require("../utils/logger");
 // ==================== Admin Blog Posts Management ====================
@@ -19,7 +22,7 @@ exports.getAdminBlogPosts = (0, asyncHandler_1.asyncHandler)(async (req, res) =>
     }
     // Category filter
     if (category) {
-        const categoryDoc = await BlogCategory_1.BlogCategory.findOne({ slug: category });
+        const categoryDoc = await BlogCategory_1.default.findOne({ slug: category });
         if (categoryDoc) {
             query.categories = categoryDoc._id;
         }
@@ -45,14 +48,14 @@ exports.getAdminBlogPosts = (0, asyncHandler_1.asyncHandler)(async (req, res) =>
     sortOptions[sort] = order === 'desc' ? -1 : 1;
     const skip = (Number(page) - 1) * Number(limit);
     const [posts, total] = await Promise.all([
-        BlogPost_1.BlogPost.find(query)
+        BlogPost_1.default.find(query)
             .populate('author', 'name email avatar')
             .populate('categories', 'name slug color')
             .sort(sortOptions)
             .skip(skip)
             .limit(Number(limit))
             .lean(),
-        BlogPost_1.BlogPost.countDocuments(query)
+        BlogPost_1.default.countDocuments(query)
     ]);
     const response = {
         success: true,
@@ -74,20 +77,20 @@ exports.getAdminBlogPosts = (0, asyncHandler_1.asyncHandler)(async (req, res) =>
  */
 exports.getAdminBlogStats = (0, asyncHandler_1.asyncHandler)(async (req, res) => {
     const [totalPosts, publishedPosts, draftPosts, featuredPosts, totalViews, totalComments, totalLikes, recentPosts] = await Promise.all([
-        BlogPost_1.BlogPost.countDocuments(),
-        BlogPost_1.BlogPost.countDocuments({ status: 'published' }),
-        BlogPost_1.BlogPost.countDocuments({ status: 'draft' }),
-        BlogPost_1.BlogPost.countDocuments({ isFeatured: true }),
-        BlogPost_1.BlogPost.aggregate([
+        BlogPost_1.default.countDocuments(),
+        BlogPost_1.default.countDocuments({ status: 'published' }),
+        BlogPost_1.default.countDocuments({ status: 'draft' }),
+        BlogPost_1.default.countDocuments({ isFeatured: true }),
+        BlogPost_1.default.aggregate([
             { $group: { _id: null, total: { $sum: '$viewCount' } } }
         ]).then(result => result[0]?.total || 0),
-        BlogPost_1.BlogPost.aggregate([
+        BlogPost_1.default.aggregate([
             { $group: { _id: null, total: { $sum: '$commentCount' } } }
         ]).then(result => result[0]?.total || 0),
-        BlogPost_1.BlogPost.aggregate([
+        BlogPost_1.default.aggregate([
             { $group: { _id: null, total: { $sum: '$likeCount' } } }
         ]).then(result => result[0]?.total || 0),
-        BlogPost_1.BlogPost.find({ status: 'published' })
+        BlogPost_1.default.find({ status: 'published' })
             .sort({ publishedAt: -1 })
             .limit(5)
             .populate('author', 'name')
@@ -150,7 +153,7 @@ exports.getBlogAnalytics = (0, asyncHandler_1.asyncHandler)(async (req, res) => 
  */
 exports.getPostAnalytics = (0, asyncHandler_1.asyncHandler)(async (req, res) => {
     const { id } = req.params;
-    const post = await BlogPost_1.BlogPost.findById(id)
+    const post = await BlogPost_1.default.findById(id)
         .populate('author', 'name email')
         .populate('categories', 'name')
         .lean();
@@ -209,7 +212,7 @@ exports.bulkUpdatePosts = (0, asyncHandler_1.asyncHandler)(async (req, res) => {
             error: 'هیچ فیلد قابل به‌روزرسانی ارسال نشده'
         });
     }
-    const result = await BlogPost_1.BlogPost.updateMany({ _id: { $in: postIds } }, { $set: updateData });
+    const result = await BlogPost_1.default.updateMany({ _id: { $in: postIds } }, { $set: updateData });
     logger_1.logger.info('Bulk update posts', {
         userId: req.user.id,
         postIds,
@@ -237,7 +240,7 @@ exports.bulkDeletePosts = (0, asyncHandler_1.asyncHandler)(async (req, res) => {
             error: 'شناسه پست‌ها الزامی است'
         });
     }
-    const result = await BlogPost_1.BlogPost.deleteMany({
+    const result = await BlogPost_1.default.deleteMany({
         _id: { $in: postIds }
     });
     logger_1.logger.info('Bulk delete posts', {
@@ -302,7 +305,7 @@ exports.sendNewPostNotification = (0, asyncHandler_1.asyncHandler)(async (req, r
             error: 'شناسه پست الزامی است'
         });
     }
-    const post = await BlogPost_1.BlogPost.findById(postId).populate('author', 'name');
+    const post = await BlogPost_1.default.findById(postId).populate('author', 'name');
     if (!post) {
         return res.status(404).json({
             success: false,

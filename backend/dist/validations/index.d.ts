@@ -18,12 +18,12 @@ declare const schemas: {
         email: z.ZodString;
         password: z.ZodString;
     }, "strip", z.ZodTypeAny, {
-        name?: string;
         email?: string;
+        name?: string;
         password?: string;
     }, {
-        name?: string;
         email?: string;
+        name?: string;
         password?: string;
     }>;
     readonly login: z.ZodObject<{
@@ -66,11 +66,11 @@ declare const schemas: {
         questionId: z.ZodString;
         selectedOption: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
-        selectedOption?: number;
         questionId?: string;
+        selectedOption?: number;
     }, {
-        selectedOption?: number;
         questionId?: string;
+        selectedOption?: number;
     }>;
     readonly createTicket: z.ZodObject<{
         subject: z.ZodString;
@@ -115,23 +115,23 @@ declare const schemas: {
         metaDescription: z.ZodOptional<z.ZodString>;
         status: z.ZodOptional<z.ZodEnum<["draft", "published", "archived"]>>;
     }, "strip", z.ZodTypeAny, {
+        category?: string;
         tags?: string[];
         title?: string;
-        content?: string;
-        category?: string;
         status?: "draft" | "published" | "archived";
+        content?: string;
+        coverImage?: string;
         metaTitle?: string;
         metaDescription?: string;
-        coverImage?: string;
     }, {
+        category?: string;
         tags?: string[];
         title?: string;
-        content?: string;
-        category?: string;
         status?: "draft" | "published" | "archived";
+        content?: string;
+        coverImage?: string;
         metaTitle?: string;
         metaDescription?: string;
-        coverImage?: string;
     }>;
 };
 /**

@@ -233,6 +233,22 @@ UserSchema.virtual("exams", {
     foreignField: "user",
     justOne: false,
 });
+// ایندکس‌های ضروری برای بهینه‌سازی عملکرد کوئری
+UserSchema.index({ email: 1 }, { unique: true }); // ایندکس منحصر به فرد روی ایمیل
+UserSchema.index({ nationalCode: 1 }, { sparse: true }); // ایندکس روی کد ملی (sparse برای مقادیر اختیاری)
+UserSchema.index({ phoneNumber: 1 }, { sparse: true }); // ایندکس روی شماره تلفن
+UserSchema.index({ role: 1 }); // ایندکس روی نقش کاربر
+UserSchema.index({ institutionId: 1 }, { sparse: true }); // ایندکس روی موسسه
+UserSchema.index({ institutionalDiscountGroupId: 1 }, { sparse: true }); // ایندکس روی گروه تخفیف
+UserSchema.index({ educationalGroup: 1 }, { sparse: true }); // ایندکس روی گروه آموزشی
+UserSchema.index({ createdAt: -1 }); // ایندکس نزولی روی تاریخ ایجاد (برای فیلتر کردن کاربران جدید)
+UserSchema.index({ enrollmentCode: 1 }, { sparse: true }); // ایندکس روی کد ثبت‌نام
+// ایندکس ترکیبی برای جستجوی بهینه کاربران سازمانی
+UserSchema.index({
+    institutionId: 1,
+    institutionalDiscountGroupId: 1,
+    role: 1
+}, { sparse: true });
 // Hash password before saving
 UserSchema.pre("save", async function (next) {
     // Only hash the password if it's modified (or new)

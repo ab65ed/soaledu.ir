@@ -1,62 +1,97 @@
-# API Documentation - Exam-Edu Backend
+# مستندات API - بک‌اند Exam-Edu
 
-## Overview
+**نسخه:** v2.0.0  
+**آخرین بروزرسانی:** 16 دی 1403  
+**وضعیت:** ✅ آماده تولید  
 
-This document provides comprehensive documentation for all API endpoints in the Exam-Edu backend system. The API follows RESTful conventions and uses JSON for data exchange.
+---
 
-## Base URL
+## 📋 نمای کلی
 
-```
-Development: http://localhost:5000/api
-Production: https://your-domain.com/api
-```
+این مستند شامل مستندات جامع تمام endpoint های سیستم بک‌اند Exam-Edu می‌باشد. API از معماری RESTful پیروی کرده و از JSON برای تبادل داده استفاده می‌کند.
 
-## Authentication
-
-Most endpoints require authentication using JWT tokens. Include the token in the Authorization header:
+## 🌐 آدرس پایه
 
 ```
+Development: http://localhost:3000/api/v1
+Staging: https://api-staging.soaledu.ir/api/v1
+Production: https://api.soaledu.ir/api/v1
+```
+
+## 🔐 احراز هویت
+
+اکثر endpoint ها نیاز به احراز هویت با JWT token دارند. توکن را در header Authorization قرار دهید:
+
+```http
 Authorization: Bearer <your-jwt-token>
 ```
 
-## Response Format
+## 🛡️ امنیت CSRF
 
-All API responses follow this standard format:
+برای endpoint های POST، PUT، DELETE نیاز به CSRF token است:
+
+```http
+X-CSRF-Token: <csrf-token>
+```
+
+**دریافت CSRF Token:**
+```http
+GET /api/v1/csrf-token
+```
+
+## 📊 فرمت پاسخ
+
+تمام پاسخ‌های API از این فرمت استاندارد پیروی می‌کنند:
 
 ```json
 {
   "success": true|false,
-  "message": "Response message",
-  "data": {}, // Response data (if applicable)
-  "error": {} // Error details (if applicable)
+  "message": "پیام پاسخ",
+  "data": {}, // داده‌های پاسخ (در صورت وجود)
+  "errors": [], // جزئیات خطا (در صورت وجود)
+  "meta": {} // اطلاعات اضافی مثل pagination
 }
 ```
 
-## Error Codes
+## 🚨 کدهای خطا
 
-- `200` - Success
-- `201` - Created
-- `400` - Bad Request
-- `401` - Unauthorized
-- `403` - Forbidden
-- `404` - Not Found
-- `422` - Validation Error
-- `500` - Internal Server Error
+| کد | توضیح | مثال |
+|-----|--------|-------|
+| `200` | موفق | درخواست با موفقیت انجام شد |
+| `201` | ایجاد شده | رکورد جدید ایجاد شد |
+| `400` | درخواست نامعتبر | داده‌های ورودی اشتباه |
+| `401` | غیرمجاز | نیاز به احراز هویت |
+| `403` | ممنوع | عدم دسترسی |
+| `404` | یافت نشد | منبع موجود نیست |
+| `422` | خطای اعتبارسنجی | داده‌های ورودی نامعتبر |
+| `429` | تعداد درخواست زیاد | Rate limit exceeded |
+| `500` | خطای سرور | خطای داخلی سرور |
 
 ---
 
-## Authentication Endpoints
+## 🔑 Authentication Endpoints
 
-### POST /auth/register
-Register a new user account.
+### POST /api/v1/auth/register
+ثبت نام کاربر جدید
+
+**Headers:**
+```http
+Content-Type: application/json
+X-CSRF-Token: <csrf-token>
+```
 
 **Request Body:**
 ```json
 {
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "password123",
-  "role": "student" // optional, defaults to "student"
+  "firstName": "احمد",
+  "lastName": "محمدی",
+  "email": "ahmad@example.com",
+  "password": "SecurePass123!",
+  "nationalCode": "1234567890", // اختیاری
+  "phoneNumber": "09123456789", // اختیاری
+  "role": "student", // اختیاری، پیش‌فرض: student
+  "gradeLevel": 12, // اختیاری
+  "institutionId": "institution_id" // اختیاری
 }
 ```
 
@@ -68,23 +103,34 @@ Register a new user account.
   "data": {
     "user": {
       "id": "user_id",
-      "name": "John Doe",
-      "email": "john@example.com",
-      "role": "student"
+      "firstName": "احمد",
+      "lastName": "محمدی",
+      "email": "ahmad@example.com",
+      "role": "student",
+      "profileCompleted": false
     },
-    "token": "jwt_token"
+    "tokens": {
+      "accessToken": "jwt_access_token",
+      "refreshToken": "jwt_refresh_token"
+    }
   }
 }
 ```
 
-### POST /auth/login
-Authenticate user and get access token.
+### POST /api/v1/auth/login
+ورود کاربر و دریافت توکن دسترسی
+
+**Headers:**
+```http
+Content-Type: application/json
+X-CSRF-Token: <csrf-token>
+```
 
 **Request Body:**
 ```json
 {
-  "email": "john@example.com",
-  "password": "password123"
+  "email": "ahmad@example.com",
+  "password": "SecurePass123!"
 }
 ```
 
@@ -96,675 +142,736 @@ Authenticate user and get access token.
   "data": {
     "user": {
       "id": "user_id",
-      "name": "John Doe",
-      "email": "john@example.com",
-      "role": "student"
+      "firstName": "احمد",
+      "lastName": "محمدی",
+      "email": "ahmad@example.com",
+      "role": "student",
+      "lastLoginAt": "2024-01-01T12:00:00.000Z"
     },
-    "token": "jwt_token"
-  }
-}
-```
-
-### POST /auth/logout
-Logout user and invalidate token.
-
-**Headers:** `Authorization: Bearer <token>`
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "خروج موفقیت‌آمیز"
-}
-```
-
-### POST /auth/forgot-password
-Request password reset email.
-
-**Request Body:**
-```json
-{
-  "email": "john@example.com"
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "ایمیل بازیابی ارسال شد"
-}
-```
-
-### POST /auth/reset-password
-Reset password using token.
-
-**Request Body:**
-```json
-{
-  "token": "reset_token",
-  "password": "new_password123"
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "رمز عبور با موفقیت تغییر یافت"
-}
-```
-
----
-
-## User Management Endpoints
-
-### GET /users/profile
-Get current user profile.
-
-**Headers:** `Authorization: Bearer <token>`
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "id": "user_id",
-    "name": "John Doe",
-    "email": "john@example.com",
-    "role": "student",
-    "avatar": "avatar_url",
-    "createdAt": "2024-01-01T00:00:00.000Z"
-  }
-}
-```
-
-### PUT /users/profile
-Update user profile.
-
-**Headers:** `Authorization: Bearer <token>`
-
-**Request Body:**
-```json
-{
-  "name": "John Smith",
-  "email": "johnsmith@example.com",
-  "avatar": "new_avatar_url"
-}
-```
-
-### GET /users (Admin only)
-Get all users with pagination.
-
-**Headers:** `Authorization: Bearer <admin_token>`
-
-**Query Parameters:**
-- `page` (number): Page number (default: 1)
-- `limit` (number): Items per page (default: 10)
-- `role` (string): Filter by role
-- `search` (string): Search by name or email
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "users": [...],
-    "pagination": {
-      "page": 1,
-      "limit": 10,
-      "total": 100,
-      "pages": 10
+    "tokens": {
+      "accessToken": "jwt_access_token",
+      "refreshToken": "jwt_refresh_token"
     }
   }
 }
 ```
 
----
+### POST /api/v1/auth/refresh-token
+تجدید توکن دسترسی
 
-## Exam Management Endpoints
-
-### GET /exams
-Get all available exams.
-
-**Headers:** `Authorization: Bearer <token>`
-
-**Query Parameters:**
-- `category` (string): Filter by category
-- `difficulty` (string): Filter by difficulty
-- `page` (number): Page number
-- `limit` (number): Items per page
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "exams": [
-      {
-        "id": "exam_id",
-        "title": "Math Test",
-        "description": "Basic math exam",
-        "category": "mathematics",
-        "difficulty": "medium",
-        "duration": 3600,
-        "totalQuestions": 20,
-        "passingScore": 70,
-        "isActive": true
-      }
-    ],
-    "pagination": {...}
-  }
-}
+**Headers:**
+```http
+Content-Type: application/json
+X-CSRF-Token: <csrf-token>
 ```
-
-### GET /exams/:id
-Get specific exam details.
-
-**Headers:** `Authorization: Bearer <token>`
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "id": "exam_id",
-    "title": "Math Test",
-    "description": "Basic math exam",
-    "instructions": "Read carefully...",
-    "category": "mathematics",
-    "difficulty": "medium",
-    "duration": 3600,
-    "totalQuestions": 20,
-    "passingScore": 70,
-    "questions": [...] // Only included when starting exam
-  }
-}
-```
-
-### POST /exams (Admin only)
-Create new exam.
-
-**Headers:** `Authorization: Bearer <admin_token>`
 
 **Request Body:**
 ```json
 {
-  "title": "New Exam",
-  "description": "Exam description",
-  "category": "science",
-  "difficulty": "hard",
-  "duration": 7200,
-  "passingScore": 80,
-  "questions": ["question_id1", "question_id2"]
+  "refreshToken": "jwt_refresh_token"
 }
 ```
 
-### PUT /exams/:id (Admin only)
-Update exam.
+### GET /api/v1/auth/me
+دریافت اطلاعات کاربر فعلی
 
-**Headers:** `Authorization: Bearer <admin_token>`
+**Headers:**
+```http
+Authorization: Bearer <access_token>
+```
 
-**Request Body:** Same as POST /exams
+### PUT /api/v1/auth/complete-profile
+تکمیل پروفایل کاربر
 
-### DELETE /exams/:id (Admin only)
-Delete exam.
-
-**Headers:** `Authorization: Bearer <admin_token>`
-
----
-
-## Question Bank Endpoints
-
-### GET /questions (Admin only)
-Get all questions with filtering.
-
-**Headers:** `Authorization: Bearer <admin_token>`
-
-**Query Parameters:**
-- `category` (string): Filter by category
-- `difficulty` (string): Filter by difficulty
-- `type` (string): Filter by question type
-- `page` (number): Page number
-- `limit` (number): Items per page
-
-### POST /questions (Admin only)
-Create new question.
-
-**Headers:** `Authorization: Bearer <admin_token>`
+**Headers:**
+```http
+Authorization: Bearer <access_token>
+Content-Type: application/json
+X-CSRF-Token: <csrf-token>
+```
 
 **Request Body:**
 ```json
 {
-  "text": "What is 2 + 2?",
+  "nationalCode": "1234567890",
+  "phoneNumber": "09123456789",
+  "gradeLevel": 12,
+  "bio": "توضیحات کاربر"
+}
+```
+
+### POST /api/v1/auth/logout
+خروج کاربر و ابطال توکن
+
+**Headers:**
+```http
+Authorization: Bearer <access_token>
+X-CSRF-Token: <csrf-token>
+```
+
+---
+
+## 👤 User Management Endpoints
+
+### GET /api/v1/users
+دریافت لیست کاربران (فقط ادمین)
+
+**Headers:**
+```http
+Authorization: Bearer <admin_token>
+```
+
+**Query Parameters:**
+```
+?page=1&limit=10&sort=createdAt&order=desc&role=student&search=احمد
+```
+
+### GET /api/v1/users/:id
+دریافت اطلاعات کاربر خاص
+
+**Headers:**
+```http
+Authorization: Bearer <token>
+```
+
+### PUT /api/v1/users/:id
+بروزرسانی اطلاعات کاربر
+
+**Headers:**
+```http
+Authorization: Bearer <token>
+Content-Type: application/json
+X-CSRF-Token: <csrf-token>
+```
+
+### DELETE /api/v1/users/:id
+حذف کاربر (فقط ادمین)
+
+**Headers:**
+```http
+Authorization: Bearer <admin_token>
+X-CSRF-Token: <csrf-token>
+```
+
+---
+
+## 📝 Question Management Endpoints
+
+### POST /api/v1/questions
+ایجاد سوال جدید
+
+**Headers:**
+```http
+Authorization: Bearer <instructor_token>
+Content-Type: application/json
+X-CSRF-Token: <csrf-token>
+```
+
+**Request Body:**
+```json
+{
+  "title": "عنوان سوال",
+  "content": "محتوای سوال",
   "type": "multiple_choice",
-  "category": "mathematics",
-  "difficulty": "easy",
+  "difficulty": "medium",
+  "category": "category_id",
+  "lesson": "lesson_name",
+  "tags": ["ریاضی", "جبر"],
   "options": [
-    { "text": "3", "isCorrect": false },
-    { "text": "4", "isCorrect": true },
-    { "text": "5", "isCorrect": false }
+    {
+      "text": "گزینه اول",
+      "isCorrect": false
+    },
+    {
+      "text": "گزینه دوم",
+      "isCorrect": true
+    }
   ],
-  "explanation": "Basic addition",
-  "points": 1
+  "explanation": "توضیح پاسخ",
+  "points": 5
 }
 ```
+
+### GET /api/v1/questions
+دریافت لیست سوالات
+
+**Query Parameters:**
+```
+?page=1&limit=10&category=category_id&difficulty=medium&search=ریاضی
+```
+
+### GET /api/v1/questions/:id
+دریافت جزئیات سوال
+
+### PUT /api/v1/questions/:id
+بروزرسانی سوال
+
+### DELETE /api/v1/questions/:id
+حذف سوال
+
+### GET /api/v1/questions/search
+جستجو در سوالات
+
+**Query Parameters:**
+```
+?q=کلمه کلیدی&category=category_id&difficulty=easy
+```
+
+### POST /api/v1/questions/bulk
+ایجاد چندین سوال همزمان
+
+### GET /api/v1/questions/stats
+آمار سوالات
+
+### POST /api/v1/questions/validate
+اعتبارسنجی داده‌های سوال
 
 ---
 
-## Results and Analytics Endpoints
+## 📋 Exam Management Endpoints
 
-### GET /results/user/:userId
-Get user's exam results.
+### POST /api/v1/exams
+ایجاد آزمون جدید
 
-**Headers:** `Authorization: Bearer <token>`
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": "result_id",
-      "exam": {
-        "id": "exam_id",
-        "title": "Math Test"
-      },
-      "score": 85,
-      "percentage": 85,
-      "isPassed": true,
-      "completedAt": "2024-01-01T00:00:00.000Z",
-      "duration": 1800
-    }
-  ]
-}
+**Headers:**
+```http
+Authorization: Bearer <instructor_token>
+Content-Type: application/json
+X-CSRF-Token: <csrf-token>
 ```
-
-### GET /results/exam/:examId/user/:userId
-Get specific exam result for user.
-
-**Headers:** `Authorization: Bearer <token>`
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "id": "result_id",
-    "score": 85,
-    "percentage": 85,
-    "correctAnswers": 17,
-    "incorrectAnswers": 3,
-    "unansweredQuestions": 0,
-    "answers": [
-      {
-        "questionId": "q1",
-        "selectedAnswer": "option_b",
-        "isCorrect": true,
-        "timeSpent": 45
-      }
-    ],
-    "analytics": {
-      "averageTimePerQuestion": 90,
-      "categoryPerformance": [...]
-    }
-  }
-}
-```
-
-### GET /results/analytics/exam/:examId (Admin only)
-Get exam analytics.
-
-**Headers:** `Authorization: Bearer <admin_token>`
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "totalAttempts": 150,
-    "averageScore": 78.5,
-    "passRate": 0.82,
-    "averageDuration": 2100,
-    "scoreDistribution": [...],
-    "questionAnalytics": [...],
-    "recentActivity": [...]
-  }
-}
-```
-
-### GET /results/analytics/overall (Admin only)
-Get overall system analytics.
-
-**Headers:** `Authorization: Bearer <admin_token>`
-
-**Query Parameters:**
-- `dateRange` (string): Date range (e.g., "30d", "7d")
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "totalExams": 25,
-    "totalAttempts": 1250,
-    "totalUsers": 300,
-    "averageScore": 76.8,
-    "popularExams": [...],
-    "recentActivity": [...],
-    "topPerformers": [...]
-  }
-}
-```
-
-### POST /results/export (Admin only)
-Export exam results.
-
-**Headers:** `Authorization: Bearer <admin_token>`
 
 **Request Body:**
 ```json
 {
-  "examId": "exam_id",
-  "format": "csv", // or "json"
-  "includeAnswers": true
+  "title": "آزمون ریاضی پایه دوازدهم",
+  "description": "توضیحات آزمون",
+  "duration": 90,
+  "difficulty": "medium",
+  "category": "category_id",
+  "lesson": "جبر",
+  "isPublic": true,
+  "maxAttempts": 3,
+  "passingScore": 60,
+  "scheduledAt": "2024-01-15T10:00:00.000Z",
+  "questions": ["question_id_1", "question_id_2"],
+  "institutionId": "institution_id"
 }
 ```
 
-**Response:** CSV or JSON file download
+### GET /api/v1/exams
+دریافت لیست آزمون‌ها
+
+**Query Parameters:**
+```
+?page=1&limit=10&status=active&category=category_id&isPublic=true
+```
+
+### GET /api/v1/exams/:id
+دریافت جزئیات آزمون
+
+### PUT /api/v1/exams/:id
+بروزرسانی آزمون
+
+### DELETE /api/v1/exams/:id
+حذف آزمون
+
+### POST /api/v1/exams/:id/publish
+انتشار آزمون
+
+### POST /api/v1/exams/:id/start
+شروع جلسه آزمون
+
+### POST /api/v1/exams/:id/submit
+ارسال پاسخ‌های آزمون
+
+### GET /api/v1/exams/:id/results
+دریافت نتایج آزمون
+
+### GET /api/v1/exams/stats
+آمار آزمون‌ها
 
 ---
 
-## Payment System Endpoints
+## 📚 Category Management Endpoints
 
-### GET /payments/wallet
-Get user's wallet information.
+### POST /api/v1/categories
+ایجاد دسته‌بندی جدید
 
-**Headers:** `Authorization: Bearer <token>`
+**Headers:**
+```http
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+X-CSRF-Token: <csrf-token>
+```
 
-**Response:**
+**Request Body:**
 ```json
 {
-  "success": true,
-  "data": {
-    "balance": 50000,
-    "currency": "IRR",
-    "transactions": [...]
-  }
+  "name": "ریاضی",
+  "slug": "math",
+  "description": "دروس ریاضی",
+  "parentId": "parent_category_id",
+  "order": 1,
+  "isActive": true
 }
 ```
 
-### POST /payments/charge
-Charge wallet.
+### GET /api/v1/categories
+دریافت لیست دسته‌بندی‌ها
 
-**Headers:** `Authorization: Bearer <token>`
+### GET /api/v1/categories/:id
+دریافت جزئیات دسته‌بندی
+
+### PUT /api/v1/categories/:id
+بروزرسانی دسته‌بندی
+
+### DELETE /api/v1/categories/:id
+حذف دسته‌بندی
+
+---
+
+## 🏢 Institution Management Endpoints
+
+### POST /api/v1/institutions
+ایجاد سازمان جدید
+
+**Headers:**
+```http
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+X-CSRF-Token: <csrf-token>
+```
+
+**Request Body:**
+```json
+{
+  "name": "دانشگاه تهران",
+  "domain": "ut.ac.ir",
+  "type": "university",
+  "city": "تهران",
+  "province": "تهران",
+  "description": "توضیحات سازمان",
+  "adminUserId": "admin_user_id"
+}
+```
+
+### GET /api/v1/institutions
+دریافت لیست سازمان‌ها
+
+### GET /api/v1/institutions/:id
+دریافت جزئیات سازمان
+
+### PUT /api/v1/institutions/:id
+بروزرسانی سازمان
+
+### DELETE /api/v1/institutions/:id
+حذف سازمان
+
+---
+
+## 💰 Payment & Transaction Endpoints
+
+### POST /api/v1/payments
+ایجاد پرداخت جدید
+
+**Headers:**
+```http
+Authorization: Bearer <token>
+Content-Type: application/json
+X-CSRF-Token: <csrf-token>
+```
+
+**Request Body:**
+```json
+{
+  "amount": 50000,
+  "gateway": "zarinpal",
+  "description": "خرید آزمون",
+  "callbackUrl": "https://example.com/callback"
+}
+```
+
+### GET /api/v1/payments
+دریافت لیست پرداخت‌ها
+
+### GET /api/v1/payments/:id
+دریافت جزئیات پرداخت
+
+### POST /api/v1/payments/:id/verify
+تایید پرداخت
+
+### GET /api/v1/transactions
+دریافت لیست تراکنش‌ها
+
+### GET /api/v1/transactions/:id
+دریافت جزئیات تراکنش
+
+---
+
+## 🎫 Discount Code Endpoints
+
+### POST /api/v1/discount-codes
+ایجاد کد تخفیف جدید
+
+**Headers:**
+```http
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+X-CSRF-Token: <csrf-token>
+```
+
+**Request Body:**
+```json
+{
+  "code": "SUMMER2024",
+  "type": "percentage",
+  "value": 20,
+  "maxUsage": 100,
+  "validFrom": "2024-06-01T00:00:00.000Z",
+  "validTo": "2024-08-31T23:59:59.000Z",
+  "institutionId": "institution_id"
+}
+```
+
+### GET /api/v1/discount-codes
+دریافت لیست کدهای تخفیف
+
+### POST /api/v1/discount-codes/validate
+اعتبارسنجی کد تخفیف
+
+### PUT /api/v1/discount-codes/:id
+بروزرسانی کد تخفیف
+
+### DELETE /api/v1/discount-codes/:id
+حذف کد تخفیف
+
+---
+
+## 💳 Wallet Management Endpoints
+
+### GET /api/v1/wallet
+دریافت اطلاعات کیف پول
+
+**Headers:**
+```http
+Authorization: Bearer <token>
+```
+
+### POST /api/v1/wallet/charge
+شارژ کیف پول
+
+**Headers:**
+```http
+Authorization: Bearer <token>
+Content-Type: application/json
+X-CSRF-Token: <csrf-token>
+```
 
 **Request Body:**
 ```json
 {
   "amount": 100000,
-  "description": "Wallet charge"
+  "gateway": "zarinpal"
 }
 ```
 
-### GET /payments/transactions
-Get payment transactions.
-
-**Headers:** `Authorization: Bearer <token>`
-
-**Query Parameters:**
-- `page` (number): Page number
-- `limit` (number): Items per page
-- `status` (string): Filter by status
+### GET /api/v1/wallet/transactions
+دریافت تراکنش‌های کیف پول
 
 ---
 
-## Support Ticket Endpoints
+## 📞 Contact Management Endpoints
 
-### GET /tickets
-Get user's support tickets.
+### POST /api/v1/contact
+ارسال پیام تماس
 
-**Headers:** `Authorization: Bearer <token>`
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": "ticket_id",
-      "subject": "Login Issue",
-      "description": "Cannot login to account",
-      "status": "open",
-      "priority": "medium",
-      "createdAt": "2024-01-01T00:00:00.000Z",
-      "responses": [...]
-    }
-  ]
-}
+**Headers:**
+```http
+Content-Type: application/json
+X-CSRF-Token: <csrf-token>
 ```
-
-### POST /tickets
-Create new support ticket.
-
-**Headers:** `Authorization: Bearer <token>`
 
 **Request Body:**
 ```json
 {
-  "subject": "Technical Issue",
-  "description": "Detailed description of the issue",
-  "priority": "high",
-  "category": "technical"
+  "name": "احمد محمدی",
+  "email": "ahmad@example.com",
+  "phone": "09123456789",
+  "subject": "موضوع پیام",
+  "message": "متن پیام",
+  "type": "support",
+  "priority": "medium"
 }
 ```
+
+### GET /api/v1/contact
+دریافت لیست پیام‌ها (فقط ادمین)
+
+### GET /api/v1/contact/:id
+دریافت جزئیات پیام
+
+### PUT /api/v1/contact/:id
+بروزرسانی وضعیت پیام
 
 ---
 
-## Blog Management Endpoints
+## 📊 Analytics & Statistics Endpoints
 
-### GET /blog/posts
-Get published blog posts.
+### GET /api/v1/analytics/dashboard
+داشبورد آمار کلی
 
-**Query Parameters:**
-- `category` (string): Filter by category
-- `search` (string): Search in title and content
-- `page` (number): Page number
-- `limit` (number): Items per page
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "posts": [
-      {
-        "id": "post_id",
-        "title": "Blog Post Title",
-        "slug": "blog-post-title",
-        "excerpt": "Post excerpt...",
-        "content": "Full content...",
-        "author": {
-          "name": "Author Name"
-        },
-        "category": {
-          "name": "Category Name"
-        },
-        "publishedAt": "2024-01-01T00:00:00.000Z",
-        "readTime": 5
-      }
-    ],
-    "pagination": {...}
-  }
-}
+**Headers:**
+```http
+Authorization: Bearer <token>
 ```
 
-### GET /blog/posts/:slug
-Get specific blog post by slug.
+### GET /api/v1/analytics/exams
+آمار آزمون‌ها
 
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "id": "post_id",
-    "title": "Blog Post Title",
-    "content": "Full content...",
-    "author": {...},
-    "category": {...},
-    "tags": [...],
-    "publishedAt": "2024-01-01T00:00:00.000Z",
-    "comments": [...]
-  }
-}
-```
+### GET /api/v1/analytics/questions
+آمار سوالات
 
-### POST /blog/posts (Admin only)
-Create new blog post.
+### GET /api/v1/analytics/users
+آمار کاربران
 
-**Headers:** `Authorization: Bearer <admin_token>`
-
-**Request Body:**
-```json
-{
-  "title": "New Blog Post",
-  "content": "Post content...",
-  "excerpt": "Post excerpt...",
-  "categoryId": "category_id",
-  "tags": ["tag1", "tag2"],
-  "status": "published",
-  "featuredImage": "image_url"
-}
-```
+### GET /api/v1/analytics/performance
+آمار عملکرد سیستم
 
 ---
 
-## File Upload Endpoints
+## 📁 File Upload Endpoints
 
-### POST /upload/image
-Upload image file.
+### POST /api/v1/upload/image
+آپلود تصویر
 
-**Headers:** 
-- `Authorization: Bearer <token>`
-- `Content-Type: multipart/form-data`
+**Headers:**
+```http
+Authorization: Bearer <token>
+Content-Type: multipart/form-data
+X-CSRF-Token: <csrf-token>
+```
 
-**Request Body:**
-- `image` (file): Image file (PNG, JPG, JPEG, max 5MB)
-- `type` (string): Upload type ("avatar", "blog", "lesson")
+**Form Data:**
+```
+file: [image file] (max 5MB, PNG/JPG only)
+```
 
 **Response:**
 ```json
 {
   "success": true,
+  "message": "فایل با موفقیت آپلود شد",
   "data": {
-    "url": "https://cdn.example.com/image.jpg",
+    "url": "https://example.com/uploads/image.jpg",
     "filename": "image.jpg",
-    "size": 1024000,
-    "type": "image/jpeg"
+    "size": 1024000
   }
 }
 ```
 
 ---
 
-## Rate Limiting
+## 🔍 Search Endpoints
 
-API endpoints are rate-limited to prevent abuse:
+### GET /api/v1/search
+جستجوی عمومی
 
-- **Authentication endpoints**: 5 requests per minute
-- **General endpoints**: 100 requests per minute
-- **Upload endpoints**: 10 requests per minute
+**Query Parameters:**
+```
+?q=کلمه کلیدی&type=questions&category=category_id&page=1&limit=10
+```
 
-## Pagination
+### GET /api/v1/search/suggestions
+پیشنهادات جستجو
 
-Paginated endpoints support these query parameters:
+**Query Parameters:**
+```
+?q=کلمه کلیدی&limit=5
+```
 
-- `page` (number): Page number (default: 1)
-- `limit` (number): Items per page (default: 10, max: 100)
+---
 
-Pagination response format:
+## 🏥 Health Check Endpoints
+
+### GET /api/health
+بررسی سلامت سیستم
+
+**Response:**
 ```json
 {
-  "pagination": {
-    "page": 1,
-    "limit": 10,
-    "total": 100,
-    "pages": 10,
-    "hasNext": true,
-    "hasPrev": false
+  "success": true,
+  "message": "سیستم سالم است",
+  "data": {
+    "status": "healthy",
+    "timestamp": "2024-01-01T12:00:00.000Z",
+    "uptime": 3600,
+    "version": "2.0.0"
   }
 }
 ```
 
-## Filtering and Searching
+### GET /api/health/detailed
+بررسی تفصیلی سلامت سیستم
 
-Many endpoints support filtering and searching:
-
-- Use query parameters for filtering (e.g., `?category=math&difficulty=easy`)
-- Use `search` parameter for text search
-- Use `dateFrom` and `dateTo` for date range filtering
-
-## WebSocket Events (Future Implementation)
-
-Real-time events will be implemented using WebSocket:
-
-- `exam:started` - User started an exam
-- `exam:completed` - User completed an exam
-- `ticket:updated` - Support ticket status changed
-- `notification:new` - New notification for user
-
----
-
-## Error Handling
-
-Common error responses:
-
-### Validation Error (422)
+**Response:**
 ```json
 {
-  "success": false,
-  "message": "خطای اعتبارسنجی",
-  "errors": [
-    {
-      "field": "email",
-      "message": "ایمیل معتبر نیست"
+  "success": true,
+  "data": {
+    "status": "healthy",
+    "services": {
+      "database": "connected",
+      "redis": "connected",
+      "storage": "available"
+    },
+    "performance": {
+      "responseTime": "50ms",
+      "memoryUsage": "45%",
+      "cpuUsage": "30%"
     }
-  ]
-}
-```
-
-### Authentication Error (401)
-```json
-{
-  "success": false,
-  "message": "دسترسی غیرمجاز"
-}
-```
-
-### Not Found Error (404)
-```json
-{
-  "success": false,
-  "message": "منبع یافت نشد"
-}
-```
-
-### Server Error (500)
-```json
-{
-  "success": false,
-  "message": "خطای داخلی سرور"
+  }
 }
 ```
 
 ---
 
-## Development Notes
+## 🔧 Utility Endpoints
 
-- All dates are in ISO 8601 format
-- All text responses support Persian (RTL) content
-- File uploads are processed asynchronously
-- Database queries are optimized with proper indexing
-- All endpoints include proper error handling and logging
+### GET /api/v1/csrf-token
+دریافت CSRF token
 
-For more information or support, contact the development team.
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "csrfToken": "csrf_token_value"
+  }
+}
+```
+
+### GET /api/v1/config
+دریافت تنظیمات عمومی
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "appName": "Exam-Edu",
+    "version": "2.0.0",
+    "supportedLanguages": ["fa", "en"],
+    "maxFileSize": 5242880,
+    "allowedFileTypes": ["image/jpeg", "image/png"]
+  }
+}
+```
+
+---
+
+## 📝 Validation Rules
+
+### کد ملی ایرانی
+- باید ۱۰ رقم باشد
+- الگوریتم اعتبارسنجی کد ملی ایرانی
+
+### شماره موبایل ایرانی
+- فرمت: `09xxxxxxxxx`
+- پشتیبانی از `+98` و `98`
+
+### رمز عبور
+- حداقل ۸ کاراکتر
+- شامل حروف کوچک، بزرگ، عدد و کاراکتر خاص
+
+### نام‌های فارسی
+- فقط حروف فارسی و فاصله
+- حداقل ۲ کاراکتر، حداکثر ۵۰ کاراکتر
+
+---
+
+## 🚦 Rate Limiting
+
+| Endpoint Type | Limit | Window |
+|---------------|-------|--------|
+| Authentication | 5 requests | 15 minutes |
+| General API | 100 requests | 15 minutes |
+| File Upload | 10 requests | 15 minutes |
+| Search | 50 requests | 15 minutes |
+
+---
+
+## 📚 SDK و کتابخانه‌ها
+
+### JavaScript/TypeScript
+```javascript
+import { ExamEduAPI } from '@exam-edu/api-client';
+
+const api = new ExamEduAPI({
+  baseURL: 'https://api.soaledu.ir/api/v1',
+  apiKey: 'your-api-key'
+});
+
+// استفاده
+const user = await api.auth.login({
+  email: 'user@example.com',
+  password: 'password'
+});
+```
+
+### Python
+```python
+from exam_edu_api import ExamEduClient
+
+client = ExamEduClient(
+    base_url='https://api.soaledu.ir/api/v1',
+    api_key='your-api-key'
+)
+
+# استفاده
+user = client.auth.login(
+    email='user@example.com',
+    password='password'
+)
+```
+
+---
+
+## 🐛 خطایابی
+
+### لاگ‌های مفید
+```bash
+# مشاهده لاگ‌های API
+tail -f logs/api.log
+
+# مشاهده لاگ‌های خطا
+tail -f logs/error.log
+
+# مشاهده لاگ‌های امنیتی
+tail -f logs/security.log
+```
+
+### ابزارهای مانیتورینگ
+- **Health Check:** `/api/health`
+- **Metrics:** `/api/metrics`
+- **Status:** `/api/status`
+
+---
+
+## 📞 پشتیبانی
+
+### تماس با تیم توسعه
+- **ایمیل:** dev@soaledu.ir
+- **تلگرام:** @soaledu_support
+- **مستندات:** https://docs.soaledu.ir
+
+### گزارش باگ
+لطفاً باگ‌ها را در GitHub Issues گزارش دهید:
+https://github.com/soaledu/backend/issues
+
+---
+
+**نکته:** این مستندات بر اساس نسخه v2.0.0 تهیه شده است. برای آخرین تغییرات، لطفاً به مخزن GitHub مراجعه کنید.
+
+---
+
+*آخرین بروزرسانی: 16 دی 1403*

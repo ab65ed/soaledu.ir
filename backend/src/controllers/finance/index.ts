@@ -29,4 +29,17 @@ export class FinanceController {
   static createPayment = PaymentController.createPayment;
   static verifyPayment = PaymentController.verifyPayment;
   static getPaymentHistory = PaymentController.getPaymentHistory;
+  
+  // Statistics method - mock implementation
+  static getStatistics = async (req: any, res: any) => {
+    res.json({
+      success: true,
+      data: {
+        totalRevenue: 0,
+        totalTransactions: 0,
+        pendingPayments: 0
+      },
+      message: 'آمار مالی - پیاده‌سازی موقت'
+    });
+  };
 } 

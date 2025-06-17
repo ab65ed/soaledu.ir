@@ -58,12 +58,12 @@ async function updateWalletBalance(userId, amount, type) {
         let wallet = await query.first({ useMasterKey: true });
         if (!wallet) {
             wallet = new finance_1.WalletClass();
-            wallet.userId = userId;
-            wallet.balance = 0;
-            wallet.totalEarnings = 0;
-            wallet.totalWithdrawals = 0;
-            wallet.pendingWithdrawals = 0;
-            wallet.freezeAmount = 0;
+            wallet.set('userId', userId);
+            wallet.set('balance', 0);
+            wallet.set('totalEarnings', 0);
+            wallet.set('totalWithdrawals', 0);
+            wallet.set('pendingWithdrawals', 0);
+            wallet.set('freezeAmount', 0);
         }
         const currentBalance = wallet.get('balance') || 0;
         const newBalance = type === 'ADD' ? currentBalance + amount : currentBalance - amount;
@@ -232,13 +232,13 @@ const requestWithdrawal = async (req, res) => {
         // این قسمت می‌تواند بعداً پیاده‌سازی شود
         // ایجاد درخواست برداشت
         const withdrawal = new finance_1.WithdrawalRequestClass();
-        withdrawal.userId = userId;
-        withdrawal.amount = amount;
-        withdrawal.paymentMethod = paymentMethod;
+        withdrawal.set('userId', userId);
+        withdrawal.set('amount', amount);
+        withdrawal.set('paymentMethod', paymentMethod);
         withdrawal.set('accountDetails', accountDetails);
-        withdrawal.status = finance_1.WithdrawalStatus.PENDING;
+        withdrawal.set('status', finance_1.WithdrawalStatus.PENDING);
         withdrawal.set('requestDate', new Date());
-        withdrawal.trackingNumber = (0, finance_1.generateTrackingNumber)();
+        withdrawal.set('trackingNumber', (0, finance_1.generateTrackingNumber)());
         if (description) {
             withdrawal.set('description', description);
         }

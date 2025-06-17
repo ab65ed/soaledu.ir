@@ -73,13 +73,10 @@ export declare const CreateQuestionSchema: z.ZodObject<{
         isCorrect?: boolean;
         label?: string;
     }[];
-    tags?: string[];
-    source?: string;
-    title?: string;
-    content?: string;
     correctAnswer?: string;
     difficulty?: "easy" | "medium" | "hard";
     explanation?: string;
+    tags?: string[];
     sourcePage?: number;
     metadata?: {
         points?: number;
@@ -87,6 +84,9 @@ export declare const CreateQuestionSchema: z.ZodObject<{
         chapter?: string;
     };
     courseExamId?: string;
+    title?: string;
+    source?: string;
+    content?: string;
 }, {
     type?: "multiple-choice" | "true-false" | "descriptive";
     options?: {
@@ -94,13 +94,10 @@ export declare const CreateQuestionSchema: z.ZodObject<{
         isCorrect?: boolean;
         label?: string;
     }[];
-    tags?: string[];
-    source?: string;
-    title?: string;
-    content?: string;
     correctAnswer?: string;
     difficulty?: "easy" | "medium" | "hard";
     explanation?: string;
+    tags?: string[];
     sourcePage?: number;
     metadata?: {
         points?: number;
@@ -108,6 +105,9 @@ export declare const CreateQuestionSchema: z.ZodObject<{
         chapter?: string;
     };
     courseExamId?: string;
+    title?: string;
+    source?: string;
+    content?: string;
 }>;
 export declare const UpdateQuestionSchema: z.ZodObject<Omit<{
     courseExamId: z.ZodOptional<z.ZodString>;
@@ -153,19 +153,19 @@ export declare const UpdateQuestionSchema: z.ZodObject<Omit<{
         isCorrect?: boolean;
         label?: string;
     }[];
-    tags?: string[];
-    source?: string;
-    title?: string;
-    content?: string;
     correctAnswer?: string;
     difficulty?: "easy" | "medium" | "hard";
     explanation?: string;
+    tags?: string[];
     sourcePage?: number;
     metadata?: {
         points?: number;
         timeLimit?: number;
         chapter?: string;
     };
+    title?: string;
+    source?: string;
+    content?: string;
 }, {
     type?: "multiple-choice" | "true-false" | "descriptive";
     options?: {
@@ -173,19 +173,19 @@ export declare const UpdateQuestionSchema: z.ZodObject<Omit<{
         isCorrect?: boolean;
         label?: string;
     }[];
-    tags?: string[];
-    source?: string;
-    title?: string;
-    content?: string;
     correctAnswer?: string;
     difficulty?: "easy" | "medium" | "hard";
     explanation?: string;
+    tags?: string[];
     sourcePage?: number;
     metadata?: {
         points?: number;
         timeLimit?: number;
         chapter?: string;
     };
+    title?: string;
+    source?: string;
+    content?: string;
 }>;
 export declare const QuestionFiltersSchema: z.ZodObject<{
     courseExamId: z.ZodOptional<z.ZodString>;
@@ -198,25 +198,25 @@ export declare const QuestionFiltersSchema: z.ZodObject<{
     page: z.ZodDefault<z.ZodNumber>;
     limit: z.ZodDefault<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    page?: number;
     limit?: number;
     search?: string;
     type?: "multiple-choice" | "true-false" | "descriptive";
-    isActive?: boolean;
-    tags?: string[];
     difficulty?: "easy" | "medium" | "hard";
+    tags?: string[];
     authorId?: string;
     courseExamId?: string;
+    page?: number;
+    isActive?: boolean;
 }, {
-    page?: number;
     limit?: number;
     search?: string;
     type?: "multiple-choice" | "true-false" | "descriptive";
-    isActive?: boolean;
-    tags?: string[];
     difficulty?: "easy" | "medium" | "hard";
+    tags?: string[];
     authorId?: string;
     courseExamId?: string;
+    page?: number;
+    isActive?: boolean;
 }>;
 export type QuestionOption = z.infer<typeof QuestionOptionSchema>;
 export type QuestionMetadata = z.infer<typeof QuestionMetadataSchema>;

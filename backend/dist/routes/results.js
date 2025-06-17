@@ -11,23 +11,22 @@ const Result_1 = __importDefault(require("../models/Result"));
 const exam_model_1 = __importDefault(require("../models/exam.model"));
 const auth_1 = require("../middlewares/auth");
 const validations_1 = require("../validations");
-const fastest_validator_1 = __importDefault(require("fastest-validator"));
-const validator = new fastest_validator_1.default();
-// Validation schemas
-const getResultsSchema = {
-    page: { type: 'number', optional: true, min: 1, default: 1 },
-    limit: { type: 'number', optional: true, min: 1, max: 100, default: 10 },
-    examId: { type: 'string', optional: true },
-    userId: { type: 'string', optional: true },
-    status: { type: 'string', optional: true, enum: ['completed', 'abandoned', 'timeout'] },
-    dateFrom: { type: 'string', optional: true },
-    dateTo: { type: 'string', optional: true }
-};
-const exportResultsSchema = {
-    examId: { type: 'string', required: true },
-    format: { type: 'string', optional: true, enum: ['csv', 'json'], default: 'csv' },
-    includeAnswers: { type: 'boolean', optional: true, default: false }
-};
+const zod_1 = require("zod");
+// Validation schemas using Zod
+const getResultsSchema = zod_1.z.object({
+    page: zod_1.z.number().min(1).optional().default(1),
+    limit: zod_1.z.number().min(1).max(100).optional().default(10),
+    examId: zod_1.z.string().optional(),
+    userId: zod_1.z.string().optional(),
+    status: zod_1.z.enum(['completed', 'abandoned', 'timeout']).optional(),
+    dateFrom: zod_1.z.string().optional(),
+    dateTo: zod_1.z.string().optional()
+});
+const exportResultsSchema = zod_1.z.object({
+    examId: zod_1.z.string({ message: 'شناسه آزمون الزامی است' }),
+    format: zod_1.z.enum(['csv', 'json']).optional().default('csv'),
+    includeAnswers: zod_1.z.boolean().optional().default(false)
+});
 /**
  * @route GET /api/results
  * @desc Get results with filtering and pagination

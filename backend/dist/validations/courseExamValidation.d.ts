@@ -26,26 +26,26 @@ export declare const CreateCourseExamSchema: z.ZodObject<{
     isPublished: z.ZodOptional<z.ZodBoolean>;
     chapters: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
-    description?: string;
-    tags?: string[];
-    title?: string;
     difficulty?: "easy" | "medium" | "hard";
+    tags?: string[];
     isPublished?: boolean;
+    title?: string;
+    description?: string;
     price?: number;
-    courseType?: "other" | "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "university" | "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "konkur";
+    courseType?: "history" | "other" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
     estimatedTime?: number;
     chapters?: string[];
 }, {
-    description?: string;
-    tags?: string[];
-    title?: string;
     difficulty?: "easy" | "medium" | "hard";
+    tags?: string[];
     isPublished?: boolean;
+    title?: string;
+    description?: string;
     price?: number;
-    courseType?: "other" | "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "university" | "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "konkur";
+    courseType?: "history" | "other" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
     estimatedTime?: number;
     chapters?: string[];
@@ -66,26 +66,26 @@ export declare const UpdateCourseExamSchema: z.ZodObject<{
     isPublished: z.ZodOptional<z.ZodBoolean>;
     chapters: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
-    description?: string;
-    tags?: string[];
-    title?: string;
     difficulty?: "easy" | "medium" | "hard";
+    tags?: string[];
     isPublished?: boolean;
+    title?: string;
+    description?: string;
     price?: number;
-    courseType?: "other" | "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "university" | "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "konkur";
+    courseType?: "history" | "other" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
     estimatedTime?: number;
     chapters?: string[];
 }, {
-    description?: string;
-    tags?: string[];
-    title?: string;
     difficulty?: "easy" | "medium" | "hard";
+    tags?: string[];
     isPublished?: boolean;
+    title?: string;
+    description?: string;
     price?: number;
-    courseType?: "other" | "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "university" | "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "konkur";
+    courseType?: "history" | "other" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
     estimatedTime?: number;
     chapters?: string[];
@@ -122,13 +122,13 @@ export declare const AutoSaveSchema: z.ZodObject<{
     answers: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     timeSpent: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    timeSpent?: number;
     answers?: Record<string, any>;
+    timeSpent?: number;
     progress?: number;
     lastQuestionIndex?: number;
 }, {
-    timeSpent?: number;
     answers?: Record<string, any>;
+    timeSpent?: number;
     progress?: number;
     lastQuestionIndex?: number;
 }>;
@@ -145,41 +145,41 @@ export declare const SearchQuerySchema: z.ZodEffects<z.ZodObject<{
     maxPrice: z.ZodOptional<z.ZodNumber>;
     tags: z.ZodOptional<z.ZodEffects<z.ZodString, string[], string>>;
 }, "strip", z.ZodTypeAny, {
+    difficulty?: "easy" | "medium" | "hard";
     tags?: string[];
-    difficulty?: "easy" | "medium" | "hard";
-    q?: string;
-    courseType?: "other" | "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "university" | "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "konkur";
-    group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
     minPrice?: number;
     maxPrice?: number;
+    courseType?: "history" | "other" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
+    group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
+    q?: string;
 }, {
-    tags?: string;
     difficulty?: "easy" | "medium" | "hard";
-    q?: string;
-    courseType?: "other" | "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
+    tags?: string;
     grade?: "university" | "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "konkur";
-    group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
     minPrice?: number;
     maxPrice?: number;
+    courseType?: "history" | "other" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
+    group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
+    q?: string;
 }>, {
+    difficulty?: "easy" | "medium" | "hard";
     tags?: string[];
-    difficulty?: "easy" | "medium" | "hard";
-    q?: string;
-    courseType?: "other" | "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
     grade?: "university" | "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "konkur";
-    group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
     minPrice?: number;
     maxPrice?: number;
+    courseType?: "history" | "other" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
+    group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
+    q?: string;
 }, {
-    tags?: string;
     difficulty?: "easy" | "medium" | "hard";
-    q?: string;
-    courseType?: "other" | "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
+    tags?: string;
     grade?: "university" | "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "konkur";
-    group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
     minPrice?: number;
     maxPrice?: number;
+    courseType?: "history" | "other" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
+    group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
+    q?: string;
 }>;
 /**
  * Validation schema for listing queries
@@ -195,25 +195,25 @@ export declare const ListQuerySchema: z.ZodObject<{
     difficulty: z.ZodOptional<z.ZodEnum<["easy", "medium", "hard"]>>;
     isPublished: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    page?: number;
     limit?: number;
     difficulty?: "easy" | "medium" | "hard";
     isPublished?: boolean;
-    sortBy?: "createdAt" | "updatedAt" | "title" | "rating" | "price";
-    courseType?: "other" | "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
+    page?: number;
+    sortBy?: "createdAt" | "updatedAt" | "title" | "price" | "rating";
     grade?: "university" | "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "konkur";
-    group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
     order?: "asc" | "desc";
+    courseType?: "history" | "other" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
+    group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
 }, {
-    page?: number;
     limit?: number;
     difficulty?: "easy" | "medium" | "hard";
     isPublished?: boolean;
-    sortBy?: "createdAt" | "updatedAt" | "title" | "rating" | "price";
-    courseType?: "other" | "history" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
+    page?: number;
+    sortBy?: "createdAt" | "updatedAt" | "title" | "price" | "rating";
     grade?: "university" | "elementary-1" | "elementary-2" | "elementary-3" | "elementary-4" | "elementary-5" | "elementary-6" | "middle-school-1" | "middle-school-2" | "middle-school-3" | "high-school-1" | "high-school-2" | "high-school-3" | "high-school-4" | "high-school-10" | "high-school-11" | "high-school-12" | "konkur";
-    group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
     order?: "asc" | "desc";
+    courseType?: "history" | "other" | "mathematics" | "physics" | "chemistry" | "biology" | "geography" | "literature" | "english" | "arabic";
+    group?: "other" | "technical" | "theoretical" | "mathematical" | "experimental" | "art";
 }>;
 export declare const validateCourseExam: (req: Request, res: Response, next: NextFunction) => void;
 export declare const validateCourseExamUpdate: (req: Request, res: Response, next: NextFunction) => void;

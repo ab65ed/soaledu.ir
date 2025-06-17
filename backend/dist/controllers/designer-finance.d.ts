@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import Parse from 'parse/node';
 interface AuthenticatedRequest extends Request {
     user?: Parse.User;
     userId?: string;

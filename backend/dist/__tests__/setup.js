@@ -1,79 +1,60 @@
+"use strict";
 /**
- * Test Setup
- * تنظیمات اولیه تست‌ها
+ * Jest Setup
+ * تنظیمات عمومی برای تمام تست‌ها
  */
-// Mock Parse globally
-jest.mock('parse/node', () => ({
-    Object: {
-        extend: jest.fn().mockImplementation((className) => {
-            var _a;
-            return _a = class MockParseObject {
-                    constructor() {
-                        this.attributes = {};
-                    }
-                    set(key, value) {
-                        this.attributes[key] = value;
-                    }
-                    get(key) {
-                        return this.attributes[key];
-                    }
-                    save() {
-                        return Promise.resolve({
-                            id: 'mock-id',
-                            objectId: 'mock-object-id',
-                            ...this.attributes
-                        });
-                    }
-                    toJSON() {
-                        return {
-                            objectId: 'mock-object-id',
-                            ...this.attributes
-                        };
-                    }
-                    setACL() {
-                        // Mock ACL setting
-                    }
-                },
-                _a.className = className,
-                _a;
-        })
-    },
-    Query: jest.fn().mockImplementation((objectClass) => ({
-        get: jest.fn().mockResolvedValue({
-            get: jest.fn(),
-            set: jest.fn(),
-            save: jest.fn(),
-            toJSON: jest.fn()
-        }),
-        find: jest.fn().mockResolvedValue([]),
-        count: jest.fn().mockResolvedValue(0),
-        equalTo: jest.fn().mockReturnThis(),
-        containedIn: jest.fn().mockReturnThis(),
-        descending: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis(),
-        skip: jest.fn().mockReturnThis()
-    })),
-    ACL: jest.fn().mockImplementation(() => ({
-        setReadAccess: jest.fn(),
-        setWriteAccess: jest.fn()
-    }))
-}));
-// Global test configuration
-beforeEach(() => {
-    jest.clearAllMocks();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = __importDefault(require("mongoose"));
+const globals_1 = require("@jest/globals");
+// افزایش timeout برای تست‌های پایگاه داده
+globals_1.jest.setTimeout(30000);
+// مدیریت اتصال MongoDB برای هر تست
+beforeEach(async () => {
+    // بررسی وجود URI در environment
+    const mongoUri = process.env.MONGODB_URI || globalThis.__MONGO_URI__;
+    if (!mongoUri) {
+        throw new Error('MongoDB URI not found in environment or global variables');
+    }
+    // اتصال فقط اگر قبلاً متصل نباشیم
+    if (mongoose_1.default.connection.readyState === 0) {
+        await mongoose_1.default.connect(mongoUri, {
+            maxPoolSize: 5,
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 10000
+        });
+    }
 });
-// Suppress console.error in tests unless needed
-const originalError = console.error;
-beforeAll(() => {
-    console.error = (...args) => {
-        if (typeof args[0] === 'string' &&
-            args[0].includes('Warning:')) {
-            return;
+// پاکسازی پایگاه داده بعد از هر تست
+afterEach(async () => {
+    if (mongoose_1.default.connection.readyState === 1) {
+        // پاکسازی تمام collections
+        const collections = Object.keys(mongoose_1.default.connection.collections);
+        for (const collectionName of collections) {
+            const collection = mongoose_1.default.connection.collections[collectionName];
+            await collection.deleteMany({});
         }
-        originalError.call(console, ...args);
-    };
+    }
 });
-afterAll(() => {
-    console.error = originalError;
+// قطع اتصال در پایان هر test suite
+afterAll(async () => {
+    try {
+        if (mongoose_1.default.connection.readyState !== 0) {
+            await mongoose_1.default.disconnect();
+        }
+    }
+    catch (error) {
+        console.warn('Warning: Error disconnecting mongoose in teardown:', error);
+    }
+});
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
 });
 //# sourceMappingURL=setup.js.map

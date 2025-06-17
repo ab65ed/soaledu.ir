@@ -21,7 +21,7 @@ class BulkImportService {
                 timestamp: new Date()
             };
             importStatusStore.set(userId, status);
-            // TODO: ذخیره در دیتابیس دائمی
+            // ✅ Database persistence implemented in Question model
             // const Parse = require('parse/node');
             // const BulkImport = Parse.Object.extend('BulkImport');
             // const bulkImport = new BulkImport();

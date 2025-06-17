@@ -244,6 +244,28 @@ const ExamSchema = new mongoose_1.Schema({
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
 });
+// Database indexes for performance optimization
+ExamSchema.index({ creator: 1, status: 1, createdAt: -1 }); // Creator's exams by status and date
+ExamSchema.index({ user: 1, status: 1, startedAt: -1 }, { sparse: true }); // User's exam attempts
+ExamSchema.index({ status: 1, isPublic: 1, createdAt: -1 }); // Public published exams
+ExamSchema.index({ category: 1, status: 1, isPublic: 1 }, { sparse: true }); // Category-based searches
+ExamSchema.index({ lesson: 1, status: 1 }, { sparse: true }); // Lesson-based exams
+ExamSchema.index({ difficulty: 1, status: 1 }); // Filter by difficulty
+ExamSchema.index({ tags: 1 }); // Search by tags
+ExamSchema.index({ title: 'text', description: 'text' }); // Full-text search
+ExamSchema.index({
+    scheduledStartDate: 1,
+    scheduledEndDate: 1,
+    isScheduled: 1,
+    status: 1
+}, { sparse: true }); // Scheduled exams
+ExamSchema.index({
+    startedAt: 1,
+    duration: 1,
+    status: 1
+}, { sparse: true }); // Active exam time tracking
+ExamSchema.index({ completedAt: -1, status: 1 }, { sparse: true }); // Completed exams by date
+ExamSchema.index({ isPublic: 1, status: 1, createdAt: -1 }); // Public exam listings
 // Virtual for answers to this exam
 ExamSchema.virtual('answers', {
     ref: 'Answer',

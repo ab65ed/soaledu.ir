@@ -17,4 +17,5 @@ export declare class FinanceController {
     static createPayment: typeof PaymentController.createPayment;
     static verifyPayment: typeof PaymentController.verifyPayment;
     static getPaymentHistory: typeof PaymentController.getPaymentHistory;
+    static getStatistics: (req: any, res: any) => Promise<void>;
 }

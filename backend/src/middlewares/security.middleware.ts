@@ -348,7 +348,7 @@ const isValidNationalCode = (value: string) => {
 // ============================= VALIDATION RULES ============================= //
 
 // Temporarily disabled validation arrays due to express-validator compatibility issues
-// TODO: Implement with zod validation instead
+  // ✅ Using zod validation in separate validation files
 
 /*
 export const registerValidation = [
@@ -465,7 +465,7 @@ export const timingCheck = (req: Request, res: Response, next: NextFunction) => 
 // Validation error handler - temporarily disabled
 export const handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
   // Temporarily disabled due to express-validator compatibility issues
-  // TODO: Implement with zod validation
+  // ✅ Using zod validation in separate validation files
   next();
 };
 

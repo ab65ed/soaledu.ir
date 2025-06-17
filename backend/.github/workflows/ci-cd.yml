@@ -1,0 +1,304 @@
+name: Backend CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/ci-cd.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+
+env:
+  NODE_VERSION: '18.x'
+  MONGODB_URI: mongodb://localhost:27017/exam-edu-test
+
+jobs:
+  # مرحله تست و کیفیت کد
+  test:
+    name: 🧪 Test & Quality Check
+    runs-on: ubuntu-latest
+    
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
+
+    - name: 📦 Install dependencies
+      working-directory: backend
+      run: npm ci
+
+    - name: 🔍 Lint check
+      working-directory: backend
+      run: npm run lint
+
+    - name: 🎯 Type check
+      working-directory: backend
+      run: npm run type-check
+
+    - name: 🧪 Run tests
+      working-directory: backend
+      run: npm test
+      env:
+        NODE_ENV: test
+        MONGODB_URI: ${{ env.MONGODB_URI }}
+        JWT_SECRET: test-secret-key-for-ci
+        JWT_REFRESH_SECRET: test-refresh-secret-key-for-ci
+
+    - name: 📊 Generate test coverage
+      working-directory: backend
+      run: npm run test:coverage
+
+    - name: 📈 Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: backend/coverage/lcov.info
+        flags: backend
+        name: backend-coverage
+
+  # مرحله امنیت و آسیب‌پذیری
+  security:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
+
+    - name: 📦 Install dependencies
+      working-directory: backend
+      run: npm ci
+
+    - name: 🔍 Audit dependencies
+      working-directory: backend
+      run: npm audit --audit-level=moderate
+
+    - name: 🛡️ Run Snyk security scan
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --severity-threshold=high --file=backend/package.json
+
+    - name: 🔐 CodeQL Analysis
+      uses: github/codeql-action/init@v2
+      with:
+        languages: javascript
+
+    - name: 🔍 Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+
+  # مرحله ساخت
+  build:
+    name: 🏗️ Build Application
+    runs-on: ubuntu-latest
+    needs: [test, security]
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
+
+    - name: 📦 Install dependencies
+      working-directory: backend
+      run: npm ci
+
+    - name: 🏗️ Build application
+      working-directory: backend
+      run: npm run build
+
+    - name: 📦 Create production package
+      working-directory: backend
+      run: |
+        mkdir -p dist-package
+        cp -r dist/* dist-package/
+        cp package.json dist-package/
+        cp package-lock.json dist-package/
+        cd dist-package && npm ci --only=production
+
+    - name: 📤 Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: backend-build
+        path: backend/dist-package/
+        retention-days: 7
+
+  # مرحله ساخت Docker Image
+  docker:
+    name: 🐳 Build Docker Image
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🐳 Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: 🔑 Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: 📦 Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: backend-build
+        path: backend/dist-package/
+
+    - name: 🏗️ Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: backend
+        file: backend/Dockerfile
+        push: true
+        tags: |
+          ${{ secrets.DOCKER_USERNAME }}/exam-edu-backend:latest
+          ${{ secrets.DOCKER_USERNAME }}/exam-edu-backend:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  # مرحله استقرار در محیط Staging
+  deploy-staging:
+    name: 🚀 Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: docker
+    if: github.ref == 'refs/heads/develop'
+    environment: staging
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🚀 Deploy to staging server
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.STAGING_HOST }}
+        username: ${{ secrets.STAGING_USERNAME }}
+        key: ${{ secrets.STAGING_SSH_KEY }}
+        script: |
+          cd /opt/exam-edu-staging
+          docker-compose pull backend
+          docker-compose up -d backend
+          docker system prune -f
+
+    - name: 🔍 Health check
+      run: |
+        sleep 30
+        curl -f ${{ secrets.STAGING_URL }}/api/health || exit 1
+
+  # مرحله استقرار در محیط Production
+  deploy-production:
+    name: 🌟 Deploy to Production
+    runs-on: ubuntu-latest
+    needs: docker
+    if: github.ref == 'refs/heads/main'
+    environment: production
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🚀 Deploy to production server
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.PRODUCTION_HOST }}
+        username: ${{ secrets.PRODUCTION_USERNAME }}
+        key: ${{ secrets.PRODUCTION_SSH_KEY }}
+        script: |
+          cd /opt/exam-edu-production
+          docker-compose pull backend
+          docker-compose up -d backend
+          docker system prune -f
+
+    - name: 🔍 Health check
+      run: |
+        sleep 30
+        curl -f ${{ secrets.PRODUCTION_URL }}/api/health || exit 1
+
+    - name: 📊 Performance monitoring
+      run: |
+        # اجرای تست‌های عملکرد پس از استقرار
+        curl -f ${{ secrets.PRODUCTION_URL }}/api/health/detailed || exit 1
+
+  # مرحله اطلاع‌رسانی
+  notify:
+    name: 📢 Notification
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production]
+    if: always()
+
+    steps:
+    - name: 📧 Send notification
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#deployments'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+  # مرحله پاکسازی
+  cleanup:
+    name: 🧹 Cleanup
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production]
+    if: always()
+
+    steps:
+    - name: 🗑️ Delete old artifacts
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: context.runId,
+          });
+          
+          for (const artifact of artifacts.data.artifacts) {
+            if (artifact.name === 'backend-build' && artifact.created_at < new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {
+              await github.rest.actions.deleteArtifact({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                artifact_id: artifact.id,
+              });
+            }
+          } 

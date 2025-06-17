@@ -1,8 +1,5 @@
 /**
- * Test Setup
- * تنظیمات اولیه تست‌ها
+ * Jest Setup
+ * تنظیمات عمومی برای تمام تست‌ها
  */
-declare const originalError: {
-    (...data: any[]): void;
-    (message?: any, ...optionalParams: any[]): void;
-};
+export {};

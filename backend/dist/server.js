@@ -45,13 +45,23 @@ const tickets_1 = __importDefault(require("./routes/tickets"));
 const payment_1 = __importDefault(require("./routes/payment"));
 const results_1 = __importDefault(require("./routes/results"));
 const exam_purchase_1 = __importDefault(require("./routes/exam-purchase")); // Exam purchase cache management routes
-// import financeRoutes from "./routes/finance"; // Finance and pricing routes - فایل موجود نیست
-// import designerFinanceRoutes from "./routes/designer-finance"; // Designer finance management routes - فایل موجود نیست
-// import financeSettingsRoutes from "./routes/financeSettings"; // Finance settings management routes - فایل موجود نیست
-// import blogRoutes from "./routes/blogRoutes"; // Blog management routes - فایل موجود نیست
+const finance_1 = __importDefault(require("./routes/finance")); // Finance and pricing routes - فعال شده
+const designer_finance_1 = __importDefault(require("./routes/designer-finance")); // Designer finance management routes - فعال شده
+const financeSettings_1 = __importDefault(require("./routes/financeSettings")); // Finance settings management routes - فعال شده
+const blogRoutes_1 = __importDefault(require("./routes/blogRoutes")); // Blog management routes - فعال شده
+// Newly activated routes
+const contact_2 = __importDefault(require("./routes/contact")); // Contact form routes - فعال شده
+const testExams_1 = __importDefault(require("./routes/testExams")); // Test exam routes - فعال شده
+const designer_finance_routes_1 = __importDefault(require("./routes/designer-finance.routes")); // Designer finance routes v2 - فعال شده
+const question_1 = __importDefault(require("./routes/question")); // Question management routes - فعال شده
+const roles_1 = __importDefault(require("./routes/roles")); // Roles management routes - فعال شده
+const course_exam_1 = __importDefault(require("./routes/course-exam")); // Course exam routes - فعال شده
+const course_exam_routes_1 = __importDefault(require("./routes/course-exam.routes")); // Course exam routes v2 - فعال شده
 // Import middleware
 const errorHandler_1 = require("./middlewares/errorHandler");
 const parse_server_1 = require("./config/parse-server");
+const csrf_middleware_1 = require("./middlewares/csrf.middleware");
+const token_blocklist_middleware_1 = require("./middlewares/token-blocklist.middleware");
 // Initialize Parse Server
 const parseServer = (0, parse_server_1.createParseServer)();
 // Initialize Parse - after server creation
@@ -131,6 +141,10 @@ app.use((req, res, next) => {
     logger_1.default.info(`${req.method} ${req.url}`);
     next();
 });
+// Security middleware - CSRF protection
+app.use(csrf_middleware_1.setupCSRFToken);
+// Token blocklist check (before authentication middleware)
+app.use(token_blocklist_middleware_1.checkTokenBlocklist);
 // Parse Server endpoint
 app.use('/parse', parseServer.app);
 // API Routes - Working routes
@@ -155,17 +169,29 @@ app.use("/api/v1/analytics", analytics_1.default); // Analytics and reporting
 app.use("/api/v1/tickets", tickets_1.default);
 app.use("/api/v1/payments", payment_1.default);
 app.use("/api/v1/results", results_1.default);
-app.use("/api/exam-purchase", exam_purchase_1.default); // Exam purchase cache management routes
-// app.use("/api/v1/finance", financeRoutes); // Finance and pricing routes - فایل موجود نیست
-// app.use("/api/v1/designer-finance", designerFinanceRoutes); // Designer finance management routes - فایل موجود نیست
-// app.use("/api/finance-settings", financeSettingsRoutes); // Finance settings management routes - فایل موجود نیست
-// app.use("/api/v1/blog", blogRoutes); // Blog management routes - فایل موجود نیست
+app.use("/api/v1/exam-purchase", exam_purchase_1.default); // Exam purchase cache management routes - استانداردسازی شده
+// Finance and Blog routes - فعال شده
+app.use("/api/v1/finance", finance_1.default); // Finance and pricing routes - فعال شده
+app.use("/api/v1/designer-finance", designer_finance_1.default); // Designer finance management routes - فعال شده
+app.use("/api/finance-settings", financeSettings_1.default); // Finance settings management routes - فعال شده
+app.use("/api/v1/blog", blogRoutes_1.default); // Blog management routes - فعال شده
+// Newly activated routes
+app.use("/api/v1/contact-form", contact_2.default); // Contact form routes - فعال شده
+app.use("/api/v1/test-exams", testExams_1.default); // Test exam routes - فعال شده
+app.use("/api/v1/designer-finance-v2", designer_finance_routes_1.default); // Designer finance routes v2 - فعال شده
+app.use("/api/v1/question", question_1.default); // Question management routes - فعال شده
+app.use("/api/v1/roles", roles_1.default); // Roles management routes - فعال شده
+app.use("/api/v1/course-exams", course_exam_1.default); // Course exam routes - فعال شده
+app.use("/api/v1/course-exams-v2", course_exam_routes_1.default); // Course exam routes v2 - فعال شده
 // Swagger API Documentation
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocs));
 // Health check endpoint
 app.get("/health", (req, res) => {
     res.status(200).json({ status: "ok", environment: env_1.NODE_ENV });
 });
+// CSRF Token endpoint
+const csrf_middleware_2 = require("./middlewares/csrf.middleware");
+app.get("/api/v1/csrf-token", csrf_middleware_2.provideCSRFToken);
 // Error handling middleware
 app.use(errorHandler_1.errorHandler);
 // Connect to MongoDB and start server

@@ -247,20 +247,20 @@ export declare const TransactionSchema: z.ZodObject<{
     metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
 }, "strip", z.ZodTypeAny, {
     type?: TransactionType;
+    metadata?: Record<string, any>;
+    userId?: string;
     description?: string;
     amount?: number;
-    userId?: string;
-    metadata?: Record<string, any>;
     designerShare?: number;
     platformFee?: number;
     referenceId?: string;
     designerId?: string;
 }, {
     type?: TransactionType;
+    metadata?: Record<string, any>;
+    userId?: string;
     description?: string;
     amount?: number;
-    userId?: string;
-    metadata?: Record<string, any>;
     designerShare?: number;
     platformFee?: number;
     referenceId?: string;
@@ -274,15 +274,15 @@ export declare const NotificationSettingsSchema: z.ZodObject<{
     pushNotifications: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     email?: string;
-    frequency?: NotificationFrequency;
     withdrawalNotifications?: boolean;
     earningNotifications?: boolean;
+    frequency?: NotificationFrequency;
     pushNotifications?: boolean;
 }, {
     email?: string;
-    frequency?: NotificationFrequency;
     withdrawalNotifications?: boolean;
     earningNotifications?: boolean;
+    frequency?: NotificationFrequency;
     pushNotifications?: boolean;
 }>;
 export declare function calculateDesignerEarning(totalAmount: number, designerShare?: number): number;

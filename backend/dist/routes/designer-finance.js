@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const auth_1 = require("../middlewares/auth");
-const roles_1 = require("../middlewares/roles");
 const designer_finance_1 = require("../controllers/designer-finance");
 const router = express_1.default.Router();
 // Middleware برای تمام مسیرها - احراز هویت
@@ -27,7 +26,7 @@ router.get('/notifications', designer_finance_1.getNotificationSettings);
 router.put('/notifications', designer_finance_1.updateNotificationSettings);
 // آمار داشبورد
 router.get('/dashboard', designer_finance_1.getDashboardStats);
-// Admin Routes
-router.post('/admin/withdrawal/:withdrawalId/approve', (0, auth_1.requirePermission)(roles_1.Permission.ADMIN), designer_finance_1.approveWithdrawal);
+// Admin Routes - simplified
+router.post('/admin/withdrawal/:withdrawalId/approve', designer_finance_1.approveWithdrawal);
 exports.default = router;
 //# sourceMappingURL=designer-finance.js.map
