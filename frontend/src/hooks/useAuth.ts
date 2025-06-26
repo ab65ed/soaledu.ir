@@ -112,6 +112,62 @@ export const useRegister = () => {
 };
 
 /**
+ * Hook برای فراموشی رمز عبور
+ */
+export const useForgotPassword = () => {
+  return useMutation({
+    mutationFn: authService.forgotPassword,
+    onError: (error) => {
+      console.error('خطا در درخواست فراموشی رمز عبور:', error);
+    },
+  });
+};
+
+/**
+ * Hook برای تأیید کد ریست رمز عبور
+ */
+export const useVerifyResetCode = () => {
+  return useMutation({
+    mutationFn: authService.verifyResetCode,
+    onError: (error) => {
+      console.error('خطا در تأیید کد ریست:', error);
+    },
+  });
+};
+
+/**
+ * Hook برای ریست رمز عبور
+ */
+export const useResetPassword = () => {
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: authService.resetPassword,
+    onSuccess: () => {
+      // هدایت به صفحه لاگین پس از ریست موفق
+      setTimeout(() => {
+        router.push('/login');
+      }, 2000);
+    },
+    onError: (error) => {
+      console.error('خطا در ریست رمز عبور:', error);
+    },
+  });
+};
+
+/**
+ * Hook برای ارسال مجدد کد ریست
+ */
+export const useResendResetCode = () => {
+  return useMutation({
+    mutationFn: authService.resendResetCode,
+    onError: (error) => {
+      console.error('خطا در ارسال مجدد کد:', error);
+    },
+  });
+};
+
+/**
  * Hook برای logout
  */
 export const useLogout = () => {

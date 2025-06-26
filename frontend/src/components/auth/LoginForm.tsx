@@ -320,7 +320,7 @@ export const LoginForm: React.FC = () => {
             </label>
           </div>
           <a
-            href="/auth/forgot-password"
+                          href="/forgot-password"
             className="text-sm text-blue-600 hover:text-blue-500 transition-colors"
           >
             فراموشی رمز عبور؟
@@ -381,7 +381,7 @@ export const LoginForm: React.FC = () => {
         <p className="text-sm text-gray-600">
           حساب کاربری ندارید؟{" "}
           <a
-            href="/auth/register"
+                          href="/register"
             className="text-blue-600 hover:text-blue-500 font-medium transition-colors"
           >
             ثبت‌نام کنید

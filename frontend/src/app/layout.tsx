@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import { QueryProvider } from '@/components/providers/QueryProvider'
 
 export const metadata: Metadata = {
   title: 'سؤال‌ساز - سیستم آموزشی پیشرفته',
@@ -61,9 +62,11 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
       </head>
       <body className="font-yekanbakh antialiased min-h-screen bg-white text-gray-900">
-        <div id="root" className="min-h-screen">
-          {children}
-        </div>
+        <QueryProvider>
+          <div id="root" className="min-h-screen">
+            {children}
+          </div>
+        </QueryProvider>
       </body>
     </html>
   )

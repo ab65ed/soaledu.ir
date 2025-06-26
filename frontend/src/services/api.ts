@@ -29,13 +29,15 @@ export const queryClient = new QueryClient({
   },
 });
 
-// تنظیمات Parse Server
-Parse.initialize(
-  process.env.NEXT_PUBLIC_PARSE_APP_ID || 'soaledu-app-id',
-  process.env.NEXT_PUBLIC_PARSE_JS_KEY || 'soaledu-js-key'
-);
+// تنظیمات Parse Server - فقط در client-side
+if (typeof window !== 'undefined') {
+  Parse.initialize(
+    process.env.NEXT_PUBLIC_PARSE_APP_ID || 'soaledu-app-id',
+    process.env.NEXT_PUBLIC_PARSE_JS_KEY || 'soaledu-js-key'
+  );
 
-Parse.serverURL = process.env.NEXT_PUBLIC_PARSE_SERVER_URL || 'http://localhost:1337/parse';
+  Parse.serverURL = process.env.NEXT_PUBLIC_PARSE_SERVER_URL || 'http://localhost:1337/parse';
+}
 
 // Base API configuration
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337/api';
@@ -107,6 +109,8 @@ export interface LoginCredentials {
 export interface RegisterData {
   name: string;
   email: string;
+  mobile: string;
+  nationalId: string;
   password: string;
   role?: string;
 }
@@ -122,7 +126,7 @@ export interface User {
 
 // فراموشی رمز عبور
 export interface ForgotPasswordData {
-  email: string;
+  identifier: string; // ایمیل یا شماره موبایل
   nationalId: string;
 }
 
@@ -134,8 +138,8 @@ export interface ForgotPasswordResponse {
 
 export interface ResetPasswordData {
   token: string;
-  password: string;
-  confirmPassword: string;
+  code: string;
+  newPassword: string;
 }
 
 export interface VerifyCodeData {
