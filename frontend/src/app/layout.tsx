@@ -60,7 +60,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
       </head>
-      <body className="font-iran-sans antialiased min-h-screen bg-white text-gray-900">
+      <body className="font-yekanbakh antialiased min-h-screen bg-white text-gray-900">
         <div id="root" className="min-h-screen">
           {children}
         </div>

@@ -53,6 +53,15 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "critters": "^0.0.23"
+    "@radix-ui/react-accordion": "^1.2.11",
+    "@radix-ui/react-alert-dialog": "^1.1.14",
+    "@radix-ui/react-aspect-ratio": "^1.1.7",
+    "@radix-ui/react-avatar": "^1.1.10",
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
+    "critters": "^0.0.23",
+    "embla-carousel-react": "^8.6.0",
+    "lucide-react": "^0.523.0",
+    "react-day-picker": "^9.7.0"
   }
 }
