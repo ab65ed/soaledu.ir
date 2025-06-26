@@ -201,22 +201,22 @@
 
 /* انیمیشن‌های سفارشی برای کامپوننت‌ها */
 @keyframes floating {
-  0%, 100% {
-    transform: translateY(0px);
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
   }
-  50% {
-    transform: translateY(-20px);
+  50% { 
+    transform: translateY(-20px) rotate(5deg); 
   }
 }
 
 @keyframes animate-reveal {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.95);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
@@ -225,16 +225,18 @@
 }
 
 .animate-reveal {
-  animation: animate-reveal 0.8s ease-out forwards;
+  animation: animate-reveal 0.6s ease-out forwards;
 }
 
 .animate-float {
-  animation: floating 3s ease-in-out infinite;
+  animation: floating 6s ease-in-out infinite;
 }
 
-/* Grid pattern background */
+/* استایل‌های grid برای پس‌زمینه */
 .bg-grid-pattern {
-  background-image: radial-gradient(circle at 1px 1px, rgba(105, 54, 245, 0.15) 1px, transparent 0);
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
@@ -248,28 +250,28 @@
 }
 
 .font-inter {
-  font-family: Inter, var(--font-family-yekanbakh);
+  font-family: 'Inter', sans-serif;
 }
 
-/* کلاس‌های مورد نیاز برای Lovable */
+/* کلاس‌های Typography */
 .heading-xl {
-  @apply text-4xl md:text-5xl lg:text-6xl font-bold leading-tight;
+  @apply text-3xl font-bold leading-tight;
 }
 
 .gradient-text {
-  @apply bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
 }
 
 .button-primary {
-  @apply bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg;
+  @apply bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200;
 }
 
 .button-outline {
-  @apply border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300;
+  @apply border border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200;
 }
 
 .container-section {
-  @apply px-6;
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 }
 
 .line-clamp-2 {
@@ -279,6 +281,7 @@
   overflow: hidden;
 }
 
+/* مخفی کردن اسکرول‌بار */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;

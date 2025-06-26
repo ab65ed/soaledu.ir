@@ -20,7 +20,7 @@ export const LoginHeader: React.FC = () => {
         initial={{ scale: 0.8 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="mx-auto w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center shadow-lg"
+        className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg"
       >
         <svg
           className="w-8 h-8 text-white"
@@ -43,7 +43,8 @@ export const LoginHeader: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.4 }}
-        className="text-3xl font-bold text-foreground font-yekanbakh"
+        className="text-3xl font-bold text-gray-900"
+        style={{ fontFamily: 'var(--font-family-yekanbakh)' }}
       >
         ورود به حساب کاربری
       </motion.h1>
@@ -53,7 +54,7 @@ export const LoginHeader: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.6 }}
-        className="text-muted-foreground text-sm max-w-xs mx-auto leading-relaxed"
+        className="text-gray-600 text-sm max-w-xs mx-auto leading-relaxed"
       >
         به پلتفرم جامع آزمون‌ساز و جامعه طراحان سوال خوش آمدید
       </motion.p>
@@ -63,12 +64,12 @@ export const LoginHeader: React.FC = () => {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.8 }}
-        className="flex items-center justify-center gap-2 text-xs text-muted-foreground"
+        className="flex items-center justify-center gap-2 text-xs text-gray-500"
       >
         <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
         </svg>
-        <span className="font-medium text-red-300">ورود امن و محافظت شده</span>
+        <span className="font-medium">ورود امن و محافظت شده</span>
       </motion.div>
     </motion.div>
   );

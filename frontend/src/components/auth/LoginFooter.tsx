@@ -19,28 +19,28 @@ export const LoginFooter: React.FC = () => {
       <div className="flex items-center justify-center gap-6 text-sm">
         <a
           href="/about"
-          className="text-muted-foreground hover:text-foreground transition-colors"
+          className="text-gray-600 hover:text-gray-900 transition-colors"
         >
           درباره ما
         </a>
-        <span className="text-border">|</span>
+        <span className="text-gray-300">|</span>
         <a
           href="/contact"
-          className="text-muted-foreground hover:text-foreground transition-colors"
+          className="text-gray-600 hover:text-gray-900 transition-colors"
         >
           تماس با ما
         </a>
-        <span className="text-border">|</span>
+        <span className="text-gray-300">|</span>
         <a
           href="/help"
-          className="text-muted-foreground hover:text-foreground transition-colors"
+          className="text-gray-600 hover:text-gray-900 transition-colors"
         >
           راهنما
         </a>
       </div>
 
       {/* اطلاعات کپی‌رایت */}
-      <div className="text-xs text-muted-foreground space-y-1">
+      <div className="text-xs text-gray-500 space-y-1">
         <p>© ۱۴۰۳ پلتفرم آزمون‌ساز سوال‌ادو. تمامی حقوق محفوظ است.</p>
         <p className="flex items-center justify-center gap-1">
           ساخته شده با
@@ -71,12 +71,12 @@ export const LoginFooter: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.6 }}
-        className="text-xs text-muted-foreground bg-muted/30 rounded-lg p-3 border border-border/30"
+        className="text-xs text-gray-500 bg-gray-50 rounded-lg p-3 border border-gray-200"
       >
         <p className="font-medium mb-1">نیاز به کمک دارید؟</p>
         <p>
           با تیم پشتیبانی ما در تماس باشید:{" "}
-          <a href="mailto:support@soaledu.ir" className="text-primary hover:underline">
+          <a href="mailto:support@soaledu.ir" className="text-blue-600 hover:underline">
             support@soaledu.ir
           </a>
         </p>
