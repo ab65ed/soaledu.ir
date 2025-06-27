@@ -6,8 +6,9 @@ import { motion } from "framer-motion";
 /**
  * کامپوننت فوتر صفحه لاگین
  * شامل لینک‌های مفید و اطلاعات تماس
+ * بهینه‌سازی شده برای performance
  */
-export const LoginFooter: React.FC = () => {
+export const LoginFooter: React.FC = React.memo(() => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -15,6 +16,8 @@ export const LoginFooter: React.FC = () => {
       transition={{ duration: 0.5, delay: 0.4 }}
       className="text-center space-y-4"
     >
+
+
       {/* لینک‌های مفید */}
       <div className="flex items-center justify-center gap-6 text-sm">
         <a
@@ -83,4 +86,6 @@ export const LoginFooter: React.FC = () => {
       </motion.div>
     </motion.div>
   );
-}; 
+});
+
+LoginFooter.displayName = "LoginFooter"; 

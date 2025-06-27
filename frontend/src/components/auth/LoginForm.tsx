@@ -1,14 +1,13 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "framer-motion";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-// import { useLogin } from "@/hooks/useAuth"; // Temporarily disabled for build
+import { Card, CardContent } from "@/components/ui/card";
 import { 
   Eye, 
   EyeOff, 
@@ -20,7 +19,8 @@ import {
   PenTool,
   Shield,
   Headphones,
-  ChevronDown
+  ChevronDown,
+  ArrowLeft
 } from "lucide-react";
 
 // تعریف نقش‌های کاربری
@@ -28,35 +28,35 @@ const USER_ROLES = {
   learner: {
     value: "learner",
     label: "فراگیر",
-    description: "دانش‌آموز / دانشجو",
+    subtitle: "دانش‌آموز / دانش‌جو",
     icon: GraduationCap,
     color: "text-blue-600"
   },
   designer: {
     value: "designer",
     label: "طراح سوال",
-    description: "طراح و تولیدکننده سوال",
+    subtitle: "سازنده / طراح آزمون",
     icon: PenTool,
     color: "text-purple-600"
   },
   admin: {
     value: "admin",
     label: "مدیر سیستم",
-    description: "مدیر کل پلتفرم",
+    subtitle: "مدیر کل / ناظر سیستم",
     icon: Shield,
     color: "text-red-600"
   },
   expert: {
     value: "expert",
     label: "کارشناس",
-    description: "کارشناس موضوعی",
+    subtitle: "بررسی‌کننده / تأیید‌کننده",
     icon: UserCog,
     color: "text-green-600"
   },
   support: {
     value: "support",
     label: "پشتیبانی",
-    description: "تیم پشتیبانی",
+    subtitle: "پشتیبانی فنی / راهنمایی",
     icon: Headphones,
     color: "text-orange-600"
   }
@@ -68,9 +68,7 @@ const loginSchema = z.object({
     .min(1, "ایمیل یا شماره موبایل الزامی است")
     .refine(
       (value) => {
-        // بررسی ایمیل معتبر
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        // بررسی شماره موبایل ایرانی
         const mobileRegex = /^09\d{9}$/;
         return emailRegex.test(value) || mobileRegex.test(value);
       },
@@ -89,11 +87,9 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 /**
  * کامپوننت فرم اصلی لاگین
- * شامل اعتبارسنجی، انیمیشن، و مدیریت خطا
  */
-export const LoginForm: React.FC = () => {
+export const LoginForm: React.FC = React.memo(() => {
   const [showPassword, setShowPassword] = useState(false);
-  const [loginError, setLoginError] = useState<string | null>(null);
 
   const {
     register,
@@ -105,43 +101,43 @@ export const LoginForm: React.FC = () => {
     defaultValues: {
       email: "",
       password: "",
-      role: "learner", // پیش‌فرض روی فراگیر
+      role: "learner",
       remember: false,
     },
   });
 
-  // const loginMutation = useLogin(); // Temporarily disabled for build
-  const watchedEmail = watch("email");
   const watchedRole = watch("role");
 
-  // تشخیص نوع ورودی (ایمیل یا موبایل)
-  const isEmailInput = watchedEmail?.includes("@");
+  const selectedRole = useMemo(() => 
+    USER_ROLES[watchedRole], 
+    [watchedRole]
+  );
 
-  const onSubmit = async (data: LoginFormData) => {
+  const userRoleOptions = useMemo(() => 
+    Object.values(USER_ROLES), 
+    []
+  );
+
+  const togglePasswordVisibility = useCallback(() => {
+    setShowPassword(prev => !prev);
+  }, []);
+
+  const onSubmit = useCallback(async (data: LoginFormData) => {
     try {
-      setLoginError(null);
-      // Simulate login for now
       console.log("Login attempt:", data);
-      // TODO: Replace with actual API call
-      // await loginMutation.mutateAsync({
-      //   email: data.email,
-      //   password: data.password,
-      //   role: data.role,
-      // });
+      console.log(`ورود موفقیت‌آمیز! خوش آمدید! شما به عنوان ${selectedRole.label} وارد شدید.`);
          } catch (error: unknown) {
        const errorMessage = error instanceof Error 
          ? error.message 
-         : typeof error === 'object' && error !== null && 'response' in error
-         ? (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'خطای نامشخص'
          : 'خطایی در ورود رخ داد. لطفاً دوباره تلاش کنید.';
        
-       setLoginError(errorMessage);
+      console.error("خطا در ورود:", errorMessage);
     }
-  };
-
-  const selectedRole = USER_ROLES[watchedRole];
+  }, [selectedRole.label]);
 
   return (
+    <Card className="backdrop-blur-sm border-white/40 shadow-xl">
+      <CardContent className="p-6">
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -149,30 +145,13 @@ export const LoginForm: React.FC = () => {
       className="space-y-6"
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" data-testid="login-form">
-        {/* نمایش خطای لاگین */}
-        <AnimatePresence>
-          {loginError && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Alert variant="destructive">
-                <AlertDescription className="text-sm">
-                  {loginError}
-                </AlertDescription>
-              </Alert>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* انتخاب نقش کاربری */}
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="space-y-2"
+          className="space-y-3"
         >
           <label className="text-sm font-medium text-gray-900 block">
             نقش کاربری
@@ -188,29 +167,38 @@ export const LoginForm: React.FC = () => {
             )}
             <select
               {...register("role")}
-              className="w-full h-12 pl-10 pr-10 text-right bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none"
+              className="w-full h-12 pl-10 pr-10 text-right bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none transition-colors"
               style={{ fontFamily: 'var(--font-family-yekanbakh)' }}
+              title="انتخاب نقش کاربری - برای راهنمایی بر روی آیکون کلیک کنید"
             >
-              {Object.values(USER_ROLES).map((role) => (
+              {userRoleOptions.map((role) => (
                 <option key={role.value} value={role.value}>
-                  {role.label} - {role.description}
+                  {role.label} / {role.subtitle}
                 </option>
               ))}
             </select>
+            
+            {/* Tooltip راهنما */}
+            <div className="absolute left-12 top-1/2 -translate-y-1/2 group">
+              <div className="w-4 h-4 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center cursor-help">
+                ?
+              </div>
+              <div className="absolute bottom-6 left-0 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-2 px-3 whitespace-nowrap z-50">
+                راهنمای نقش‌های کاربری
+                <div className="absolute top-full left-2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+              </div>
+            </div>
           </div>
-          <AnimatePresence>
-            {errors.role && (
-              <motion.p
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="text-sm text-red-600"
-                role="alert"
-              >
-                {errors.role.message}
-              </motion.p>
-            )}
-          </AnimatePresence>
+          
+          {errors.role && (
+            <motion.p
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="text-sm text-red-600 mt-1"
+            >
+              {errors.role.message}
+            </motion.p>
+          )}
         </motion.div>
 
         {/* فیلد ایمیل/موبایل */}
@@ -220,32 +208,31 @@ export const LoginForm: React.FC = () => {
           transition={{ duration: 0.4, delay: 0.2 }}
           className="space-y-2"
         >
-          <label htmlFor="email" className="text-sm font-medium text-gray-900 block">
+              <label className="text-sm font-medium text-gray-900 block">
             ایمیل یا شماره موبایل
           </label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
               <Mail className="h-4 w-4" />
             </div>
             <Input
-              id="email"
+                  {...register("email")}
               type="text"
-              placeholder={isEmailInput ? "example@domain.com" : "09123456789"}
-              className="pl-10 text-right h-12"
+                  placeholder="example@domain.com یا 09123456789"
+                  className="h-12 pr-10 text-right transition-all"
+                  style={{ fontFamily: 'var(--font-family-yekanbakh)' }}
+                  dir="ltr"
               data-testid="email-input"
-              aria-label="ایمیل یا شماره موبایل"
-              {...register("email")}
             />
           </div>
           <AnimatePresence>
             {errors.email && (
               <motion.p
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
                 className="text-sm text-red-600"
                 data-testid="email-error"
-                role="alert"
               >
                 {errors.email.message}
               </motion.p>
@@ -260,40 +247,45 @@ export const LoginForm: React.FC = () => {
           transition={{ duration: 0.4, delay: 0.3 }}
           className="space-y-2"
         >
-          <label htmlFor="password" className="text-sm font-medium text-gray-900 block">
+              <label className="text-sm font-medium text-gray-900 block">
             رمز عبور
           </label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
               <Lock className="h-4 w-4" />
             </div>
+                <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-auto p-0 hover:bg-transparent"
+                    onClick={togglePasswordVisibility}
+                    data-testid="password-toggle"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4 text-gray-400" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-gray-400" />
+                    )}
+                  </Button>
+                </div>
             <Input
-              id="password"
+                  {...register("password")}
               type={showPassword ? "text" : "password"}
-              placeholder="حداقل ۸ کاراکتر"
-              className="pl-10 pr-10 text-right h-12"
+                  placeholder="رمز عبور خود را وارد کنید"
+                  className="h-12 px-10 text-right transition-all"
+                  style={{ fontFamily: 'var(--font-family-yekanbakh)' }}
               data-testid="password-input"
-              aria-label="رمز عبور"
-              {...register("password")}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900 transition-colors"
-              aria-label={showPassword ? "مخفی کردن رمز عبور" : "نمایش رمز عبور"}
-            >
-              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </button>
+                />
           </div>
           <AnimatePresence>
             {errors.password && (
               <motion.p
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
                 className="text-sm text-red-600"
-                data-testid="password-error"
-                role="alert"
               >
                 {errors.password.message}
               </motion.p>
@@ -301,30 +293,22 @@ export const LoginForm: React.FC = () => {
           </AnimatePresence>
         </motion.div>
 
-        {/* چک‌باکس یادآوری و فراموشی رمز */}
+            {/* چک‌باکس یادآوری */}
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
-          className="flex items-center justify-between"
+              className="flex items-center gap-2"
         >
-          <div className="flex items-center space-x-2 space-x-reverse">
             <input
+                {...register("remember")}
+                type="checkbox"
               id="remember"
-              type="checkbox"
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              {...register("remember")}
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            <label htmlFor="remember" className="text-sm text-gray-600 cursor-pointer">
+              <label htmlFor="remember" className="text-sm text-gray-700 cursor-pointer select-none">
               مرا به خاطر بسپار
             </label>
-          </div>
-          <a
-                          href="/forgot-password"
-            className="text-sm text-blue-600 hover:text-blue-500 transition-colors"
-          >
-            فراموشی رمز عبور؟
-          </a>
         </motion.div>
 
         {/* دکمه ورود */}
@@ -335,59 +319,52 @@ export const LoginForm: React.FC = () => {
         >
           <Button
             type="submit"
-            className="w-full h-12 text-base font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-300 shadow-lg hover:shadow-xl"
             disabled={isSubmitting}
+                className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium rounded-md transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
             data-testid="login-button"
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="ml-2 h-4 w-4 animate-spin" data-testid="loading-spinner" />
                 در حال ورود...
               </>
             ) : (
               <>
-                {selectedRole && <selectedRole.icon className="ml-2 h-4 w-4" />}
-                ورود به عنوان {selectedRole?.label}
+                    ورود به عنوان {selectedRole.label}
+                    <ArrowLeft className="mr-2 h-4 w-4" />
               </>
             )}
           </Button>
         </motion.div>
 
-        {/* نشانگر وضعیت */}
-        <AnimatePresence>
-          {isSubmitting && (
+            {/* لینک‌های Navigation */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="flex items-center justify-center gap-2 text-sm text-gray-600"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.6 }}
+              className="flex items-center justify-between text-sm pt-2"
             >
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" />
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
-              <span className="mr-2">درحال احراز هویت...</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </form>
-
-      {/* لینک ثبت‌نام */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-        className="text-center pt-4 border-t border-gray-200/50"
-      >
-        <p className="text-sm text-gray-600">
-          حساب کاربری ندارید؟{" "}
           <a
                           href="/register"
-            className="text-blue-600 hover:text-blue-500 font-medium transition-colors"
+                className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                data-testid="register-link"
           >
-            ثبت‌نام کنید
+                ثبت نام کنید
           </a>
-        </p>
+              <span className="text-gray-300">|</span>
+              <a
+                href="/forgot-password"
+                className="text-purple-600 hover:text-purple-700 font-medium transition-colors"
+                data-testid="forgot-password-link"
+              >
+                فراموشی رمز عبور
+              </a>
       </motion.div>
+          </form>
     </motion.div>
+      </CardContent>
+    </Card>
   );
-}; 
+});
+
+LoginForm.displayName = "LoginForm"; 

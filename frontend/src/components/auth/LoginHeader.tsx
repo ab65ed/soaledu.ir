@@ -2,75 +2,101 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { LogIn, Sparkles } from "lucide-react";
 
 /**
- * کامپوننت هدر صفحه لاگین
- * شامل لوگو، عنوان و توضیحات
+ * کامپوننت Header صفحه لاگین
+ * شامل آیکون گرادینت و انیمیشن طلایی
  */
-export const LoginHeader: React.FC = () => {
+export const LoginHeader: React.FC = React.memo(() => {
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="text-center space-y-4"
+      transition={{ duration: 0.6 }}
+      className="text-center mb-8"
     >
-      {/* لوگو */}
+      {/* آیکون اصلی با گرادینت */}
       <motion.div
-        initial={{ scale: 0.8 }}
+        initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg"
+        transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+        className="relative mx-auto mb-6 w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg"
       >
-        <svg
-          className="w-8 h-8 text-white"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
+        <LogIn className="w-10 h-10 text-white" />
+        
+        {/* انیمیشن طلایی */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ 
+            opacity: [0, 1, 0],
+            x: [20, 0, -20],
+            rotate: [0, 360]
+          }}
+          transition={{ 
+            duration: 2,
+            repeat: Infinity,
+            repeatDelay: 1
+          }}
+          className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center shadow-md"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-          />
-        </svg>
+          <Sparkles className="w-4 h-4 text-white" />
+        </motion.div>
       </motion.div>
 
-      {/* عنوان اصلی */}
+      {/* عنوان */}
       <motion.h1
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="text-3xl font-bold text-gray-900"
-        style={{ fontFamily: 'var(--font-family-yekanbakh)' }}
+        transition={{ delay: 0.4 }}
+        className="text-3xl font-bold text-gray-800 mb-4 leading-relaxed"
       >
-        ورود به حساب کاربری
+        دروازه{' '}
+        <span 
+          style={{ 
+            color: '#EA384C',
+            textShadow: '0 0 10px rgba(234, 56, 76, 0.3), 0 0 20px rgba(234, 56, 76, 0.2)',
+            fontWeight: 'bold'
+          }}
+        >
+          دانش
+        </span>
+        <br />
+        در انتظار شماست
       </motion.h1>
 
       {/* توضیحات */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.6 }}
-        className="text-gray-600 text-sm max-w-xs mx-auto leading-relaxed"
+        transition={{ delay: 0.6 }}
+        className="text-gray-600 text-lg max-w-md mx-auto leading-relaxed"
       >
-        به پلتفرم جامع آزمون‌ساز و جامعه طراحان سوال خوش آمدید
+        لطفاً برای ادامه وارد حساب کاربری خود شوید
       </motion.p>
 
       {/* نشانگر امنیت */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
-        className="flex items-center justify-center gap-2 text-xs text-gray-500"
+        transition={{ delay: 0.8, duration: 0.5 }}
+        className="flex items-center justify-center gap-2 mt-4 px-4 py-2 bg-green-50 border border-green-200 rounded-full text-green-700 text-sm font-medium w-fit mx-auto"
       >
-        <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-        </svg>
-        <span className="font-medium">ورود امن و محافظت شده</span>
+        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+        <span>ورود امن و محافظت شده</span>
       </motion.div>
+
+      {/* خط جداکننده */}
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ delay: 1, duration: 0.5 }}
+        className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mx-auto mt-6"
+      />
     </motion.div>
   );
-}; 
+});
+
+LoginHeader.displayName = "LoginHeader";
+
+export default LoginHeader;
