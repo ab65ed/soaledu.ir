@@ -19,11 +19,11 @@ export declare const ImageUploadSchema: z.ZodObject<{
     type: z.ZodEnum<["avatar", "blog", "lesson", "exam"]>;
     description: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    type?: "lesson" | "exam" | "avatar" | "blog";
     description?: string;
+    type?: "lesson" | "exam" | "avatar" | "blog";
 }, {
-    type?: "lesson" | "exam" | "avatar" | "blog";
     description?: string;
+    type?: "lesson" | "exam" | "avatar" | "blog";
 }>;
 export declare const ImageUpdateSchema: z.ZodObject<{
     url: z.ZodString;

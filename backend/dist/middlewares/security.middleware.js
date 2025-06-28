@@ -322,9 +322,8 @@ export const registerValidation = [
       return true;
     }),
   
-  body('educationalGroup')
-    .isIn(['ریاضی فیزیک', 'علوم تجربی', 'علوم انسانی', 'فنی حرفه‌ای', 'کاردانش', 'سایر'])
-    .withMessage('گروه آموزشی انتخاب شده معتبر نیست'),
+
+
   
   body('acceptTerms')
     .isBoolean()

@@ -27,7 +27,6 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: 'student' | 'admin' | 'support' | 'Question Designer';
-  educationalGroup?: mongoose.Types.ObjectId;
   nationalCode?: string; // کد ملی برای شناسایی در تخفیف‌های سازمانی
   phoneNumber?: string; // شماره تلفن برای شناسایی در تخفیف‌های سازمانی
   institutionalDiscountPercentage?: number; // درصد تخفیف سازمانی
@@ -136,10 +135,7 @@ const UserSchema = new Schema<IUser>(
       },
       default: "student",
     },
-    educationalGroup: {
-      type: Schema.Types.ObjectId,
-      ref: "Category",
-    },
+
     nationalCode: {
       type: String,
       trim: true,
@@ -243,7 +239,7 @@ UserSchema.index({ phoneNumber: 1 }, { sparse: true }); // ایندکس روی �
 UserSchema.index({ role: 1 }); // ایندکس روی نقش کاربر
 UserSchema.index({ institutionId: 1 }, { sparse: true }); // ایندکس روی موسسه
 UserSchema.index({ institutionalDiscountGroupId: 1 }, { sparse: true }); // ایندکس روی گروه تخفیف
-UserSchema.index({ educationalGroup: 1 }, { sparse: true }); // ایندکس روی گروه آموزشی
+
 UserSchema.index({ createdAt: -1 }); // ایندکس نزولی روی تاریخ ایجاد (برای فیلتر کردن کاربران جدید)
 UserSchema.index({ enrollmentCode: 1 }, { sparse: true }); // ایندکس روی کد ثبت‌نام
 

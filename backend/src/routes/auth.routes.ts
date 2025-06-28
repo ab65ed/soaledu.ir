@@ -10,7 +10,6 @@ import {
   login,
   refreshToken,
   getMe,
-  completeProfile,
   logout
 } from '../controllers/auth.controller';
 import { validate, schemas } from '../validations';
@@ -124,35 +123,6 @@ router.post('/refresh-token', refreshToken);
  *         description: Not authorized
  */
 router.get('/me', protectRoute, getMe);
-
-/**
- * @swagger
- * /auth/complete-profile:
- *   put:
- *     summary: Complete user profile (select educational group)
- *     tags: [Authentication]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - educationalGroup
- *             properties:
- *               educationalGroup:
- *                 type: string
- *     responses:
- *       200:
- *         description: Profile completed successfully
- *       400:
- *         description: Educational group is required
- *       401:
- *         description: Not authorized
- */
-router.put('/complete-profile', protectRoute, completeProfile);
 
 /**
  * @swagger

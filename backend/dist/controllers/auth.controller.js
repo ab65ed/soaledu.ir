@@ -41,7 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = exports.completeProfile = exports.getMe = exports.refreshToken = exports.login = exports.register = void 0;
+exports.logout = exports.getMe = exports.refreshToken = exports.login = exports.register = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_model_1 = __importDefault(require("../models/user.model"));
 const errorHandler_1 = require("../middlewares/errorHandler");
@@ -161,7 +161,6 @@ const login = async (req, res, next) => {
                     name: user.name,
                     email: user.email,
                     role: user.role,
-                    educationalGroup: user.educationalGroup,
                 },
             },
         });
@@ -219,7 +218,7 @@ exports.refreshToken = refreshToken;
  */
 const getMe = async (req, res, next) => {
     try {
-        const user = await user_model_1.default.findById(req.user?.id).populate("educationalGroup");
+        const user = await user_model_1.default.findById(req.user?.id);
         if (!user) {
             return next(new errorHandler_1.ApiError("User not found", 404));
         }
@@ -231,7 +230,6 @@ const getMe = async (req, res, next) => {
                     name: user.name,
                     email: user.email,
                     role: user.role,
-                    educationalGroup: user.educationalGroup,
                     wallet: {
                         balance: user.wallet.balance,
                     },
@@ -244,40 +242,6 @@ const getMe = async (req, res, next) => {
     }
 };
 exports.getMe = getMe;
-/**
- * @desc    Complete user profile (select educational group)
- * @route   PUT /api/v1/auth/complete-profile
- * @access  Private
- */
-const completeProfile = async (req, res, next) => {
-    try {
-        const { educationalGroup } = req.body;
-        if (!educationalGroup) {
-            return next(new errorHandler_1.ApiError("Educational group is required", 400));
-        }
-        // Update user
-        const user = await user_model_1.default.findByIdAndUpdate(req.user?.id, { educationalGroup }, { new: true, runValidators: true }).populate("educationalGroup");
-        if (!user) {
-            return next(new errorHandler_1.ApiError("User not found", 404));
-        }
-        res.status(200).json({
-            status: "success",
-            data: {
-                user: {
-                    id: user._id,
-                    name: user.name,
-                    email: user.email,
-                    role: user.role,
-                    educationalGroup: user.educationalGroup,
-                },
-            },
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-};
-exports.completeProfile = completeProfile;
 /**
  * @desc    Logout user
  * @route   POST /api/v1/auth/logout

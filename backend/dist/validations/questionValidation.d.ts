@@ -23,43 +23,43 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     allowMultipleCorrect: z.ZodOptional<z.ZodBoolean>;
     correctAnswer: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
+    tags?: string[];
+    isPublished?: boolean;
+    isDraft?: boolean;
+    difficulty?: "Medium" | "Easy" | "Hard";
+    options?: string[];
     type?: "multiple-choice";
     text?: string;
-    options?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: boolean;
-    difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
     category?: string;
     lesson?: string;
-    tags?: string[];
     timeLimit?: number;
     sourcePage?: number;
     sourceBook?: string;
     sourceChapter?: string;
-    isDraft?: boolean;
-    isPublished?: boolean;
 }, {
+    tags?: string[];
+    isPublished?: boolean;
+    isDraft?: boolean;
+    difficulty?: "Medium" | "Easy" | "Hard";
+    options?: string[];
     type?: "multiple-choice";
     text?: string;
-    options?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: boolean;
-    difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
     category?: string;
     lesson?: string;
-    tags?: string[];
     timeLimit?: number;
     sourcePage?: number;
     sourceBook?: string;
     sourceChapter?: string;
-    isDraft?: boolean;
-    isPublished?: boolean;
 }>, z.ZodObject<{
     text: z.ZodString;
     category: z.ZodString;
@@ -81,43 +81,43 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     allowMultipleCorrect: z.ZodOptional<z.ZodLiteral<false>>;
     correctAnswer: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
+    tags?: string[];
+    isPublished?: boolean;
+    isDraft?: boolean;
+    difficulty?: "Medium" | "Easy" | "Hard";
+    options?: string[];
     type?: "true-false";
     text?: string;
-    options?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: false;
-    difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
     category?: string;
     lesson?: string;
-    tags?: string[];
     timeLimit?: number;
     sourcePage?: number;
     sourceBook?: string;
     sourceChapter?: string;
-    isDraft?: boolean;
-    isPublished?: boolean;
 }, {
+    tags?: string[];
+    isPublished?: boolean;
+    isDraft?: boolean;
+    difficulty?: "Medium" | "Easy" | "Hard";
+    options?: string[];
     type?: "true-false";
     text?: string;
-    options?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: false;
-    difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
     category?: string;
     lesson?: string;
-    tags?: string[];
     timeLimit?: number;
     sourcePage?: number;
     sourceBook?: string;
     sourceChapter?: string;
-    isDraft?: boolean;
-    isPublished?: boolean;
 }>, z.ZodObject<{
     text: z.ZodString;
     category: z.ZodString;
@@ -139,43 +139,43 @@ export declare const QuestionCreateSchema: z.ZodDiscriminatedUnion<"type", [z.Zo
     correctAnswer: z.ZodString;
     allowMultipleCorrect: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
+    tags?: string[];
+    isPublished?: boolean;
+    isDraft?: boolean;
+    difficulty?: "Medium" | "Easy" | "Hard";
+    options?: string[];
     type?: "short-answer" | "essay";
     text?: string;
-    options?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: boolean;
-    difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
     category?: string;
     lesson?: string;
-    tags?: string[];
     timeLimit?: number;
     sourcePage?: number;
     sourceBook?: string;
     sourceChapter?: string;
-    isDraft?: boolean;
-    isPublished?: boolean;
 }, {
+    tags?: string[];
+    isPublished?: boolean;
+    isDraft?: boolean;
+    difficulty?: "Medium" | "Easy" | "Hard";
+    options?: string[];
     type?: "short-answer" | "essay";
     text?: string;
-    options?: string[];
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: boolean;
-    difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
     category?: string;
     lesson?: string;
-    tags?: string[];
     timeLimit?: number;
     sourcePage?: number;
     sourceBook?: string;
     sourceChapter?: string;
-    isDraft?: boolean;
-    isPublished?: boolean;
 }>]>;
 /**
  * Schema for updating a question (all fields optional except id)
@@ -201,45 +201,45 @@ export declare const QuestionUpdateSchema: z.ZodObject<{
     allowMultipleCorrect: z.ZodOptional<z.ZodBoolean>;
     correctAnswer: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
+    tags?: string[];
+    isPublished?: boolean;
+    isDraft?: boolean;
+    difficulty?: "Medium" | "Easy" | "Hard";
     id?: string;
-    text?: string;
     options?: string[];
+    type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
+    text?: string;
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: boolean;
-    difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
     category?: string;
     lesson?: string;
-    tags?: string[];
     timeLimit?: number;
     sourcePage?: number;
     sourceBook?: string;
     sourceChapter?: string;
-    isDraft?: boolean;
-    isPublished?: boolean;
 }, {
-    type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
+    tags?: string[];
+    isPublished?: boolean;
+    isDraft?: boolean;
+    difficulty?: "Medium" | "Easy" | "Hard";
     id?: string;
-    text?: string;
     options?: string[];
+    type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
+    text?: string;
     correctOptions?: number[];
     correctAnswer?: string;
     allowMultipleCorrect?: boolean;
-    difficulty?: "Medium" | "Easy" | "Hard";
     points?: number;
     explanation?: string;
     category?: string;
     lesson?: string;
-    tags?: string[];
     timeLimit?: number;
     sourcePage?: number;
     sourceBook?: string;
     sourceChapter?: string;
-    isDraft?: boolean;
-    isPublished?: boolean;
 }>;
 /**
  * Schema for auto-save (more lenient)
@@ -252,18 +252,18 @@ export declare const QuestionAutoSaveSchema: z.ZodObject<{
     sourcePage: z.ZodOptional<z.ZodNumber>;
     tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
+    tags?: string[];
     id?: string;
     text?: string;
     points?: number;
     category?: string;
-    tags?: string[];
     sourcePage?: number;
 }, {
+    tags?: string[];
     id?: string;
     text?: string;
     points?: number;
     category?: string;
-    tags?: string[];
     sourcePage?: number;
 }>;
 /**
@@ -274,13 +274,13 @@ export declare const QuestionSearchSchema: z.ZodObject<{
     limit: z.ZodOptional<z.ZodNumber>;
     publishedOnly: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
+    q?: string;
     limit?: number;
     publishedOnly?: boolean;
-    q?: string;
 }, {
+    q?: string;
     limit?: number;
     publishedOnly?: boolean;
-    q?: string;
 }>;
 /**
  * Schema for listing questions
@@ -293,18 +293,18 @@ export declare const QuestionListSchema: z.ZodObject<{
     sortBy: z.ZodOptional<z.ZodEnum<["newest", "oldest", "difficulty", "points", "category"]>>;
     publishedOnly: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    limit?: number;
-    type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
     difficulty?: "Medium" | "Easy" | "Hard";
+    type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
     page?: number;
-    sortBy?: "difficulty" | "points" | "category" | "newest" | "oldest";
+    limit?: number;
+    sortBy?: "difficulty" | "newest" | "points" | "category" | "oldest";
     publishedOnly?: boolean;
 }, {
-    limit?: number;
-    type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
     difficulty?: "Medium" | "Easy" | "Hard";
+    type?: "multiple-choice" | "true-false" | "short-answer" | "essay";
     page?: number;
-    sortBy?: "difficulty" | "points" | "category" | "newest" | "oldest";
+    limit?: number;
+    sortBy?: "difficulty" | "newest" | "points" | "category" | "oldest";
     publishedOnly?: boolean;
 }>;
 /**
@@ -315,13 +315,13 @@ export declare const QuestionRatingSchema: z.ZodObject<{
     rating: z.ZodNumber;
     comment: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
+    rating?: number;
     id?: string;
     comment?: string;
-    rating?: number;
 }, {
+    rating?: number;
     id?: string;
     comment?: string;
-    rating?: number;
 }>;
 export type QuestionCreateType = z.infer<typeof QuestionCreateSchema>;
 export type QuestionUpdateType = z.infer<typeof QuestionUpdateSchema>;

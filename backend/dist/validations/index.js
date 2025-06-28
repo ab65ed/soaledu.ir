@@ -68,7 +68,6 @@ const schemas = {
             .min(2, { message: 'نام باید حداقل ۲ کاراکتر باشد' })
             .max(50, { message: 'نام نباید بیشتر از ۵۰ کاراکتر باشد' })
             .optional(),
-        educationalGroup: zod_1.z.string().optional()
     }),
     // ExamConfig schemas
     createExamConfig: zod_1.z.object({

@@ -7,7 +7,7 @@ interface QueryOptions {
   skip?: number;
   courseType?: string;
   grade?: string;
-  group?: string;
+  fieldOfStudy?: string;
   difficulty?: string;
   tags?: string[];
   priceRange?: {
@@ -41,8 +41,8 @@ class CourseExam extends Parse.Object {
     return this.get('grade');
   }
 
-  get group() {
-    return this.get('group');
+  get fieldOfStudy() {
+    return this.get('fieldOfStudy');
   }
 
   get description() {
@@ -130,8 +130,8 @@ class CourseExam extends Parse.Object {
     this.set('grade', value);
   }
 
-  set group(value) {
-    this.set('group', value);
+  set fieldOfStudy(value) {
+    this.set('fieldOfStudy', value);
   }
 
   set description(value) {
@@ -206,54 +206,55 @@ class CourseExam extends Parse.Object {
     this.set('chapters', value);
   }
 
-  // Static methods for creation and queries
+  // Static methods
   static async create(data) {
     const courseExam = new CourseExam();
     
-    // Required fields
-    courseExam.title = data.title;
-    courseExam.courseType = data.courseType;
-    courseExam.grade = data.grade;
-    courseExam.group = data.group;
-    courseExam.description = data.description;
-    
-    // Optional fields with defaults
-    courseExam.tags = data.tags || [];
-    courseExam.isPublished = data.isPublished || false;
-    courseExam.isDraft = data.isDraft !== undefined ? data.isDraft : true;
-    courseExam.questionCount = data.questionCount || 0;
-    courseExam.totalSales = data.totalSales || 0;
-    courseExam.revenue = data.revenue || 0;
-    courseExam.difficulty = data.difficulty;
-    courseExam.estimatedTime = data.estimatedTime;
-    courseExam.price = data.price || 0;
-    courseExam.authorId = data.authorId;
-    courseExam.averageRating = data.averageRating || 0;
-    courseExam.ratingCount = data.ratingCount || 0;
-    courseExam.version = data.version || 1;
-    courseExam.chapters = data.chapters || [];
-    
-    // Metadata
-    courseExam.metadata = {
-      lastAutoSave: new Date(),
-      version: 1,
-      chapters: data.chapters || [],
-      ...data.metadata
-    };
+    // Set all properties
+    Object.keys(data).forEach(key => {
+      if (courseExam.hasOwnProperty(key) || ['title', 'courseType', 'grade', 'fieldOfStudy', 'description', 'tags', 'difficulty', 'estimatedTime', 'price', 'isPublished', 'isDraft', 'authorId', 'author', 'metadata'].includes(key)) {
+        courseExam.set(key, data[key]);
+      }
+    });
 
-    // Set author relationship if provided
-    if (data.author) {
-      courseExam.author = data.author;
+    // Set default values
+    if (!data.hasOwnProperty('isPublished')) {
+      courseExam.isPublished = false;
     }
-
-    // ACL settings
-    const acl = new Parse.ACL();
-    if (data.authorId) {
-      acl.setReadAccess(data.authorId, true);
-      acl.setWriteAccess(data.authorId, true);
+    
+    if (!data.hasOwnProperty('isDraft')) {
+      courseExam.isDraft = true;
     }
-    acl.setPublicReadAccess(true); // Allow public read for published exams
-    courseExam.setACL(acl);
+    
+    if (!data.hasOwnProperty('questionCount')) {
+      courseExam.questionCount = 0;
+    }
+    
+    if (!data.hasOwnProperty('totalSales')) {
+      courseExam.totalSales = 0;
+    }
+    
+    if (!data.hasOwnProperty('revenue')) {
+      courseExam.revenue = 0;
+    }
+    
+    if (!data.hasOwnProperty('averageRating')) {
+      courseExam.averageRating = 0;
+    }
+    
+    if (!data.hasOwnProperty('ratingCount')) {
+      courseExam.ratingCount = 0;
+    }
+    
+    if (!data.hasOwnProperty('version')) {
+      courseExam.version = 1;
+    }
+    
+    // Initialize metadata
+    const metadata = data.metadata || {};
+    metadata.createdAt = new Date();
+    metadata.version = 1;
+    courseExam.metadata = metadata;
 
     return await courseExam.save();
   }
@@ -266,7 +267,6 @@ class CourseExam extends Parse.Object {
   static async findByAuthor(authorId: string, options: CourseExamOptions = {}) {
     let query = new Parse.Query(CourseExam);
     query.equalTo('authorId', authorId);
-    query.include('author');
     
     if (options.courseType) {
       query.equalTo('courseType', options.courseType);
@@ -274,10 +274,6 @@ class CourseExam extends Parse.Object {
     
     if (options.grade) {
       query.equalTo('grade', options.grade);
-    }
-    
-    if (options.group) {
-      query.equalTo('group', options.group);
     }
     
     if (options.difficulty) {
@@ -350,10 +346,6 @@ class CourseExam extends Parse.Object {
     
     if (options.grade) {
       query.equalTo('grade', options.grade);
-    }
-    
-    if (options.group) {
-      query.equalTo('group', options.group);
     }
     
     if (options.difficulty) {
@@ -537,7 +529,7 @@ class CourseExam extends Parse.Object {
       title: this.title,
       courseType: this.courseType,
       grade: this.grade,
-      group: this.group,
+      fieldOfStudy: this.fieldOfStudy,
       description: this.description,
       tags: this.tags,
       isPublished: this.isPublished,

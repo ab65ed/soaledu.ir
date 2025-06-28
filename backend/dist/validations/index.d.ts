@@ -18,12 +18,12 @@ declare const schemas: {
         email: z.ZodString;
         password: z.ZodString;
     }, "strip", z.ZodTypeAny, {
-        email?: string;
         name?: string;
+        email?: string;
         password?: string;
     }, {
-        email?: string;
         name?: string;
+        email?: string;
         password?: string;
     }>;
     readonly login: z.ZodObject<{
@@ -38,13 +38,10 @@ declare const schemas: {
     }>;
     readonly updateProfile: z.ZodObject<{
         name: z.ZodOptional<z.ZodString>;
-        educationalGroup: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         name?: string;
-        educationalGroup?: string;
     }, {
         name?: string;
-        educationalGroup?: string;
     }>;
     readonly createExamConfig: z.ZodObject<{
         category: z.ZodString;
@@ -78,12 +75,12 @@ declare const schemas: {
         priority: z.ZodOptional<z.ZodEnum<["low", "medium", "high"]>>;
     }, "strip", z.ZodTypeAny, {
         message?: string;
-        priority?: "medium" | "low" | "high";
         subject?: string;
+        priority?: "medium" | "high" | "low";
     }, {
         message?: string;
-        priority?: "medium" | "low" | "high";
         subject?: string;
+        priority?: "medium" | "high" | "low";
     }>;
     readonly addTicketResponse: z.ZodObject<{
         message: z.ZodString;
@@ -115,19 +112,19 @@ declare const schemas: {
         metaDescription: z.ZodOptional<z.ZodString>;
         status: z.ZodOptional<z.ZodEnum<["draft", "published", "archived"]>>;
     }, "strip", z.ZodTypeAny, {
-        category?: string;
         tags?: string[];
-        title?: string;
         status?: "draft" | "published" | "archived";
+        category?: string;
+        title?: string;
         content?: string;
         coverImage?: string;
         metaTitle?: string;
         metaDescription?: string;
     }, {
-        category?: string;
         tags?: string[];
-        title?: string;
         status?: "draft" | "published" | "archived";
+        category?: string;
+        title?: string;
         content?: string;
         coverImage?: string;
         metaTitle?: string;

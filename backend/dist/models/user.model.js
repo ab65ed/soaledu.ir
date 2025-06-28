@@ -134,10 +134,6 @@ const UserSchema = new mongoose_1.Schema({
         },
         default: "student",
     },
-    educationalGroup: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: "Category",
-    },
     nationalCode: {
         type: String,
         trim: true,
@@ -240,7 +236,6 @@ UserSchema.index({ phoneNumber: 1 }, { sparse: true }); // ایندکس روی �
 UserSchema.index({ role: 1 }); // ایندکس روی نقش کاربر
 UserSchema.index({ institutionId: 1 }, { sparse: true }); // ایندکس روی موسسه
 UserSchema.index({ institutionalDiscountGroupId: 1 }, { sparse: true }); // ایندکس روی گروه تخفیف
-UserSchema.index({ educationalGroup: 1 }, { sparse: true }); // ایندکس روی گروه آموزشی
 UserSchema.index({ createdAt: -1 }); // ایندکس نزولی روی تاریخ ایجاد (برای فیلتر کردن کاربران جدید)
 UserSchema.index({ enrollmentCode: 1 }, { sparse: true }); // ایندکس روی کد ثبت‌نام
 // ایندکس ترکیبی برای جستجوی بهینه کاربران سازمانی

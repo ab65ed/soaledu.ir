@@ -8,11 +8,11 @@ class CourseExamController {
      */
     static async createCourseExam(req, res) {
         try {
-            const { title, courseType, grade, group, description, tags = [], difficulty, estimatedTime, price = 0, isPublished = false } = req.body;
+            const { title, courseType, grade, description, tags = [], difficulty, estimatedTime, price = 0, isPublished = false } = req.body;
             // Validation
-            if (!title || !courseType || !grade || !group || !description) {
+            if (!title || !courseType || !grade || !description) {
                 return res.status(400).json({
-                    error: 'Required fields missing: title, courseType, grade, group, description'
+                    error: 'Required fields missing: title, courseType, grade, description'
                 });
             }
             // Get current user
@@ -21,7 +21,6 @@ class CourseExamController {
                 title,
                 courseType,
                 grade,
-                group,
                 description,
                 tags,
                 difficulty,
@@ -155,7 +154,7 @@ class CourseExamController {
      */
     static async listCourseExams(req, res) {
         try {
-            const { page = 1, limit = 10, courseType, grade, group, difficulty, tags, priceMin, priceMax, search, sortBy = 'newest', publishedOnly = false, authorId } = req.query;
+            const { page = 1, limit = 10, courseType, grade, difficulty, tags, priceMin, priceMax, search, sortBy = 'newest', publishedOnly = false, authorId } = req.query;
             const skip = (parseInt(page) - 1) * parseInt(limit);
             const options = {
                 limit: parseInt(limit),
@@ -167,8 +166,6 @@ class CourseExamController {
                 options.courseType = courseType;
             if (grade)
                 options.grade = grade;
-            if (group)
-                options.group = group;
             if (difficulty)
                 options.difficulty = difficulty;
             if (tags) {

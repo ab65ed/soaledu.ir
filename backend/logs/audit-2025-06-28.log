@@ -1,0 +1,6 @@
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"CSRF validation failed: Missing cookie token","method":"POST","timestamp":"2025-06-28 12:17:15.798","url":"/protected"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"CSRF validation failed: Missing header token","method":"POST","timestamp":"2025-06-28 12:17:15.838","url":"/protected"}
+{"cookieTokenLength":64,"headerTokenLength":13,"ip":"::ffff:127.0.0.1","level":"warn","message":"CSRF validation failed: Token length mismatch","method":"POST","timestamp":"2025-06-28 12:17:15.877","url":"/protected"}
+{"cookieTokenLength":64,"headerTokenLength":5,"ip":"::ffff:127.0.0.1","level":"warn","message":"CSRF validation failed: Token length mismatch","method":"POST","timestamp":"2025-06-28 12:17:15.944","url":"/protected"}
+{"cookieTokenLength":22,"headerTokenLength":10,"ip":"::ffff:127.0.0.1","level":"warn","message":"CSRF validation failed: Token length mismatch","method":"POST","timestamp":"2025-06-28 12:17:15.994","url":"/protected"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"CSRF validation failed: Missing header token","method":"POST","timestamp":"2025-06-28 12:17:16.032","url":"/protected"}

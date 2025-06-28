@@ -205,11 +205,11 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
     endTime: z.ZodOptional<z.ZodDate>;
     isPublished: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    type?: "practice" | "custom" | "official" | "timed";
-    isPublished?: boolean;
     title?: string;
-    status?: "draft" | "active" | "completed" | "cancelled";
     description?: string;
+    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
+    status?: "draft" | "active" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -229,11 +229,11 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
     startTime?: Date;
     endTime?: Date;
 }, {
-    type?: "practice" | "custom" | "official" | "timed";
-    isPublished?: boolean;
     title?: string;
-    status?: "draft" | "active" | "completed" | "cancelled";
     description?: string;
+    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
+    status?: "draft" | "active" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -253,11 +253,11 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
     startTime?: Date;
     endTime?: Date;
 }>, {
-    type?: "practice" | "custom" | "official" | "timed";
-    isPublished?: boolean;
     title?: string;
-    status?: "draft" | "active" | "completed" | "cancelled";
     description?: string;
+    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
+    status?: "draft" | "active" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -277,11 +277,11 @@ export declare const CreateTestExamSchema: z.ZodEffects<z.ZodObject<{
     startTime?: Date;
     endTime?: Date;
 }, {
-    type?: "practice" | "custom" | "official" | "timed";
-    isPublished?: boolean;
     title?: string;
-    status?: "draft" | "active" | "completed" | "cancelled";
     description?: string;
+    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
+    status?: "draft" | "active" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -397,11 +397,11 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
     endTime: z.ZodOptional<z.ZodDate>;
     isPublished: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    type?: "practice" | "custom" | "official" | "timed";
-    isPublished?: boolean;
     title?: string;
-    status?: "draft" | "active" | "completed" | "cancelled";
     description?: string;
+    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
+    status?: "draft" | "active" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -421,11 +421,11 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
     startTime?: Date;
     endTime?: Date;
 }, {
-    type?: "practice" | "custom" | "official" | "timed";
-    isPublished?: boolean;
     title?: string;
-    status?: "draft" | "active" | "completed" | "cancelled";
     description?: string;
+    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
+    status?: "draft" | "active" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -445,11 +445,11 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
     startTime?: Date;
     endTime?: Date;
 }>, {
-    type?: "practice" | "custom" | "official" | "timed";
-    isPublished?: boolean;
     title?: string;
-    status?: "draft" | "active" | "completed" | "cancelled";
     description?: string;
+    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
+    status?: "draft" | "active" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -469,11 +469,11 @@ export declare const UpdateTestExamSchema: z.ZodEffects<z.ZodObject<{
     startTime?: Date;
     endTime?: Date;
 }, {
-    type?: "practice" | "custom" | "official" | "timed";
-    isPublished?: boolean;
     title?: string;
-    status?: "draft" | "active" | "completed" | "cancelled";
     description?: string;
+    isPublished?: boolean;
+    type?: "practice" | "custom" | "official" | "timed";
+    status?: "draft" | "active" | "completed" | "cancelled";
     configuration?: {
         tags?: string[];
         timeLimit?: number;
@@ -513,15 +513,15 @@ export declare const ExamSessionSchema: z.ZodObject<{
     currentQuestionIndex: z.ZodOptional<z.ZodNumber>;
     timeSpent: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    examId?: string;
     answers?: Record<string, any>;
     timeSpent?: number;
+    examId?: string;
     startTime?: Date;
     currentQuestionIndex?: number;
 }, {
-    examId?: string;
     answers?: Record<string, any>;
     timeSpent?: number;
+    examId?: string;
     startTime?: Date;
     currentQuestionIndex?: number;
 }>;
@@ -534,13 +534,13 @@ export declare const ExamSubmissionSchema: z.ZodObject<{
     totalTimeSpent: z.ZodNumber;
     isCompleted: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    examId?: string;
     answers?: Record<string, any>;
+    examId?: string;
     totalTimeSpent?: number;
     isCompleted?: boolean;
 }, {
-    examId?: string;
     answers?: Record<string, any>;
+    examId?: string;
     totalTimeSpent?: number;
     isCompleted?: boolean;
 }>;
@@ -557,22 +557,22 @@ export declare const ExamFilterSchema: z.ZodObject<{
     order: z.ZodOptional<z.ZodEnum<["asc", "desc"]>>;
     search: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    limit?: number;
+    isPublished?: boolean;
     search?: string;
     type?: "practice" | "custom" | "official" | "timed";
-    isPublished?: boolean;
     status?: "draft" | "active" | "completed" | "cancelled";
     page?: number;
-    sortBy?: "createdAt" | "updatedAt" | "title" | "startTime";
+    limit?: number;
+    sortBy?: "title" | "createdAt" | "updatedAt" | "startTime";
     order?: "asc" | "desc";
 }, {
-    limit?: number;
+    isPublished?: boolean;
     search?: string;
     type?: "practice" | "custom" | "official" | "timed";
-    isPublished?: boolean;
     status?: "draft" | "active" | "completed" | "cancelled";
     page?: number;
-    sortBy?: "createdAt" | "updatedAt" | "title" | "startTime";
+    limit?: number;
+    sortBy?: "title" | "createdAt" | "updatedAt" | "startTime";
     order?: "asc" | "desc";
 }>;
 /**

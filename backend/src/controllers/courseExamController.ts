@@ -12,7 +12,7 @@ class CourseExamController {
         title,
         courseType,
         grade,
-        group,
+
         description,
         tags = [],
         difficulty,
@@ -22,9 +22,9 @@ class CourseExamController {
       } = req.body;
 
       // Validation
-      if (!title || !courseType || !grade || !group || !description) {
+      if (!title || !courseType || !grade || !description) {
         return res.status(400).json({
-          error: 'Required fields missing: title, courseType, grade, group, description'
+          error: 'Required fields missing: title, courseType, grade, description'
         });
       }
 
@@ -35,7 +35,6 @@ class CourseExamController {
         title,
         courseType,
         grade,
-        group,
         description,
         tags,
         difficulty,
@@ -191,7 +190,7 @@ class CourseExamController {
         limit = 10,
         courseType,
         grade,
-        group,
+
         difficulty,
         tags,
         priceMin,
@@ -213,7 +212,7 @@ class CourseExamController {
       // Add filters
       if (courseType) options.courseType = courseType;
       if (grade) options.grade = grade;
-      if (group) options.group = group;
+
       if (difficulty) options.difficulty = difficulty;
       if (tags) {
         options.tags = Array.isArray(tags) ? tags : [tags];

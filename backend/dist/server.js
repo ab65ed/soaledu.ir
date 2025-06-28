@@ -57,6 +57,9 @@ const question_1 = __importDefault(require("./routes/question")); // Question ma
 const roles_1 = __importDefault(require("./routes/roles")); // Roles management routes - فعال شده
 const course_exam_1 = __importDefault(require("./routes/course-exam")); // Course exam routes - فعال شده
 const course_exam_routes_1 = __importDefault(require("./routes/course-exam.routes")); // Course exam routes v2 - فعال شده
+const field_of_study_routes_1 = __importDefault(require("./routes/field-of-study.routes")); // Field of study routes - جدید
+const course_types_routes_1 = __importDefault(require("./routes/course-types.routes")); // Course types routes - جدید
+const grades_routes_1 = __importDefault(require("./routes/grades.routes")); // Grades routes - جدید
 // Import middleware
 const errorHandler_1 = require("./middlewares/errorHandler");
 const parse_server_1 = require("./config/parse-server");
@@ -183,6 +186,9 @@ app.use("/api/v1/question", question_1.default); // Question management routes -
 app.use("/api/v1/roles", roles_1.default); // Roles management routes - فعال شده
 app.use("/api/v1/course-exams", course_exam_1.default); // Course exam routes - فعال شده
 app.use("/api/v1/course-exams-v2", course_exam_routes_1.default); // Course exam routes v2 - فعال شده
+app.use("/api/v1/field-of-study", field_of_study_routes_1.default); // Field of study routes - جدید
+app.use("/api/v1/course-types", course_types_routes_1.default); // Course types routes - جدید
+app.use("/api/v1/grades", grades_routes_1.default); // Grades routes - جدید
 // Swagger API Documentation
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocs));
 // Health check endpoint

@@ -137,13 +137,13 @@ export declare const PricingConfigSchema: z.ZodObject<{
         minPrice: z.ZodNumber;
         maxPrice: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
-        defaultPrice?: number;
         minPrice?: number;
         maxPrice?: number;
+        defaultPrice?: number;
     }, {
-        defaultPrice?: number;
         minPrice?: number;
         maxPrice?: number;
+        defaultPrice?: number;
     }>;
     designerShare: z.ZodNumber;
     platformFee: z.ZodNumber;
@@ -154,9 +154,9 @@ export declare const PricingConfigSchema: z.ZodObject<{
         '31-50'?: number;
     };
     flashcardPricing?: {
-        defaultPrice?: number;
         minPrice?: number;
         maxPrice?: number;
+        defaultPrice?: number;
     };
     designerShare?: number;
     platformFee?: number;
@@ -167,9 +167,9 @@ export declare const PricingConfigSchema: z.ZodObject<{
         '31-50'?: number;
     };
     flashcardPricing?: {
-        defaultPrice?: number;
         minPrice?: number;
         maxPrice?: number;
+        defaultPrice?: number;
     };
     designerShare?: number;
     platformFee?: number;
@@ -246,20 +246,20 @@ export declare const TransactionSchema: z.ZodObject<{
     platformFee: z.ZodOptional<z.ZodNumber>;
     metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
 }, "strip", z.ZodTypeAny, {
-    type?: TransactionType;
-    metadata?: Record<string, any>;
-    userId?: string;
     description?: string;
+    metadata?: Record<string, any>;
+    type?: TransactionType;
+    userId?: string;
     amount?: number;
     designerShare?: number;
     platformFee?: number;
     referenceId?: string;
     designerId?: string;
 }, {
-    type?: TransactionType;
-    metadata?: Record<string, any>;
-    userId?: string;
     description?: string;
+    metadata?: Record<string, any>;
+    type?: TransactionType;
+    userId?: string;
     amount?: number;
     designerShare?: number;
     platformFee?: number;

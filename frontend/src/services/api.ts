@@ -40,7 +40,7 @@ if (typeof window !== 'undefined') {
 }
 
 // Base API configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
 
 /**
  * Generic API response interface

@@ -6,28 +6,130 @@
  * using Zod with Persian error messages.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DIFFICULTIES = exports.GROUPS = exports.GRADES = exports.COURSE_TYPES = exports.validateQuestionDifficultyDistribution = exports.validateCourseExamPublishing = exports.validateListQuery = exports.validateSearchQuery = exports.validateAutoSave = exports.validateRating = exports.validateCourseExamUpdate = exports.validateCourseExam = exports.ListQuerySchema = exports.SearchQuerySchema = exports.AutoSaveSchema = exports.RatingSchema = exports.CourseExamParamsSchema = exports.UpdateCourseExamSchema = exports.CreateCourseExamSchema = void 0;
+exports.DIFFICULTIES = exports.FIELD_OF_STUDY_LABELS = exports.FIELD_OF_STUDY = exports.GRADE_LABELS = exports.GRADES = exports.COURSE_TYPE_LABELS = exports.COURSE_TYPES = exports.validateQuestionDifficultyDistribution = exports.validateCourseExamPublishing = exports.validateListQuery = exports.validateSearchQuery = exports.validateAutoSave = exports.validateRating = exports.validateCourseExamUpdate = exports.validateCourseExam = exports.ListQuerySchema = exports.SearchQuerySchema = exports.AutoSaveSchema = exports.RatingSchema = exports.CourseExamParamsSchema = exports.UpdateCourseExamSchema = exports.CreateCourseExamSchema = void 0;
 const zod_1 = require("zod");
-// Valid course types
+// Valid course types (انواع درس)
 const COURSE_TYPES = [
-    'mathematics', 'physics', 'chemistry', 'biology',
-    'history', 'geography', 'literature', 'english', 'arabic', 'other'
+    'academic', 'non-academic', 'skill-based', 'aptitude', 'general', 'specialized'
 ];
 exports.COURSE_TYPES = COURSE_TYPES;
-// Valid grades
+// Valid grades (مقاطع تحصیلی)
 const GRADES = [
-    'elementary-1', 'elementary-2', 'elementary-3', 'elementary-4', 'elementary-5', 'elementary-6',
-    'middle-school-1', 'middle-school-2', 'middle-school-3',
-    'high-school-1', 'high-school-2', 'high-school-3', 'high-school-4',
-    'high-school-10', 'high-school-11', 'high-school-12',
-    'university', 'konkur'
+    'elementary', 'middle-school', 'high-school', 'associate-degree', 'bachelor-degree', 'master-degree', 'doctorate-degree'
 ];
 exports.GRADES = GRADES;
-// Valid groups
-const GROUPS = [
-    'theoretical', 'mathematical', 'experimental', 'technical', 'art', 'other'
+// Valid field of study (رشته تحصیلی)
+const FIELD_OF_STUDY = [
+    // رشته‌های دبیرستان
+    'math-physics', 'experimental-sciences', 'humanities', 'technical-vocational',
+    // رشته‌های دانشگاهی - مهندسی
+    'computer-engineering', 'electrical-engineering', 'mechanical-engineering',
+    'civil-engineering', 'chemical-engineering', 'industrial-engineering',
+    'aerospace-engineering', 'biomedical-engineering',
+    // رشته‌های دانشگاهی - علوم پایه
+    'pure-mathematics', 'applied-mathematics', 'physics', 'chemistry', 'biology',
+    'geology', 'statistics', 'computer-science',
+    // رشته‌های دانشگاهی - علوم انسانی
+    'law', 'economics', 'management', 'psychology', 'sociology',
+    'political-science', 'history', 'philosophy', 'literature',
+    'linguistics', 'archaeology', 'geography',
+    // رشته‌های دانشگاهی - پزشکی
+    'medicine', 'dentistry', 'pharmacy', 'nursing', 'veterinary',
+    'public-health', 'medical-laboratory', 'physiotherapy',
+    // رشته‌های دانشگاهی - هنر
+    'fine-arts', 'music', 'theater', 'cinema', 'graphic-design',
+    'architecture', 'urban-planning',
+    // رشته‌های دانشگاهی - کشاورزی
+    'agriculture', 'horticulture', 'animal-science', 'forestry',
+    // سایر
+    'other'
 ];
-exports.GROUPS = GROUPS;
+exports.FIELD_OF_STUDY = FIELD_OF_STUDY;
+// Persian labels for field of study (عناوین فارسی رشته‌های تحصیلی)
+const FIELD_OF_STUDY_LABELS = {
+    // رشته‌های دبیرستان
+    'math-physics': 'ریاضی-فیزیک',
+    'experimental-sciences': 'علوم تجربی',
+    'humanities': 'علوم انسانی',
+    'technical-vocational': 'فنی-حرفه‌ای',
+    // رشته‌های دانشگاهی - مهندسی
+    'computer-engineering': 'مهندسی کامپیوتر',
+    'electrical-engineering': 'مهندسی برق',
+    'mechanical-engineering': 'مهندسی مکانیک',
+    'civil-engineering': 'مهندسی عمران',
+    'chemical-engineering': 'مهندسی شیمی',
+    'industrial-engineering': 'مهندسی صنایع',
+    'aerospace-engineering': 'مهندسی هوافضا',
+    'biomedical-engineering': 'مهندسی پزشکی',
+    // رشته‌های دانشگاهی - علوم پایه
+    'pure-mathematics': 'ریاضی محض',
+    'applied-mathematics': 'ریاضی کاربردی',
+    'physics': 'فیزیک',
+    'chemistry': 'شیمی',
+    'biology': 'زیست‌شناسی',
+    'geology': 'زمین‌شناسی',
+    'statistics': 'آمار',
+    'computer-science': 'علوم کامپیوتر',
+    // رشته‌های دانشگاهی - علوم انسانی
+    'law': 'حقوق',
+    'economics': 'اقتصاد',
+    'management': 'مدیریت',
+    'psychology': 'روان‌شناسی',
+    'sociology': 'جامعه‌شناسی',
+    'political-science': 'علوم سیاسی',
+    'history': 'تاریخ',
+    'philosophy': 'فلسفه',
+    'literature': 'ادبیات',
+    'linguistics': 'زبان‌شناسی',
+    'archaeology': 'باستان‌شناسی',
+    'geography': 'جغرافیا',
+    // رشته‌های دانشگاهی - پزشکی
+    'medicine': 'پزشکی',
+    'dentistry': 'دندان‌پزشکی',
+    'pharmacy': 'داروسازی',
+    'nursing': 'پرستاری',
+    'veterinary': 'دامپزشکی',
+    'public-health': 'بهداشت عمومی',
+    'medical-laboratory': 'آزمایشگاه پزشکی',
+    'physiotherapy': 'فیزیوتراپی',
+    // رشته‌های دانشگاهی - هنر
+    'fine-arts': 'هنرهای تجسمی',
+    'music': 'موسیقی',
+    'theater': 'تئاتر',
+    'cinema': 'سینما',
+    'graphic-design': 'طراحی گرافیک',
+    'architecture': 'معماری',
+    'urban-planning': 'شهرسازی',
+    // رشته‌های دانشگاهی - کشاورزی
+    'agriculture': 'کشاورزی',
+    'horticulture': 'باغبانی',
+    'animal-science': 'علوم دامی',
+    'forestry': 'جنگلداری',
+    // سایر
+    'other': 'سایر'
+};
+exports.FIELD_OF_STUDY_LABELS = FIELD_OF_STUDY_LABELS;
+// Persian labels for course types (عناوین فارسی انواع درس)
+const COURSE_TYPE_LABELS = {
+    'academic': 'درسی',
+    'non-academic': 'غیر درسی',
+    'skill-based': 'مهارتی',
+    'aptitude': 'استعدادی',
+    'general': 'عمومی',
+    'specialized': 'تخصصی'
+};
+exports.COURSE_TYPE_LABELS = COURSE_TYPE_LABELS;
+// Persian labels for grades (عناوین فارسی مقاطع تحصیلی)
+const GRADE_LABELS = {
+    'elementary': 'مقطع ابتدایی',
+    'middle-school': 'مقطع متوسطه اول',
+    'high-school': 'مقطع متوسطه دوم',
+    'associate-degree': 'کاردانی',
+    'bachelor-degree': 'کارشناسی',
+    'master-degree': 'کارشناسی ارشد',
+    'doctorate-degree': 'دکتری'
+};
+exports.GRADE_LABELS = GRADE_LABELS;
 // Valid difficulty levels
 const DIFFICULTIES = ['easy', 'medium', 'hard'];
 exports.DIFFICULTIES = DIFFICULTIES;
@@ -38,8 +140,8 @@ const CourseTypeEnum = zod_1.z.enum(COURSE_TYPES, {
 const GradeEnum = zod_1.z.enum(GRADES, {
     errorMap: () => ({ message: 'مقطع تحصیلی معتبر نیست' })
 });
-const GroupEnum = zod_1.z.enum(GROUPS, {
-    errorMap: () => ({ message: 'گروه آموزشی معتبر نیست' })
+const FieldOfStudyEnum = zod_1.z.enum(FIELD_OF_STUDY, {
+    errorMap: () => ({ message: 'رشته تحصیلی معتبر نیست' })
 });
 const DifficultyEnum = zod_1.z.enum(DIFFICULTIES, {
     errorMap: () => ({ message: 'سطح سختی معتبر نیست' })
@@ -54,7 +156,7 @@ exports.CreateCourseExamSchema = zod_1.z.object({
         .max(200, { message: 'عنوان نباید بیشتر از ۲۰۰ کاراکتر باشد' }),
     courseType: CourseTypeEnum,
     grade: GradeEnum,
-    group: GroupEnum,
+    fieldOfStudy: FieldOfStudyEnum.optional(),
     description: zod_1.z.string()
         .trim()
         .min(10, { message: 'توضیحات باید حداقل ۱۰ کاراکتر باشد' })
@@ -75,14 +177,9 @@ exports.CreateCourseExamSchema = zod_1.z.object({
         .min(0, { message: 'قیمت نمی‌تواند منفی باشد' })
         .max(100000, { message: 'قیمت نباید بیشتر از ۱۰۰,۰۰۰ تومان باشد' })
         .optional(),
-    isPublished: zod_1.z.boolean({
-        errorMap: () => ({ message: 'وضعیت انتشار باید true یا false باشد' })
-    }).optional(),
-    chapters: zod_1.z.array(zod_1.z.string()
-        .min(1, { message: 'نام فصل باید حداقل ۱ کاراکتر باشد' })
-        .max(100, { message: 'نام فصل نباید بیشتر از ۱۰۰ کاراکتر باشد' }))
-        .max(50, { message: 'حداکثر ۵۰ فصل مجاز است' })
-        .optional()
+    isPublished: zod_1.z.boolean().optional(),
+    isDraft: zod_1.z.boolean().optional(),
+    metadata: zod_1.z.record(zod_1.z.any()).optional()
 });
 /**
  * Validation schema for updating a course exam
@@ -95,7 +192,7 @@ exports.UpdateCourseExamSchema = zod_1.z.object({
         .optional(),
     courseType: CourseTypeEnum.optional(),
     grade: GradeEnum.optional(),
-    group: GroupEnum.optional(),
+    fieldOfStudy: FieldOfStudyEnum.optional(),
     description: zod_1.z.string()
         .trim()
         .min(10, { message: 'توضیحات باید حداقل ۱۰ کاراکتر باشد' })
@@ -117,14 +214,9 @@ exports.UpdateCourseExamSchema = zod_1.z.object({
         .min(0, { message: 'قیمت نمی‌تواند منفی باشد' })
         .max(100000, { message: 'قیمت نباید بیشتر از ۱۰۰,۰۰۰ تومان باشد' })
         .optional(),
-    isPublished: zod_1.z.boolean({
-        errorMap: () => ({ message: 'وضعیت انتشار باید true یا false باشد' })
-    }).optional(),
-    chapters: zod_1.z.array(zod_1.z.string()
-        .min(1, { message: 'نام فصل باید حداقل ۱ کاراکتر باشد' })
-        .max(100, { message: 'نام فصل نباید بیشتر از ۱۰۰ کاراکتر باشد' }))
-        .max(50, { message: 'حداکثر ۵۰ فصل مجاز است' })
-        .optional()
+    isPublished: zod_1.z.boolean().optional(),
+    isDraft: zod_1.z.boolean().optional(),
+    metadata: zod_1.z.record(zod_1.z.any()).optional()
 });
 /**
  * Validation schema for course exam parameters (ID validation)
@@ -170,58 +262,37 @@ exports.AutoSaveSchema = zod_1.z.object({
 exports.SearchQuerySchema = zod_1.z.object({
     q: zod_1.z.string()
         .trim()
-        .min(2, { message: 'جستجو باید حداقل ۲ کاراکتر باشد' })
-        .max(100, { message: 'جستجو نباید بیشتر از ۱۰۰ کاراکتر باشد' }),
+        .min(1, { message: 'کلمه کلیدی جستجو نباید خالی باشد' })
+        .max(100, { message: 'کلمه کلیدی جستجو نباید بیشتر از ۱۰۰ کاراکتر باشد' })
+        .optional(),
     courseType: CourseTypeEnum.optional(),
     grade: GradeEnum.optional(),
-    group: GroupEnum.optional(),
+    fieldOfStudy: FieldOfStudyEnum.optional(),
     difficulty: DifficultyEnum.optional(),
-    minPrice: zod_1.z.coerce.number()
-        .min(0, { message: 'حداقل قیمت نمی‌تواند منفی باشد' })
-        .optional(),
-    maxPrice: zod_1.z.coerce.number()
-        .min(0, { message: 'حداکثر قیمت نمی‌تواند منفی باشد' })
-        .optional(),
-    tags: zod_1.z.string()
-        .transform((str) => str.split(',').map(tag => tag.trim()))
-        .optional()
-}).refine((data) => {
-    if (data.minPrice && data.maxPrice) {
-        return data.minPrice <= data.maxPrice;
-    }
-    return true;
-}, {
-    message: 'حداقل قیمت باید کمتر یا مساوی حداکثر قیمت باشد',
-    path: ['priceRange']
+    tags: zod_1.z.array(zod_1.z.string()).optional(),
+    priceMin: zod_1.z.number().int().min(0).optional(),
+    priceMax: zod_1.z.number().int().min(0).optional(),
+    page: zod_1.z.number().int().min(1).optional(),
+    limit: zod_1.z.number().int().min(1).max(100).optional(),
+    sortBy: zod_1.z.enum(['createdAt', 'updatedAt', 'title', 'price', 'averageRating']).optional(),
+    sortOrder: zod_1.z.enum(['asc', 'desc']).optional(),
+    publishedOnly: zod_1.z.boolean().optional()
 });
 /**
- * Validation schema for listing queries
+ * Validation schema for list queries
  */
 exports.ListQuerySchema = zod_1.z.object({
-    page: zod_1.z.coerce.number()
-        .int({ message: 'شماره صفحه باید عدد صحیح باشد' })
-        .min(1, { message: 'شماره صفحه باید حداقل ۱ باشد' })
-        .default(1)
-        .optional(),
-    limit: zod_1.z.coerce.number()
-        .int({ message: 'تعداد آیتم در صفحه باید عدد صحیح باشد' })
-        .min(1, { message: 'تعداد آیتم در صفحه باید حداقل ۱ باشد' })
-        .max(50, { message: 'تعداد آیتم در صفحه نمی‌تواند بیش از ۵۰ باشد' })
-        .default(10)
-        .optional(),
-    sortBy: zod_1.z.enum(['createdAt', 'updatedAt', 'title', 'price', 'rating'], {
-        errorMap: () => ({ message: 'مرتب‌سازی معتبر نیست' })
-    }).optional(),
-    order: zod_1.z.enum(['asc', 'desc'], {
-        errorMap: () => ({ message: 'نحوه مرتب‌سازی معتبر نیست' })
-    }).optional(),
+    page: zod_1.z.number().int().min(1).optional(),
+    limit: zod_1.z.number().int().min(1).max(100).optional(),
     courseType: CourseTypeEnum.optional(),
     grade: GradeEnum.optional(),
-    group: GroupEnum.optional(),
+    fieldOfStudy: FieldOfStudyEnum.optional(),
     difficulty: DifficultyEnum.optional(),
-    isPublished: zod_1.z.coerce.boolean({
-        errorMap: () => ({ message: 'وضعیت انتشار باید true یا false باشد' })
-    }).optional()
+    authorId: zod_1.z.string().optional(),
+    isPublished: zod_1.z.boolean().optional(),
+    isDraft: zod_1.z.boolean().optional(),
+    sortBy: zod_1.z.enum(['createdAt', 'updatedAt', 'title', 'price', 'averageRating']).optional(),
+    sortOrder: zod_1.z.enum(['asc', 'desc']).optional()
 });
 // Helper function to format errors
 const formatZodError = (error) => {

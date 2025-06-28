@@ -45,10 +45,10 @@ exports.COURSE_EXAM_INDEXES = [
         status: 'active'
     },
     {
-        id: 'course_exam_grade_group_idx',
+        id: 'course_exam_grade_idx',
         collection: 'CourseExam',
-        fields: { grade: 1, group: 1, isPublished: 1 },
-        name: 'grade_group_published',
+        fields: { grade: 1, isPublished: 1 },
+        name: 'grade_published',
         type: 'compound',
         options: {
             background: true

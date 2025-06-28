@@ -106,34 +106,34 @@ export declare const questionSchema: z.ZodObject<{
     explanation: z.ZodOptional<z.ZodString>;
     points: z.ZodDefault<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    type?: "essay" | "multiple_choice" | "true_false" | "short_answer";
+    title?: string;
+    tags?: string[];
+    difficulty?: "easy" | "medium" | "hard";
     options?: {
         text?: string;
         isCorrect?: boolean;
     }[];
+    type?: "essay" | "multiple_choice" | "true_false" | "short_answer";
     correctAnswer?: string;
-    difficulty?: "easy" | "medium" | "hard";
     points?: number;
     explanation?: string;
     category?: string;
     lesson?: string;
-    tags?: string[];
-    title?: string;
     content?: string;
 }, {
-    type?: "essay" | "multiple_choice" | "true_false" | "short_answer";
+    title?: string;
+    tags?: string[];
+    difficulty?: "easy" | "medium" | "hard";
     options?: {
         text?: string;
         isCorrect?: boolean;
     }[];
+    type?: "essay" | "multiple_choice" | "true_false" | "short_answer";
     correctAnswer?: string;
-    difficulty?: "easy" | "medium" | "hard";
     points?: number;
     explanation?: string;
     category?: string;
     lesson?: string;
-    tags?: string[];
-    title?: string;
     content?: string;
 }>;
 /**
@@ -154,27 +154,27 @@ export declare const examSchema: z.ZodObject<{
     questions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     institutionId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    institutionId?: string;
+    title?: string;
+    description?: string;
     difficulty?: "easy" | "medium" | "hard";
+    institutionId?: string;
     category?: string;
     lesson?: string;
-    title?: string;
     duration?: number;
     questions?: string[];
-    description?: string;
     passingScore?: number;
     isPublic?: boolean;
     maxAttempts?: number;
     scheduledAt?: string;
 }, {
-    institutionId?: string;
+    title?: string;
+    description?: string;
     difficulty?: "easy" | "medium" | "hard";
+    institutionId?: string;
     category?: string;
     lesson?: string;
-    title?: string;
     duration?: number;
     questions?: string[];
-    description?: string;
     passingScore?: number;
     isPublic?: boolean;
     maxAttempts?: number;
@@ -194,17 +194,17 @@ export declare const contactSchema: z.ZodObject<{
     priority: z.ZodDefault<z.ZodEnum<["low", "medium", "high"]>>;
 }, "strip", z.ZodTypeAny, {
     message?: string;
+    type?: "other" | "support" | "complaint" | "suggestion";
     email?: string;
     name?: string;
-    type?: "support" | "other" | "complaint" | "suggestion";
     priority?: "medium" | "low" | "high";
     phone?: string;
     subject?: string;
 }, {
     message?: string;
+    type?: "other" | "support" | "complaint" | "suggestion";
     email?: string;
     name?: string;
-    type?: "support" | "other" | "complaint" | "suggestion";
     priority?: "medium" | "low" | "high";
     phone?: string;
     subject?: string;
@@ -271,14 +271,14 @@ export declare const paginationSchema: z.ZodObject<{
     sort: z.ZodOptional<z.ZodString>;
     order: z.ZodDefault<z.ZodEnum<["asc", "desc"]>>;
 }, "strip", z.ZodTypeAny, {
-    limit?: number;
     sort?: string;
     page?: number;
+    limit?: number;
     order?: "asc" | "desc";
 }, {
-    limit?: string;
     sort?: string;
     page?: string;
+    limit?: string;
     order?: "asc" | "desc";
 }>;
 export declare const searchSchema: z.ZodObject<{
@@ -288,14 +288,14 @@ export declare const searchSchema: z.ZodObject<{
     status: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     difficulty?: "easy" | "medium" | "hard";
-    category?: string;
     status?: string;
     q?: string;
+    category?: string;
 }, {
     difficulty?: "easy" | "medium" | "hard";
-    category?: string;
     status?: string;
     q?: string;
+    category?: string;
 }>;
 /**
  * Validation Helper Functions
@@ -390,34 +390,34 @@ declare const _default: {
         explanation: z.ZodOptional<z.ZodString>;
         points: z.ZodDefault<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
-        type?: "essay" | "multiple_choice" | "true_false" | "short_answer";
+        title?: string;
+        tags?: string[];
+        difficulty?: "easy" | "medium" | "hard";
         options?: {
             text?: string;
             isCorrect?: boolean;
         }[];
+        type?: "essay" | "multiple_choice" | "true_false" | "short_answer";
         correctAnswer?: string;
-        difficulty?: "easy" | "medium" | "hard";
         points?: number;
         explanation?: string;
         category?: string;
         lesson?: string;
-        tags?: string[];
-        title?: string;
         content?: string;
     }, {
-        type?: "essay" | "multiple_choice" | "true_false" | "short_answer";
+        title?: string;
+        tags?: string[];
+        difficulty?: "easy" | "medium" | "hard";
         options?: {
             text?: string;
             isCorrect?: boolean;
         }[];
+        type?: "essay" | "multiple_choice" | "true_false" | "short_answer";
         correctAnswer?: string;
-        difficulty?: "easy" | "medium" | "hard";
         points?: number;
         explanation?: string;
         category?: string;
         lesson?: string;
-        tags?: string[];
-        title?: string;
         content?: string;
     }>;
     examSchema: z.ZodObject<{
@@ -434,27 +434,27 @@ declare const _default: {
         questions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         institutionId: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        institutionId?: string;
+        title?: string;
+        description?: string;
         difficulty?: "easy" | "medium" | "hard";
+        institutionId?: string;
         category?: string;
         lesson?: string;
-        title?: string;
         duration?: number;
         questions?: string[];
-        description?: string;
         passingScore?: number;
         isPublic?: boolean;
         maxAttempts?: number;
         scheduledAt?: string;
     }, {
-        institutionId?: string;
+        title?: string;
+        description?: string;
         difficulty?: "easy" | "medium" | "hard";
+        institutionId?: string;
         category?: string;
         lesson?: string;
-        title?: string;
         duration?: number;
         questions?: string[];
-        description?: string;
         passingScore?: number;
         isPublic?: boolean;
         maxAttempts?: number;
@@ -470,17 +470,17 @@ declare const _default: {
         priority: z.ZodDefault<z.ZodEnum<["low", "medium", "high"]>>;
     }, "strip", z.ZodTypeAny, {
         message?: string;
+        type?: "other" | "support" | "complaint" | "suggestion";
         email?: string;
         name?: string;
-        type?: "support" | "other" | "complaint" | "suggestion";
         priority?: "medium" | "low" | "high";
         phone?: string;
         subject?: string;
     }, {
         message?: string;
+        type?: "other" | "support" | "complaint" | "suggestion";
         email?: string;
         name?: string;
-        type?: "support" | "other" | "complaint" | "suggestion";
         priority?: "medium" | "low" | "high";
         phone?: string;
         subject?: string;
@@ -507,14 +507,14 @@ declare const _default: {
         sort: z.ZodOptional<z.ZodString>;
         order: z.ZodDefault<z.ZodEnum<["asc", "desc"]>>;
     }, "strip", z.ZodTypeAny, {
-        limit?: number;
         sort?: string;
         page?: number;
+        limit?: number;
         order?: "asc" | "desc";
     }, {
-        limit?: string;
         sort?: string;
         page?: string;
+        limit?: string;
         order?: "asc" | "desc";
     }>;
     searchSchema: z.ZodObject<{
@@ -524,14 +524,14 @@ declare const _default: {
         status: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         difficulty?: "easy" | "medium" | "hard";
-        category?: string;
         status?: string;
         q?: string;
+        category?: string;
     }, {
         difficulty?: "easy" | "medium" | "hard";
-        category?: string;
         status?: string;
         q?: string;
+        category?: string;
     }>;
     iranianNationalCodeSchema: z.ZodEffects<z.ZodString, string, string>;
     iranianMobileSchema: z.ZodEffects<z.ZodString, string, string>;

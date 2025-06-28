@@ -225,4 +225,223 @@ frontend/src/
     ├── pages.md
     ├── progress-report.md
     └── test-report.md
-``` 
+```
+
+## صفحه خانه مدرن (/)
+
+### نمای کلی
+صفحه خانه جدید با طراحی مدرن و جذاب که شامل بخش‌های مختلف برای معرفی پلتفرم سوال جو است.
+
+### بخش‌های اصلی
+
+#### 1. Navigation Bar
+- لوگو و نام برند
+- منوی responsive
+- دکمه CTA اصلی
+
+#### 2. Hero Section
+```typescript
+// ویژگی‌های کلیدی:
+- Parallax scrolling effect
+- تصویر پس‌زمینه از Unsplash
+- عنوان gradient animatedا
+- دکمه‌های CTA تعاملی
+- کارت‌های شناور با انیمیشن
+```
+
+#### 3. Stats Section
+```typescript
+const stats = [
+  { number: "50,000+", label: "دانش‌آموز موفق", icon: Users },
+  { number: "10,000+", label: "آزمون برگزار شده", icon: BookOpen },
+  { number: "95%", label: "رضایت کاربران", icon: Award },
+  { number: "24/7", label: "پشتیبانی", icon: Shield }
+];
+```
+
+#### 4. Features Section
+```typescript
+const features = [
+  {
+    icon: Target,
+    title: "آزمون‌های هدفمند",
+    description: "طراحی آزمون‌های تخصصی متناسب با نیاز هر رشته و مقطع تحصیلی",
+    color: "from-blue-500 to-purple-600"
+  },
+  // ...
+];
+```
+
+#### 5. Testimonials
+- نظرات واقعی کاربران
+- تصاویر avatar از Unsplash
+- رتبه‌بندی ستاره‌ای
+
+#### 6. CTA Section
+- تصویر پس‌زمینه انگیزشی
+- دکمه‌های واضح
+- لیست مزایا
+
+#### 7. Footer
+- لینک‌های دسته‌بندی شده
+- اطلاعات شرکت
+- طراحی dark theme
+
+### انیمیشن‌ها و Effects
+
+#### Framer Motion Animations
+```typescript
+// Parallax Effect
+const { scrollYProgress } = useScroll();
+const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+
+// Floating Elements
+<motion.div
+  animate={{
+    y: [0, -20, 0],
+    x: [0, 10, 0],
+    scale: [1, 1.2, 1],
+  }}
+  transition={{
+    duration: 3 + Math.random() * 2,
+    repeat: Infinity,
+    delay: Math.random() * 2,
+  }}
+/>
+```
+
+#### CSS Animations
+```css
+.gradient-bg {
+  background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+.floating-card {
+  animation: float 6s ease-in-out infinite;
+}
+```
+
+### تصاویر Unsplash
+
+#### URLs استفاده شده:
+```typescript
+// Hero Background
+"https://images.unsplash.com/photo-1522202176988-66273c2fd55f"
+
+// Dashboard Mockup
+"https://images.unsplash.com/photo-1516321318423-f06f85e504b3"
+
+// CTA Background
+"https://images.unsplash.com/photo-1523240795612-9a054b0db644"
+
+// Testimonial Avatars
+"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d"
+"https://images.unsplash.com/photo-1494790108755-2616b612b786"
+"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+```
+
+### Performance Optimizations
+
+#### 1. Image Loading
+- استفاده از Unsplash CDN
+- Lazy loading automatic
+- Responsive images
+
+#### 2. Animation Performance
+- GPU acceleration با transform
+- Intersection Observer برای trigger
+- RequestAnimationFrame optimization
+
+#### 3. Bundle Size
+- Tree shaking icons
+- Code splitting automatic
+- CSS optimizations
+
+### Responsive Design
+
+#### Breakpoints
+```css
+/* Mobile First */
+.container {
+  padding: 1rem;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .container {
+    padding: 2rem;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .container {
+    padding: 3rem;
+  }
+}
+```
+
+### Accessibility Features
+
+#### 1. Keyboard Navigation
+- تمام دکمه‌ها قابل دسترسی با keyboard
+- Focus indicators واضح
+
+#### 2. Screen Reader Support
+- Alt texts مناسب برای تصاویر
+- Semantic HTML structure
+
+#### 3. Color Contrast
+- رعایت WCAG 2.1 guidelines
+- Contrast ratio بالای 4.5:1
+
+### استایل‌های سفارشی
+
+#### Theme Integration
+```typescript
+// استفاده از رنگ‌های theme.ts
+colors: {
+  primary: "hsl(var(--primary))",
+  secondary: "hsl(var(--secondary))",
+  // ...
+}
+```
+
+#### Custom CSS Classes
+```css
+.text-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+```
+
+### نکات توسعه
+
+#### 1. State Management
+```typescript
+const [isLoaded, setIsLoaded] = useState(false);
+// کنترل انیمیشن‌های اولیه
+```
+
+#### 2. Event Handling
+```typescript
+useEffect(() => {
+  const observer = new IntersectionObserver(/* ... */);
+  // مدیریت انیمیشن‌های scroll-based
+}, []);
+```
+
+#### 3. Performance Monitoring
+- Core Web Vitals optimization
+- Lighthouse score بالای 90
+
+// ... existing code ... 

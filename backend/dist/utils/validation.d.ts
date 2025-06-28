@@ -1,10 +1,10 @@
 export declare const validateBlogPost: (data: any) => {
     isValid: boolean;
     data: {
-        tags?: string[];
-        categories?: string[];
         title?: string;
+        tags?: string[];
         status?: "draft" | "published" | "archived";
+        categories?: string[];
         content?: string;
         metaTitle?: string;
         metaDescription?: string;
@@ -26,11 +26,11 @@ export declare const validateBlogPost: (data: any) => {
 export declare const validateBlogCategory: (data: any) => {
     isValid: boolean;
     data: {
-        name?: string;
         description?: string;
+        order?: number;
+        name?: string;
         parent?: string;
         color?: string;
-        order?: number;
     };
     errors: any[];
 } | {

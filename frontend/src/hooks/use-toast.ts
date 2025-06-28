@@ -26,4 +26,15 @@ export const useToast = () => {
   return {
     toast,
   }
+}
+
+// Export toast function directly for convenience
+export const toast = ({ title, description, variant = "default" }: ToastProps) => {
+  const message = `${title || (variant === "destructive" ? "خطا" : "موفقیت")}${description ? `\n${description}` : ""}`;
+  
+  if (variant === "destructive") {
+    console.error(message);
+  } else {
+    console.log(message);
+  }
 } 

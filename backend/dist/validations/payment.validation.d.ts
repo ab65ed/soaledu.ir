@@ -20,11 +20,11 @@ export declare const DiscountCodeSchema: z.ZodObject<{
     code: z.ZodString;
     amount: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
-    amount?: number;
     code?: string;
+    amount?: number;
 }, {
-    amount?: number;
     code?: string;
+    amount?: number;
 }>;
 export declare const CreateDiscountCodeSchema: z.ZodObject<{
     code: z.ZodString;
@@ -35,17 +35,17 @@ export declare const CreateDiscountCodeSchema: z.ZodObject<{
     maxDiscount: z.ZodOptional<z.ZodNumber>;
     description: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    discountPercentage?: number;
     description?: string;
     code?: string;
+    discountPercentage?: number;
     expiryDate?: Date;
     usageLimit?: number;
     minAmount?: number;
     maxDiscount?: number;
 }, {
-    discountPercentage?: number;
     description?: string;
     code?: string;
+    discountPercentage?: number;
     expiryDate?: Date;
     usageLimit?: number;
     minAmount?: number;
@@ -59,31 +59,31 @@ export declare const TransactionFilterSchema: z.ZodEffects<z.ZodObject<{
     startDate: z.ZodOptional<z.ZodDate>;
     endDate: z.ZodOptional<z.ZodDate>;
 }, "strip", z.ZodTypeAny, {
-    limit?: number;
-    userId?: string;
     status?: "pending" | "failed" | "completed" | "refunded";
     page?: number;
+    limit?: number;
+    userId?: string;
     startDate?: Date;
     endDate?: Date;
 }, {
-    limit?: number;
-    userId?: string;
     status?: "pending" | "failed" | "completed" | "refunded";
     page?: number;
+    limit?: number;
+    userId?: string;
     startDate?: Date;
     endDate?: Date;
 }>, {
-    limit?: number;
-    userId?: string;
     status?: "pending" | "failed" | "completed" | "refunded";
     page?: number;
+    limit?: number;
+    userId?: string;
     startDate?: Date;
     endDate?: Date;
 }, {
-    limit?: number;
-    userId?: string;
     status?: "pending" | "failed" | "completed" | "refunded";
     page?: number;
+    limit?: number;
+    userId?: string;
     startDate?: Date;
     endDate?: Date;
 }>;

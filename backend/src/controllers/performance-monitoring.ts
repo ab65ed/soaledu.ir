@@ -34,7 +34,7 @@ export const getSystemPerformance = async (req: Request, res: Response): Promise
           avgQueryTime: 85,
           indexEfficiency: 96.8,
           mostUsedQueries: [
-            'find by grade and group',
+            'find by grade',
             'text search in title',
             'filter by creator'
           ]
@@ -171,14 +171,14 @@ export const getOptimizationSuggestions = async (req: Request, res: Response): P
         priority: 'high',
         collection: 'CourseExam',
         title: 'بهینه‌سازی ایندکس جستجوی دروس',
-        description: 'اضافه کردن ایندکس ترکیبی برای بهبود جستجوی دروس بر اساس grade و group',
+        description: 'اضافه کردن ایندکس ترکیبی برای بهبود جستجوی دروس بر اساس grade',
         impact: {
           performanceGain: 65,
           resourceSavings: 30,
           estimatedTime: 5
         },
         implementation: {
-          command: 'db.CourseExam.createIndex({ grade: 1, group: 1, isPublished: 1 })',
+          command: 'db.CourseExam.createIndex({ grade: 1, isPublished: 1 })',
           riskLevel: 'low'
         },
         status: 'pending'
@@ -307,7 +307,7 @@ export const getIndexUsageStats = async (req: Request, res: Response): Promise<v
               lastUsed: new Date()
             },
             {
-              name: 'grade_group_published',
+              name: 'grade_published',
               usage: 76.3,
               hitRate: 94.8,
               size: '1.8 MB',

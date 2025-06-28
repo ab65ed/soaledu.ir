@@ -115,34 +115,6 @@ router.post('/refresh-token', auth_controller_1.refreshToken);
 router.get('/me', auth_1.protectRoute, auth_controller_1.getMe);
 /**
  * @swagger
- * /auth/complete-profile:
- *   put:
- *     summary: Complete user profile (select educational group)
- *     tags: [Authentication]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - educationalGroup
- *             properties:
- *               educationalGroup:
- *                 type: string
- *     responses:
- *       200:
- *         description: Profile completed successfully
- *       400:
- *         description: Educational group is required
- *       401:
- *         description: Not authorized
- */
-router.put('/complete-profile', auth_1.protectRoute, auth_controller_1.completeProfile);
-/**
- * @swagger
  * /auth/logout:
  *   post:
  *     summary: Logout user

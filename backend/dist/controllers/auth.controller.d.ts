@@ -30,15 +30,9 @@ declare const refreshToken: (req: Request, res: Response, next: NextFunction) =>
  */
 declare const getMe: (req: RequestWithUser, res: Response, next: NextFunction) => Promise<void>;
 /**
- * @desc    Complete user profile (select educational group)
- * @route   PUT /api/v1/auth/complete-profile
- * @access  Private
- */
-declare const completeProfile: (req: RequestWithUser, res: Response, next: NextFunction) => Promise<void>;
-/**
  * @desc    Logout user
  * @route   POST /api/v1/auth/logout
  * @access  Private
  */
 declare const logout: (req: Request, res: Response) => void;
-export { register, login, refreshToken, getMe, completeProfile, logout, };
+export { register, login, refreshToken, getMe, logout, };

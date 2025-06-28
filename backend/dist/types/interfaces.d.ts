@@ -29,7 +29,7 @@ export interface CourseExamOptions {
     sortBy?: string;
     authorId?: string;
     grade?: string;
-    group?: string;
+    fieldOfStudy?: string;
     isPublished?: boolean;
     difficulty?: 'easy' | 'medium' | 'hard';
     search?: string;

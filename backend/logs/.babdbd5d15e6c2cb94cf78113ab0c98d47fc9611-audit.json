@@ -24,6 +24,11 @@
             "date": 1751002377845,
             "name": "/home/abedin/Desktop/next-js/soaledu.ir/backend/logs/application-2025-06-27.log",
             "hash": "07d65640b2f80db76ac87decda1326c7ee2735596892af8bfe159d93af35bda1"
+        },
+        {
+            "date": 1751093904643,
+            "name": "/home/abedin/Desktop/next-js/soaledu.ir/backend/logs/application-2025-06-28.log",
+            "hash": "edd3bec23a44a4a46a6a192a2285601d425891e26b4f0b5b92a02b30aa957d78"
         }
     ],
     "hashType": "sha256"

@@ -312,56 +312,6 @@ describe('Auth Controller Tests', () => {
             expect(response.body.error).toBe('UNAUTHORIZED');
         });
     });
-    describe('PUT /api/v1/auth/complete-profile', () => {
-        it('should complete profile successfully', async () => {
-            authController.completeProfile.mockImplementation((req, res) => {
-                res.status(200).json({
-                    success: true,
-                    message: 'پروفایل با موفقیت تکمیل شد',
-                    data: {
-                        user: {
-                            ...mockUser.toJSON(),
-                            educationalGroupId: 'group123',
-                            institutionId: 'inst456'
-                        }
-                    }
-                });
-            });
-            const profileData = {
-                educationalGroupId: 'group123',
-                institutionId: 'inst456',
-                birthDate: '1990-01-01',
-                gender: 'male'
-            };
-            const response = await (0, supertest_1.default)(app)
-                .put('/api/v1/auth/complete-profile')
-                .set('Authorization', 'Bearer valid-jwt-token')
-                .send(profileData)
-                .expect(200);
-            expect(response.body.success).toBe(true);
-            expect(response.body.data.user.educationalGroupId).toBe(profileData.educationalGroupId);
-        });
-        it('should fail with validation errors', async () => {
-            authController.completeProfile.mockImplementation((req, res) => {
-                res.status(400).json({
-                    success: false,
-                    message: 'خطای اعتبارسنجی',
-                    errors: ['گروه تحصیلی الزامی است']
-                });
-            });
-            const invalidProfile = {
-                educationalGroupId: '',
-                birthDate: 'invalid-date'
-            };
-            const response = await (0, supertest_1.default)(app)
-                .put('/api/v1/auth/complete-profile')
-                .set('Authorization', 'Bearer valid-jwt-token')
-                .send(invalidProfile)
-                .expect(400);
-            expect(response.body.success).toBe(false);
-            expect(response.body.errors).toBeDefined();
-        });
-    });
     describe('POST /api/v1/auth/logout', () => {
         it('should logout successfully', async () => {
             authController.logout.mockImplementation((req, res) => {

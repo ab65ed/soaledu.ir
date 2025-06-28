@@ -151,7 +151,6 @@ const login = async (req: Request, res: Response, next: NextFunction): Promise<v
           name: user.name,
           email: user.email,
           role: user.role,
-          educationalGroup: user.educationalGroup,
         },
       },
     });
@@ -217,7 +216,7 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction): Pr
  */
 const getMe = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const user = await User.findById(req.user?.id).populate("educationalGroup");
+    const user = await User.findById(req.user?.id);
 
     if (!user) {
       return next(new ApiError("User not found", 404));
@@ -231,51 +230,9 @@ const getMe = async (req: RequestWithUser, res: Response, next: NextFunction): P
           name: user.name,
           email: user.email,
           role: user.role,
-          educationalGroup: user.educationalGroup,
           wallet: {
             balance: user.wallet.balance,
           },
-        },
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-/**
- * @desc    Complete user profile (select educational group)
- * @route   PUT /api/v1/auth/complete-profile
- * @access  Private
- */
-const completeProfile = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
-  try {
-    const { educationalGroup } = req.body;
-
-    if (!educationalGroup) {
-      return next(new ApiError("Educational group is required", 400));
-    }
-
-    // Update user
-    const user = await User.findByIdAndUpdate(
-      req.user?.id,
-      { educationalGroup },
-      { new: true, runValidators: true }
-    ).populate("educationalGroup");
-
-    if (!user) {
-      return next(new ApiError("User not found", 404));
-    }
-
-    res.status(200).json({
-      status: "success",
-      data: {
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          educationalGroup: user.educationalGroup,
         },
       },
     });
@@ -312,6 +269,5 @@ export {
   login,
   refreshToken,
   getMe,
-  completeProfile,
   logout,
 }; 

@@ -19,7 +19,6 @@ export interface IUser extends Document {
     email: string;
     password: string;
     role: 'student' | 'admin' | 'support' | 'Question Designer';
-    educationalGroup?: mongoose.Types.ObjectId;
     nationalCode?: string;
     phoneNumber?: string;
     institutionalDiscountPercentage?: number;
