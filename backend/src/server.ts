@@ -66,6 +66,10 @@ import questionRoutes from "./routes/question"; // Question management routes - 
 import rolesRoutes from "./routes/roles"; // Roles management routes - فعال شده
 import courseExamRoutes from "./routes/course-exam"; // Course exam routes - فعال شده
 import courseExamRoutes2 from "./routes/course-exam.routes"; // Course exam routes v2 - فعال شده
+import fieldOfStudyRoutes from "./routes/field-of-study.routes"; // Field of study routes - جدید
+import courseTypesRoutes from "./routes/course-types.routes"; // Course types routes - جدید
+import gradesRoutes from "./routes/grades.routes"; // Grades routes - جدید
+import coursesRoutes from "./routes/courses.routes"; // Courses routes - جدید
 
 // Import middleware
 import { errorHandler } from "./middlewares/errorHandler";
@@ -213,6 +217,10 @@ app.use("/api/v1/question", questionRoutes); // Question management routes - ف�
 app.use("/api/v1/roles", rolesRoutes); // Roles management routes - فعال شده
 app.use("/api/v1/course-exams", courseExamRoutes); // Course exam routes - فعال شده
 app.use("/api/v1/course-exams-v2", courseExamRoutes2); // Course exam routes v2 - فعال شده
+app.use("/api/v1/field-of-study", fieldOfStudyRoutes); // Field of study routes - جدید
+app.use("/api/v1/course-types", courseTypesRoutes); // Course types routes - جدید
+app.use("/api/v1/grades", gradesRoutes); // Grades routes - جدید
+app.use("/api/v1/courses", coursesRoutes); // Courses routes - جدید
 
 // Swagger API Documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
