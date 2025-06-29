@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+</head>
+<body>
+    <h1>تست API ها</h1>
+    <div id="results"></div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api/v1';
+        const results = document.getElementById('results');
+
+        async function testAPI(endpoint, name) {
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`);
+                const data = await response.json();
+                results.innerHTML += `<div style="margin: 10px; padding: 10px; border: 1px solid green;">
+                    <h3>✅ ${name}</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                </div>`;
+            } catch (error) {
+                results.innerHTML += `<div style="margin: 10px; padding: 10px; border: 1px solid red;">
+                    <h3>❌ ${name}</h3>
+                    <p>Error: ${error.message}</p>
+                </div>`;
+            }
+        }
+
+        // تست API ها
+        async function runTests() {
+            await testAPI('/course-types', 'Course Types');
+            await testAPI('/grades', 'Grades');
+            await testAPI('/field-of-study', 'Field of Study');
+            await testAPI('/courses', 'Courses');
+        }
+
+        runTests();
+    </script>
+</body>
+</html> 

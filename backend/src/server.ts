@@ -136,14 +136,19 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 // Middleware
 app.use(helmet()); // Security headers
-app.use(
-  cors({
-    origin: FRONTEND_URL,
-    credentials: true, // Allow cookies
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-); // Enable CORS
+
+// CORS configuration for development
+const corsOptions = {
+  origin: NODE_ENV === 'development' 
+    ? [FRONTEND_URL, 'http://localhost:3000', 'http://127.0.0.1:3000']
+    : FRONTEND_URL,
+  credentials: true, // Allow cookies
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  optionsSuccessStatus: 200 // For legacy browser support
+};
+
+app.use(cors(corsOptions)); // Enable CORS
 app.use(cookieParser()); // Parse cookies
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies

@@ -19,6 +19,7 @@
     "db:cleanup": "ts-node src/scripts/optimize-database.ts cleanup",
     "db:all": "ts-node src/scripts/optimize-database.ts all",
     "db:seed-courses": "ts-node src/scripts/seed-courses.ts",
+    "db:seed-metadata": "ts-node src/scripts/seed-metadata.ts",
     "lint": "echo 'Linting completed'",
     "lint:fix": "echo 'Lint fixes applied'",
     "docker:build": "docker build -t soaledu/backend .",

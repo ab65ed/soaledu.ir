@@ -72,7 +72,7 @@ export const CourseSelector: React.FC<CourseSelectorProps> = ({
       isActive: true,
       limit: 50
     }),
-    enabled: isOpen || !!debouncedSearch,
+    enabled: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 

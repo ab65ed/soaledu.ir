@@ -3,91 +3,28 @@
  * مسیرهای مقاطع تحصیلی
  */
 
-import { Router, Request, Response } from 'express';
-import { GRADES, GRADE_LABELS } from '../validations/courseExamValidation';
+import { Router } from 'express';
+import { getGrades, getGradeCategories, getGradeByValue } from '../controllers/grade.controller';
 
 const router = Router();
 
 /**
  * GET /api/v1/grades
- * دریافت لیست کامل مقاطع تحصیلی با عناوین و توضیحات فارسی
+ * دریافت لیست کامل مقاطع تحصیلی
  */
-router.get('/', (req: Request, res: Response) => {
-  try {
-    const gradesList = GRADES.map(grade => ({
-      value: grade,
-      label: GRADE_LABELS[grade],
-      description: getGradeDescription(grade),
-      ageRange: getGradeAgeRange(grade),
-      duration: getGradeDuration(grade),
-      nextLevel: getNextLevel(grade)
-    }));
-
-    res.status(200).json({
-      success: true,
-      message: 'لیست مقاطع تحصیلی با موفقیت دریافت شد',
-      data: {
-        grades: gradesList,
-        total: gradesList.length
-      }
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'خطا در دریافت لیست مقاطع تحصیلی',
-      error: error instanceof Error ? error.message : 'خطای نامشخص'
-    });
-  }
-});
+router.get('/', getGrades);
 
 /**
  * GET /api/v1/grades/categories
  * دریافت مقاطع تحصیلی به تفکیک دسته‌بندی
  */
-router.get('/categories', (req: Request, res: Response) => {
-  try {
-    const categories = {
-      'school-levels': {
-        name: 'مقاطع مدرسه‌ای',
-        description: 'مقاطع تحصیلی آموزش‌وپرورش',
-        grades: GRADES.filter(grade => 
-          ['elementary', 'middle-school', 'high-school'].includes(grade)
-        ).map(grade => ({
-          value: grade,
-          label: GRADE_LABELS[grade],
-          description: getGradeDescription(grade)
-        }))
-      },
-      'university-levels': {
-        name: 'مقاطع دانشگاهی',
-        description: 'مقاطع تحصیلی آموزش عالی',
-        grades: GRADES.filter(grade => 
-          ['associate-degree', 'bachelor-degree', 'master-degree', 'doctorate-degree'].includes(grade)
-        ).map(grade => ({
-          value: grade,
-          label: GRADE_LABELS[grade],
-          description: getGradeDescription(grade)
-        }))
-      }
-    };
+router.get('/categories', getGradeCategories);
 
-    res.status(200).json({
-      success: true,
-      message: 'دسته‌بندی مقاطع تحصیلی با موفقیت دریافت شد',
-      data: {
-        categories,
-        totalCategories: Object.keys(categories).length,
-        totalGrades: GRADES.length
-      }
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'خطا در دریافت دسته‌بندی مقاطع تحصیلی',
-      error: error instanceof Error ? error.message : 'خطای نامشخص'
-    });
-  }
-});
+/**
+ * GET /api/v1/grades/:value
+ * دریافت اطلاعات یک مقطع تحصیلی خاص
+ */
+router.get('/:value', getGradeByValue);
 
 /**
  * Helper function to get grade description

@@ -6,7 +6,7 @@ import { z } from 'zod';
  * GET /api/v1/courses
  * دریافت لیست دروس با امکان جستجو و فیلتر
  */
-export const getCourses = async (req: Request, res: Response) => {
+export const getCourses = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
       search,
@@ -26,7 +26,11 @@ export const getCourses = async (req: Request, res: Response) => {
 
     // جستجوی متنی
     if (search && typeof search === 'string') {
-      filter.$text = { $search: search };
+      // استفاده از regex search برای پشتیبانی بهتر از زبان فارسی
+      filter.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ];
     }
 
     // فیلتر بر اساس دسته‌بندی
@@ -101,17 +105,18 @@ export const getCourses = async (req: Request, res: Response) => {
  * GET /api/v1/courses/:id
  * دریافت درس با شناسه
  */
-export const getCourseById = async (req: Request, res: Response) => {
+export const getCourseById = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
 
     const course = await Course.findById(id).lean();
 
     if (!course) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: 'درس مورد نظر یافت نشد'
       });
+      return;
     }
 
     res.status(200).json({
@@ -133,7 +138,7 @@ export const getCourseById = async (req: Request, res: Response) => {
  * POST /api/v1/courses
  * ایجاد درس جدید
  */
-export const createCourse = async (req: Request, res: Response) => {
+export const createCourse = async (req: Request, res: Response): Promise<void> => {
   try {
     const courseSchema = z.object({
       title: z.string().min(3, 'عنوان درس باید حداقل 3 کاراکتر باشد'),
@@ -184,10 +189,11 @@ export const createCourse = async (req: Request, res: Response) => {
     // بررسی تکراری نبودن عنوان درس
     const existingCourse = await Course.findOne({ title: validatedData.title });
     if (existingCourse) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: 'درسی با این عنوان قبلاً ثبت شده است'
       });
+      return;
     }
 
     const newCourse = new Course(validatedData);
@@ -202,7 +208,7 @@ export const createCourse = async (req: Request, res: Response) => {
     console.error('Error in createCourse:', error);
     
     if (error instanceof z.ZodError) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: 'داده‌های ورودی نامعتبر',
         errors: error.errors.map(err => ({
@@ -210,6 +216,7 @@ export const createCourse = async (req: Request, res: Response) => {
           message: err.message
         }))
       });
+      return;
     }
 
     res.status(500).json({
@@ -224,7 +231,7 @@ export const createCourse = async (req: Request, res: Response) => {
  * PUT /api/v1/courses/:id
  * ویرایش درس
  */
-export const updateCourse = async (req: Request, res: Response) => {
+export const updateCourse = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
 
@@ -281,10 +288,11 @@ export const updateCourse = async (req: Request, res: Response) => {
         _id: { $ne: id }
       });
       if (existingCourse) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           message: 'درسی با این عنوان قبلاً ثبت شده است'
         });
+        return;
       }
     }
 
@@ -295,10 +303,11 @@ export const updateCourse = async (req: Request, res: Response) => {
     );
 
     if (!updatedCourse) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: 'درس مورد نظر یافت نشد'
       });
+      return;
     }
 
     res.status(200).json({
@@ -310,7 +319,7 @@ export const updateCourse = async (req: Request, res: Response) => {
     console.error('Error in updateCourse:', error);
     
     if (error instanceof z.ZodError) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: 'داده‌های ورودی نامعتبر',
         errors: error.errors.map(err => ({
@@ -318,6 +327,7 @@ export const updateCourse = async (req: Request, res: Response) => {
           message: err.message
         }))
       });
+      return;
     }
 
     res.status(500).json({
@@ -332,17 +342,18 @@ export const updateCourse = async (req: Request, res: Response) => {
  * DELETE /api/v1/courses/:id
  * حذف درس
  */
-export const deleteCourse = async (req: Request, res: Response) => {
+export const deleteCourse = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
 
     const deletedCourse = await Course.findByIdAndDelete(id);
 
     if (!deletedCourse) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: 'درس مورد نظر یافت نشد'
       });
+      return;
     }
 
     res.status(200).json({
@@ -364,7 +375,7 @@ export const deleteCourse = async (req: Request, res: Response) => {
  * GET /api/v1/courses/categories
  * دریافت لیست دسته‌بندی‌ها
  */
-export const getCategories = async (req: Request, res: Response) => {
+export const getCategories = async (req: Request, res: Response): Promise<void> => {
   try {
     const categories = await Course.distinct('category');
     
@@ -387,7 +398,7 @@ export const getCategories = async (req: Request, res: Response) => {
  * POST /api/v1/courses/bulk-create
  * ایجاد چندین درس به صورت یکجا
  */
-export const bulkCreateCourses = async (req: Request, res: Response) => {
+export const bulkCreateCourses = async (req: Request, res: Response): Promise<void> => {
   try {
     const coursesSchema = z.array(z.object({
       title: z.string().min(3),
@@ -407,11 +418,12 @@ export const bulkCreateCourses = async (req: Request, res: Response) => {
     
     if (existingCourses.length > 0) {
       const existingTitles = existingCourses.map(course => course.title);
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: 'برخی از دروس قبلاً ثبت شده‌اند',
         data: { existingTitles }
       });
+      return;
     }
 
     const newCourses = await Course.insertMany(validatedData);
@@ -425,7 +437,7 @@ export const bulkCreateCourses = async (req: Request, res: Response) => {
     console.error('Error in bulkCreateCourses:', error);
     
     if (error instanceof z.ZodError) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: 'داده‌های ورودی نامعتبر',
         errors: error.errors.map(err => ({
@@ -433,6 +445,7 @@ export const bulkCreateCourses = async (req: Request, res: Response) => {
           message: err.message
         }))
       });
+      return;
     }
 
     res.status(500).json({

@@ -5,8 +5,8 @@ export interface ICourse extends Document {
   description?: string;
   category: string;
   grade: string;
-  courseType?: string;
-  group?: string;
+  courseType: string;
+  fieldOfStudy: string;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -31,49 +31,46 @@ const courseSchema = new Schema<ICourse>({
     enum: [
       'دروس عمومی',
       'دروس پایه',
-      'دروس پایه کامپیوتر',
       'دروس اختصاصی',
-      'دروس فنی',
-      'علوم پایه',
-      'علوم انسانی',
-      'علوم زیستی'
+      'دروس فنی و حرفه‌ای'
     ]
   },
   grade: {
     type: String,
     required: [true, 'مقطع تحصیلی الزامی است'],
     enum: [
-      'عمومی',
+      'دیپلم',
+      'کاردانی', 
       'کارشناسی',
-      'فنی',
-      'دهم',
-      'یازدهم',
-      'دوازدهم',
-      'middle-school',
-      'high-school'
+      'کارشناسی ارشد',
+      'دکتری'
     ]
   },
   courseType: {
     type: String,
+    required: [true, 'نوع درس الزامی است'],
     enum: [
+      'academic',
+      'non-academic', 
+      'skill-based',
+      'aptitude',
+      'general',
+      'specialized'
+    ]
+  },
+  fieldOfStudy: {
+    type: String,
+    required: [true, 'رشته تحصیلی الزامی است'],
+    enum: [
+      'computer-engineering',
+      'electrical-engineering',
+      'mechanical-engineering',
+      'civil-engineering',
       'mathematics',
       'physics',
       'chemistry',
       'biology',
       'literature',
-      'computer-science',
-      'general',
-      'technical'
-    ]
-  },
-  group: {
-    type: String,
-    enum: [
-      'math-physics',
-      'experimental',
-      'literature-humanities',
-      'computer',
-      'technical',
       'general'
     ]
   },
@@ -90,6 +87,8 @@ const courseSchema = new Schema<ICourse>({
 courseSchema.index({ title: 'text', description: 'text' });
 courseSchema.index({ category: 1 });
 courseSchema.index({ grade: 1 });
+courseSchema.index({ courseType: 1 });
+courseSchema.index({ fieldOfStudy: 1 });
 courseSchema.index({ isActive: 1 });
 courseSchema.index({ createdAt: -1 });
 

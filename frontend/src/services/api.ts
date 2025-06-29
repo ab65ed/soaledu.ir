@@ -47,7 +47,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/a
  * رابط کلی پاسخ API
  */
 interface ApiResponse<T = unknown> {
-  status: 'success' | 'error';
+  success: boolean;
   message: string;
   data?: T;
   errors?: Array<{ field: string; message: string }>;
@@ -90,7 +90,7 @@ export const apiRequest = async <T = unknown>(
 
   const data: ApiResponse<T> = await response.json();
   
-  if (data.status === 'error') {
+  if (data.success === false) {
     throw new Error(data.message || 'خطا در درخواست');
   }
 

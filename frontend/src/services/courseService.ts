@@ -9,9 +9,10 @@ export interface Course {
   id: string;
   title: string;
   description?: string;
+  category: string;
   courseType: string;
   grade: string;
-  group: string;
+  group?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -22,6 +23,7 @@ export interface CourseFilters {
   courseType?: string;
   grade?: string;
   group?: string;
+  category?: string;
   isActive?: boolean;
   limit?: number;
   skip?: number;
@@ -41,16 +43,72 @@ class CourseService {
       count: number;
       limit: number;
       skip: number;
+      hasNext: boolean;
+      hasPrev: boolean;
     };
   }> {
-    const queryParams = new URLSearchParams();
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        queryParams.append(key, String(value));
-      }
-    });
+    try {
+      console.log('🔍 getCourses called with filters:', filters);
+      
+      const queryParams = new URLSearchParams();
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, String(value));
+        }
+      });
 
-    return apiRequest(`${this.baseUrl}?${queryParams.toString()}`);
+      const url = `${this.baseUrl}?${queryParams.toString()}`;
+      console.log('🔍 Making request to:', url);
+
+      const response = await apiRequest<{
+        courses: any[];
+        pagination: {
+          total: number;
+          count: number;
+          limit: number;
+          skip: number;
+          hasNext: boolean;
+          hasPrev: boolean;
+        };
+      }>(url);
+
+      console.log('🔍 Raw response:', response);
+
+      // Transform backend response to match frontend interface
+      const transformedCourses = response.courses.map((course: any) => ({
+        id: course._id,
+        title: course.title,
+        description: course.description,
+        category: course.category,
+        courseType: course.courseType,
+        grade: course.grade,
+        group: course.group,
+        isActive: course.isActive,
+        createdAt: course.createdAt,
+        updatedAt: course.updatedAt
+      }));
+
+      console.log('🔍 Transformed courses:', transformedCourses);
+
+      return {
+        courses: transformedCourses,
+        pagination: response.pagination
+      };
+    } catch (error) {
+      console.error('❌ Error fetching courses:', error);
+      // Return empty result on error
+      return {
+        courses: [],
+        pagination: {
+          total: 0,
+          count: 0,
+          limit: 50,
+          skip: 0,
+          hasNext: false,
+          hasPrev: false
+        }
+      };
+    }
   }
 
   /**
@@ -68,7 +126,31 @@ class CourseService {
    * دریافت درس با شناسه
    */
   async getCourseById(id: string): Promise<Course> {
-    return apiRequest(`${this.baseUrl}/${id}`);
+    try {
+      const response = await apiRequest<{
+        success: boolean;
+        message: string;
+        data: any;
+      }>(`${this.baseUrl}/${id}`);
+
+      // Transform backend response to match frontend interface
+      const course = response.data;
+      return {
+        id: course._id,
+        title: course.title,
+        description: course.description,
+        category: course.category,
+        courseType: course.courseType,
+        grade: course.grade,
+        group: course.group,
+        isActive: course.isActive,
+        createdAt: course.createdAt,
+        updatedAt: course.updatedAt
+      };
+    } catch (error) {
+      console.error('Error fetching course by ID:', error);
+      throw error;
+    }
   }
 
   /**
@@ -76,10 +158,34 @@ class CourseService {
    * ایجاد درس جدید
    */
   async createCourse(data: Omit<Course, 'id' | 'createdAt' | 'updatedAt'>): Promise<Course> {
-    return apiRequest(`${this.baseUrl}`, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    try {
+      const response = await apiRequest<{
+        success: boolean;
+        message: string;
+        data: any;
+      }>(`${this.baseUrl}`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+
+      // Transform backend response to match frontend interface
+      const course = response.data;
+      return {
+        id: course._id,
+        title: course.title,
+        description: course.description,
+        category: course.category,
+        courseType: course.courseType,
+        grade: course.grade,
+        group: course.group,
+        isActive: course.isActive,
+        createdAt: course.createdAt,
+        updatedAt: course.updatedAt
+      };
+    } catch (error) {
+      console.error('Error creating course:', error);
+      throw error;
+    }
   }
 
   /**
@@ -87,10 +193,34 @@ class CourseService {
    * ویرایش درس
    */
   async updateCourse(id: string, data: Partial<Course>): Promise<Course> {
-    return apiRequest(`${this.baseUrl}/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
+    try {
+      const response = await apiRequest<{
+        success: boolean;
+        message: string;
+        data: any;
+      }>(`${this.baseUrl}/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      });
+
+      // Transform backend response to match frontend interface
+      const course = response.data;
+      return {
+        id: course._id,
+        title: course.title,
+        description: course.description,
+        category: course.category,
+        courseType: course.courseType,
+        grade: course.grade,
+        group: course.group,
+        isActive: course.isActive,
+        createdAt: course.createdAt,
+        updatedAt: course.updatedAt
+      };
+    } catch (error) {
+      console.error('Error updating course:', error);
+      throw error;
+    }
   }
 
   /**
@@ -98,9 +228,14 @@ class CourseService {
    * حذف درس
    */
   async deleteCourse(id: string): Promise<void> {
-    await apiRequest(`${this.baseUrl}/${id}`, {
-      method: 'DELETE',
-    });
+    try {
+      await apiRequest(`${this.baseUrl}/${id}`, {
+        method: 'DELETE',
+      });
+    } catch (error) {
+      console.error('Error deleting course:', error);
+      throw error;
+    }
   }
 
   /**
@@ -111,6 +246,24 @@ class CourseService {
     const response = await this.getCourses({ 
       isActive: true, 
       limit 
+    });
+    return response.courses;
+  }
+
+  /**
+   * Get courses by filters for dropdown
+   * دریافت دروس برای dropdown با فیلتر
+   */
+  async getCoursesByFilters(filters: {
+    courseType?: string;
+    grade?: string;
+    group?: string;
+    search?: string;
+  }): Promise<Course[]> {
+    const response = await this.getCourses({
+      ...filters,
+      isActive: true,
+      limit: 100 // برای dropdown بیشتر نیاز است
     });
     return response.courses;
   }
